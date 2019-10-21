@@ -41,7 +41,7 @@
             android:required="false" />
 
         <activity
-            android:name="activities_fragments.activity_splash.Splash_Activity"
+            android:name=".activities_fragments.activity_splash.Splash_Activity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
             <intent-filter>
