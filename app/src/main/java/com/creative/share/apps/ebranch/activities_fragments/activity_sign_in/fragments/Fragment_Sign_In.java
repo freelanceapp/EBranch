@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 
 
 import com.creative.share.apps.ebranch.R;
+import com.creative.share.apps.ebranch.activities_fragments.activity_home.HomeActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.activities.SignInActivity;
 import com.creative.share.apps.ebranch.databinding.FragmentSignInBinding;
 import com.creative.share.apps.ebranch.interfaces.Listeners;
@@ -34,7 +35,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Fragment_Sign_In extends Fragment implements Listeners.LoginListener,Listeners.CreateAccountListener,Listeners.SkipListener,Listeners.ShowCountryDialogListener, OnCountryPickerListener {
+public class Fragment_Sign_In extends Fragment implements Listeners.LoginListener,Listeners.CreateAccountListener,Listeners.ShowCountryDialogListener, OnCountryPickerListener {
     private FragmentSignInBinding binding;
     private SignInActivity activity;
     private String current_language;
@@ -111,10 +112,11 @@ public class Fragment_Sign_In extends Fragment implements Listeners.LoginListene
         loginModel = new LoginModel(phone_code,phone,password);
         binding.setLoginModel(loginModel);
 
-        if (loginModel.isDataValid(activity))
+       /* if (loginModel.isDataValid(activity))
         {
             login(phone_code,phone,password);
-        }
+        }*/
+        navigateToHomeActivity();
     }
 
     private void login(String phone_code, String phone, String password)
@@ -122,13 +124,12 @@ public class Fragment_Sign_In extends Fragment implements Listeners.LoginListene
 
     }
 
-    @Override
-    public void skip() {
-        navigateToHomeActivity();
-    }
+
 
     private void navigateToHomeActivity() {
-
+        Intent intent = new Intent(activity, HomeActivity.class);
+        startActivity(intent);
+        activity.finish();
     }
 
     @Override

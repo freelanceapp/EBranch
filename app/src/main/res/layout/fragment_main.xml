@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    >
+
+    <data>
+
+
+
+        <variable
+            name="lang"
+            type="String" />
+
+    </data>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+
+        >
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/nestedScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true"
+                android:fitsSystemWindows="true"
+                android:overScrollMode="never">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:id="@+id/flSlider"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp">
+
+                        <androidx.viewpager.widget.ViewPager
+                            android:id="@+id/pager"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+
+                        <com.google.android.material.tabs.TabLayout
+                            android:id="@+id/tabLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="8dp"
+                            android:layout_gravity="bottom|start"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:visibility="gone"
+                            app:tabGravity="fill"
+                            app:tabIndicatorHeight="0dp"
+                            app:tabMaxWidth="8dp"
+                            app:tabMode="scrollable"
+
+
+                            />
+
+                        <ProgressBar
+                            android:id="@+id/progBarSlider"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center" />
+                    </FrameLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimary"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/linear_shape"
+                            android:padding="5dp"
+
+                            app:layout_constraintEnd_toStartOf="@+id/arrow"
+                            app:layout_constraintStart_toStartOf="parent">
+
+                            <ImageView
+                                android:id="@+id/arrow1"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_gravity="end"
+                                android:clickable="false"
+                                android:longClickable="false"
+                                android:padding="8dp"
+                                android:rotation='@{lang.equals("en")?180:0}'
+                                android:src="@drawable/ic_chat"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/contact_the_store"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="16sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/arrow1"
+                                app:layout_constraintTop_toTopOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <ImageView
+                            android:id="@+id/arrow"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="end"
+                            android:clickable="false"
+                            android:longClickable="false"
+                            android:padding="8dp"
+                            android:rotation='@{lang.equals("ar")?180:0}'
+                            android:src="@drawable/ic_right_arrow"
+                            android:tint="@color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <TextView
+                        android:id="@+id/tv_offer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/text_shape2"
+                        android:gravity="center"
+                        android:padding="15dp"
+                        android:text="@string/offer"
+
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+
+                        >
+
+                        <ImageView
+                            android:id="@+id/arrow2"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="end"
+                            android:clickable="false"
+                            android:longClickable="false"
+                            android:padding="8dp"
+                            android:rotation='@{lang.equals("en")?180:0}'
+                            android:src="@drawable/ic_right_arrow"
+                            android:tint="@color/black"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            app:layout_constraintEnd_toStartOf="@+id/arrow3"
+                            app:layout_constraintStart_toEndOf="@+id/arrow2"></androidx.recyclerview.widget.RecyclerView>
+
+                        <ImageView
+                            android:id="@+id/arrow3"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="end"
+                            android:clickable="false"
+                            android:longClickable="false"
+                            android:padding="8dp"
+                            android:rotation='@{lang.equals("ar")?180:0}'
+                            android:src="@drawable/ic_right_arrow"
+                            android:tint="@color/black"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <TextView
+                        android:id="@+id/tv_depart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/text_shape2"
+                        android:gravity="center"
+                        android:padding="15dp"
+                        android:text="@string/departments"
+
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                   android:padding="10dp"
+                        ></androidx.recyclerview.widget.RecyclerView>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cons"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                       android:layout_gravity="end"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="45dp"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/black"
+                            android:textSize="15sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/arrow4"
+                            android:text="@string/more"
+                            android:clickable="false"
+                            android:longClickable="false"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+
+                            />
+
+                        <ImageView
+                            android:id="@+id/arrow4"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:src="@drawable/ic_right_arrow"
+                            android:padding="10dp"
+                            android:tint="@color/black"
+                            android:layout_gravity="center_vertical"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:clickable="false"
+                            android:longClickable="false"
+                            android:rotation="90"
+
+                            />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/tv_bestseller"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/text_shape2"
+                        android:gravity="center"
+                        android:padding="15dp"
+                        android:text="@string/best_seller"
+
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        ></androidx.recyclerview.widget.RecyclerView>
+
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+
+</layout>

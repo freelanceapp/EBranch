@@ -1,6 +1,8 @@
 package com.creative.share.apps.ebranch.interfaces;
 
 
+import com.creative.share.apps.ebranch.models.ContactUsModel;
+
 public interface Listeners {
 
     interface LoginListener {
@@ -12,10 +14,7 @@ public interface Listeners {
     interface PasswordListner {
         void checkDatapass(String pass);
     }
-    interface SkipListener
-    {
-        void skip();
-    }
+
     interface ForgetListner
     {
         void forget();
@@ -52,6 +51,10 @@ public interface Listeners {
     }
 
 
+    interface ContactListener
+    {
+        void sendContact(ContactUsModel contactUsModel);
+    }
 
 
 

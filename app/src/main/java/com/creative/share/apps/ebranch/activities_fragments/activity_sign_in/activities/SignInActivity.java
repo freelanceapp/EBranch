@@ -46,14 +46,14 @@ public class SignInActivity extends AppCompatActivity {
 
         initView();
         if (savedInstanceState == null) {
-           /* if (!preferences.isLanguageSelected(this))
+            if (!preferences.isLanguageSelected(this))
             {
                 DisplayFragmentLanguage();
             }else
             {
                 DisplayFragmentSignIn();
 
-            }*/
+            }
             DisplayFragmentSignIn();
 
         }
