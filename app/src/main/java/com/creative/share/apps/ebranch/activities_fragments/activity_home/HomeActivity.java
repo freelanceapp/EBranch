@@ -87,7 +87,8 @@ public class HomeActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);        initView();
+        setContentView(R.layout.activity_home);
+        initView();
         if (savedInstanceState == null) {
 
             displayFragmentMain();

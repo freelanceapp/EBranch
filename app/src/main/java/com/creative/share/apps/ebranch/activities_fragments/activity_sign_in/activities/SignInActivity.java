@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentManager;
 
 
@@ -13,6 +14,7 @@ import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fra
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments.Fragment_Language;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments.Fragment_Sign_In;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments.Fragment_Sign_Up;
+import com.creative.share.apps.ebranch.databinding.ActivitySignInBinding;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
 import com.creative.share.apps.ebranch.preferences.Preferences;
 
@@ -24,6 +26,7 @@ import io.paperdb.Paper;
 public class SignInActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager;
+    private ActivitySignInBinding binding;
 
     private int fragment_count = 0;
     private Fragment_Sign_In fragment_sign_in;
@@ -43,7 +46,7 @@ public class SignInActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_in);
         Paper.init(this);
 
 
