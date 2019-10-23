@@ -36,102 +36,176 @@
             android:padding="8dp"
 
             >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/colorPrimary"
-                android:textSize="14sp"
-                android:text="@string/user_name"
+            <LinearLayout
 
-                />
-            <EditText
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_marginTop="8dp"
+                android:layout_height="40dp"
                 android:background="@drawable/linear_shape"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:text="@={contactUs.name}"
-                error="@{contactUs.error_name}"
-                />
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:layout_marginTop="5dp"
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/colorPrimary"
-                android:textSize="14sp"
-                android:text="@string/user_email"
+                >
 
-                />
-            <EditText
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_user"
+                    android:layout_gravity="center_vertical"
+                    android:tint="@color/colorPrimary"
+                    />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="37dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/white"
+                    android:hint="@string/user_name"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray4"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="14sp"
+                    android:text="@={contactUs.name}"
+                    error="@{contactUs.error_name}"
+                    
+                    />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_marginTop="8dp"
+                android:layout_height="40dp"
                 android:background="@drawable/linear_shape"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:inputType="textEmailAddress"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:text="@={contactUs.email}"
-                error="@{contactUs.error_email}"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:layout_marginTop="15dp"
+                >
 
-                />
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_email"
+                    android:layout_gravity="center_vertical"
+                    android:tint="@color/colorPrimary"
+                    />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/colorPrimary"
-                android:textSize="14sp"
-                android:text="@string/user_phone"
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="37dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/white"
+                    android:hint="@string/user_email"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray4"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="14sp"
+                    android:text="@={contactUs.email}"
+                    error="@{contactUs.error_email}"
+                    />
 
-                />
-            <EditText
+
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_marginTop="8dp"
+                android:layout_height="40dp"
                 android:background="@drawable/linear_shape"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:inputType="phone"
-                android:text="@={contactUs.phone}"
-                error="@{contactUs.error_phone}"
+                android:padding="5dp"
+                android:layout_marginTop="15dp"
 
-                />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/colorPrimary"
-                android:textSize="14sp"
-                android:text="@string/messge"
+                >
 
-                />
-            <EditText
+                <ImageView
+                    android:id="@+id/icon"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_vertical"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_phone"
+                    android:tint="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+
+                    />
+
+
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="37dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/white"
+                    android:hint="@string/user_phone"
+                    android:inputType="phone"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray4"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/icon"
+                    android:text="@={contactUs.phone}"
+                    error="@{contactUs.error_phone}"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginTop="8dp"
+                android:layout_height="203dp"
                 android:background="@drawable/linear_shape"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                android:padding="8dp"
-                android:gravity="top"
-                android:text="@={contactUs.message}"
-                error="@{contactUs.error_message}"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:layout_marginTop="15dp"
+                >
 
-                />
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_chat"
+                    android:layout_gravity="top"
+                    android:tint="@color/colorPrimary"
+                    />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                   android:padding="8dp"
+                    android:background="@color/white"
+                    android:hint="@string/user_email"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray4"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="14sp"
+                    android:gravity="top"
+
+                    android:text="@={contactUs.message}"
+                    error="@{contactUs.error_message}"
+                    />
+
+
+            </LinearLayout>
+
+
+
             <Button
                 android:id="@+id/btnSend"
                 android:layout_width="200dp"

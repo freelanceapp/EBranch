@@ -9,7 +9,7 @@ public interface Listeners {
         void checkDataLogin(String phone_code, String phone, String password);
     }
     interface ForgetpasswordListner {
-        void checkDataForget(String phone_code, String phone);
+        void checkDataForget(String emial);
     }
     interface PasswordListner {
         void checkDatapass(String pass);

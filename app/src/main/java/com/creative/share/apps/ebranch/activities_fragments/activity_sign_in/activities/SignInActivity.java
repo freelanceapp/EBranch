@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 
 
 import com.creative.share.apps.ebranch.R;
+import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments.Fragment_ForgetPassword;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments.Fragment_Language;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments.Fragment_Sign_In;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments.Fragment_Sign_Up;
@@ -30,6 +31,8 @@ public class SignInActivity extends AppCompatActivity {
     private Fragment_Language fragment_language;
     private String cuurent_language;
     private Preferences preferences;
+    private Fragment_ForgetPassword fragment_forgetpass;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         Paper.init(newBase);
@@ -97,7 +100,13 @@ public class SignInActivity extends AppCompatActivity {
             fragmentManager.beginTransaction().add(R.id.fragment_sign_in_container, fragment_language, "fragment_language").addToBackStack("fragment_language").commit();
         }
     }
+    public void displayFragmentForgetpass() {
+        fragment_count ++;
+        fragment_forgetpass = Fragment_ForgetPassword.newInstance();
 
+        manager.beginTransaction().add(R.id.fragment_sign_in_container, fragment_forgetpass, "fragment_forgetpass").addToBackStack("fragment_forgetpass").commit();
+
+    }
 
     public void RefreshActivity(String selected_language) {
         Paper.book().write("lang", selected_language);

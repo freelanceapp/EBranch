@@ -63,7 +63,12 @@ public class Fragment_Sign_In extends Fragment implements Listeners.LoginListene
         binding.setCreateAccountListener(this);
         binding.setShowCountryListener(this);
         createCountryDialog();
-
+binding.tvForget.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        activity.displayFragmentForgetpass();
+    }
+});
 
 
 
