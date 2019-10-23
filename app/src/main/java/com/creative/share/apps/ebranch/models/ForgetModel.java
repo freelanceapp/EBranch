@@ -47,7 +47,7 @@ public class ForgetModel extends BaseObservable {
     public boolean isDataValid(Context context)
     {
         if (!TextUtils.isEmpty(email) &&
-                Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
+                Patterns.EMAIL_ADDRESS.matcher(email).matches()
         )
         {
             error_email.set(null);

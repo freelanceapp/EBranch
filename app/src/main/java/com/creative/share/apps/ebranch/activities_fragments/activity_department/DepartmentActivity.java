@@ -19,7 +19,6 @@ import com.creative.share.apps.ebranch.activities_fragments.activity_department.
 import com.creative.share.apps.ebranch.activities_fragments.activity_department.fragments.Fragment_department;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_Main;
 import com.creative.share.apps.ebranch.databinding.ActivityDepartmentBinding;
-import com.creative.share.apps.ebranch.databinding.ActivityHomeBinding;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;

@@ -104,7 +104,7 @@ public class SignInActivity extends AppCompatActivity {
         fragment_count ++;
         fragment_forgetpass = Fragment_ForgetPassword.newInstance();
 
-        manager.beginTransaction().add(R.id.fragment_sign_in_container, fragment_forgetpass, "fragment_forgetpass").addToBackStack("fragment_forgetpass").commit();
+        fragmentManager.beginTransaction().add(R.id.fragment_sign_in_container, fragment_forgetpass, "fragment_forgetpass").addToBackStack("fragment_forgetpass").commit();
 
     }
 

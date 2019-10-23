@@ -48,7 +48,7 @@
                 <ImageView
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:src="@drawable/ic_left_arrow"
+                    android:src="@drawable/ic_right_arrow"
                     android:tint="@color/white"
                     android:padding="8dp"
                     android:clickable="false"
@@ -66,7 +66,7 @@
                     android:clickable="false"
                     android:longClickable="false"
                     android:textSize="16sp"
-                    android:text="@string/terms_and_conditions"
+                    android:text="terms_and_conditions"
                     />
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>

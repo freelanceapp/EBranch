@@ -14,15 +14,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -32,7 +36,6 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.activities_fragments.activity_department.DepartmentActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_Main;
-import com.creative.share.apps.ebranch.databinding.ActivityHomeBinding;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
@@ -50,6 +53,7 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.navigation.NavigationView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,14 +66,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity  {
-    private ActivityHomeBinding binding;
     private FragmentManager fragmentManager;
     private Fragment_Main fragment_main;
 
     private Preferences preferences;
     private UserModel userModel;
 
-
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
+    private ImageView imagemenu;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -82,8 +87,7 @@ public class HomeActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_home);
-        initView();
+        setContentView(R.layout.activity_home);        initView();
         if (savedInstanceState == null) {
 
             displayFragmentMain();
@@ -92,14 +96,20 @@ public class HomeActivity extends AppCompatActivity  {
 
     }
 
-    @SuppressLint("RestrictedApi")
     private void initView() {
         preferences = Preferences.newInstance();
         userModel = preferences.getUserData(this);
         fragmentManager = getSupportFragmentManager();
-        binding.toolbar.setTitle("");
+        drawer = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
 
-
+imagemenu=findViewById(R.id.imagemenu);
+imagemenu.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        drawer.openDrawer(GravityCompat.START);
+    }
+});
     }
 
 
