@@ -40,8 +40,8 @@
             app:contentInsetRight="0dp"
             >
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
                 android:orientation="horizontal"
                 android:onClick="@{()->backListener.back()}"
                 >
@@ -50,6 +50,7 @@
                     android:layout_height="35dp"
                     android:src="@drawable/ic_right_arrow"
                     android:tint="@color/white"
+                    android:layout_gravity="center"
                     android:padding="8dp"
                     android:clickable="false"
                     android:longClickable="false"
@@ -57,16 +58,16 @@
                     />
                 <TextView
                     android:id="@+id/tvTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
                     android:textColor="@color/white"
                     android:clickable="false"
                     android:longClickable="false"
                     android:textSize="16sp"
-                    android:text="terms_and_conditions"
+                    android:text="@string/terms_and_conditions"
                     />
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
