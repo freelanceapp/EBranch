@@ -1,4 +1,4 @@
-package com.creative.share.apps.ebranch.activities_fragments.activity_department.activity_product_detials;
+package com.creative.share.apps.ebranch.activities_fragments.activity_product_detials;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

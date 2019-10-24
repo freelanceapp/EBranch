@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -36,6 +37,9 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.activities_fragments.activity_department.DepartmentActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_Main;
+import com.creative.share.apps.ebranch.activities_fragments.activity_orders.OrdersActivity;
+import com.creative.share.apps.ebranch.activities_fragments.activity_profile.profileActivity;
+import com.creative.share.apps.ebranch.activities_fragments.activity_terms.TermsActivity;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
@@ -75,7 +79,7 @@ public class HomeActivity extends AppCompatActivity  {
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private ImageView imagemenu;
-
+private LinearLayout ll_profile,ll_terms,ll_orders;
     @Override
     protected void attachBaseContext(Context newBase) {
         Paper.init(newBase);
@@ -103,8 +107,39 @@ public class HomeActivity extends AppCompatActivity  {
         fragmentManager = getSupportFragmentManager();
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
+ll_profile=findViewById(R.id.ll_profile);
+        ll_terms=findViewById(R.id.ll_terms);
+        ll_orders=findViewById(R.id.ll_orders);
+
 
 imagemenu=findViewById(R.id.imagemenu);
+ll_profile.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        drawer.closeDrawer(GravityCompat.START);
+        Intent intent=new Intent(HomeActivity.this, profileActivity.class);
+        startActivity(intent);
+
+    }
+});
+        ll_terms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer.closeDrawer(GravityCompat.START);
+                Intent intent=new Intent(HomeActivity.this, TermsActivity.class);
+                startActivity(intent);
+
+            }
+        });
+        ll_orders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer.closeDrawer(GravityCompat.START);
+                Intent intent=new Intent(HomeActivity.this, OrdersActivity.class);
+                startActivity(intent);
+
+            }
+        });
 imagemenu.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View view) {

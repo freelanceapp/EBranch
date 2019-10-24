@@ -4,10 +4,15 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
@@ -17,16 +22,20 @@ import com.creative.share.apps.ebranch.activities_fragments.activity_department.
 import com.creative.share.apps.ebranch.activities_fragments.activity_department.fragments.Fragment_Search;
 import com.creative.share.apps.ebranch.activities_fragments.activity_department.fragments.Fragment_Views;
 import com.creative.share.apps.ebranch.activities_fragments.activity_department.fragments.Fragment_department;
+import com.creative.share.apps.ebranch.activities_fragments.activity_home.HomeActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_Main;
+import com.creative.share.apps.ebranch.activities_fragments.activity_orders.OrdersActivity;
+import com.creative.share.apps.ebranch.activities_fragments.activity_profile.profileActivity;
+import com.creative.share.apps.ebranch.activities_fragments.activity_terms.TermsActivity;
 import com.creative.share.apps.ebranch.databinding.ActivityDepartmentBinding;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
+import com.google.android.material.navigation.NavigationView;
 
 import io.paperdb.Paper;
 
 public class DepartmentActivity extends AppCompatActivity {
-    private ActivityDepartmentBinding binding;
     private FragmentManager fragmentManager;
     private Fragment_Search fragment_search;
     private Fragment_department fragment_department;
@@ -34,8 +43,11 @@ public class DepartmentActivity extends AppCompatActivity {
     private Fragment_ContactUs fragment_contactUs;
     private Preferences preferences;
     private UserModel userModel;
-
-
+private  AHBottomNavigation ahBottomNav;
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
+    private ImageView imagemenu;
+    private LinearLayout ll_profile,ll_terms,ll_orders,ll_home;
     @Override
     protected void attachBaseContext(Context newBase) {
         Paper.init(newBase);
@@ -47,7 +59,7 @@ public class DepartmentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_department);
+       setContentView( R.layout.activity_department);
         initView();
         if (savedInstanceState == null) {
             displayFragmentDepartment();
@@ -56,16 +68,21 @@ public class DepartmentActivity extends AppCompatActivity {
 
     }
 
-    @SuppressLint("RestrictedApi")
     private void initView() {
         preferences = Preferences.newInstance();
         userModel = preferences.getUserData(this);
         fragmentManager = getSupportFragmentManager();
-        binding.toolbar.setTitle("");
+ahBottomNav=findViewById(R.id.ah_bottom_nav);
+        drawer = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        ll_profile=findViewById(R.id.ll_profile);
+        ll_terms=findViewById(R.id.ll_terms);
+        ll_orders=findViewById(R.id.ll_orders);
+ll_home=findViewById(R.id.ll_home);
 
-
+        imagemenu=findViewById(R.id.imagemenu);
         setUpBottomNavigation();
-        binding.ahBottomNav.setOnTabSelectedListener((position, wasSelected) -> {
+       ahBottomNav.setOnTabSelectedListener((position, wasSelected) -> {
             switch (position) {
                 case 0:
 
@@ -89,6 +106,48 @@ public class DepartmentActivity extends AppCompatActivity {
             return false;
         });
 
+        ll_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer.closeDrawer(GravityCompat.START);
+                Intent intent=new Intent(DepartmentActivity.this, profileActivity.class);
+                startActivity(intent);
+
+            }
+        });
+        ll_home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer.closeDrawer(GravityCompat.START);
+                Intent intent=new Intent(DepartmentActivity.this, HomeActivity.class);
+                startActivity(intent);
+
+            }
+        });
+        ll_terms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer.closeDrawer(GravityCompat.START);
+                Intent intent=new Intent(DepartmentActivity.this, TermsActivity.class);
+                startActivity(intent);
+
+            }
+        });
+        ll_orders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer.closeDrawer(GravityCompat.START);
+                Intent intent=new Intent(DepartmentActivity.this, OrdersActivity.class);
+                startActivity(intent);
+
+            }
+        });
+        imagemenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer.openDrawer(GravityCompat.START);
+            }
+        });
     }
 
     private void setUpBottomNavigation() {
@@ -98,26 +157,26 @@ public class DepartmentActivity extends AppCompatActivity {
         AHBottomNavigationItem item3 = new AHBottomNavigationItem("", R.drawable.ic_views);
         AHBottomNavigationItem item4 = new AHBottomNavigationItem("", R.drawable.ic_email);
 
-        binding.ahBottomNav.setTitleState(AHBottomNavigation.TitleState.ALWAYS_HIDE);
-        binding.ahBottomNav.setDefaultBackgroundColor(ContextCompat.getColor(this, R.color.white));
-        binding.ahBottomNav.setTitleTextSizeInSp(14, 12);
-        binding.ahBottomNav.setForceTint(true);
-        binding.ahBottomNav.setAccentColor(ContextCompat.getColor(this, R.color.colorAccent));
-        binding.ahBottomNav.setInactiveColor(ContextCompat.getColor(this, R.color.gray5));
+       ahBottomNav.setTitleState(AHBottomNavigation.TitleState.ALWAYS_HIDE);
+       ahBottomNav.setDefaultBackgroundColor(ContextCompat.getColor(this, R.color.white));
+       ahBottomNav.setTitleTextSizeInSp(14, 12);
+       ahBottomNav.setForceTint(true);
+       ahBottomNav.setAccentColor(ContextCompat.getColor(this, R.color.colorAccent));
+       ahBottomNav.setInactiveColor(ContextCompat.getColor(this, R.color.gray5));
 
-        binding.ahBottomNav.addItem(item1);
-        binding.ahBottomNav.addItem(item2);
-        binding.ahBottomNav.addItem(item3);
-        binding.ahBottomNav.addItem(item4);
+       ahBottomNav.addItem(item1);
+       ahBottomNav.addItem(item2);
+       ahBottomNav.addItem(item3);
+       ahBottomNav.addItem(item4);
 
-        binding.ahBottomNav.setCurrentItem(1);
+       ahBottomNav.setCurrentItem(1);
 
 
     }
 
     public void updateBottomNavigationPosition(int pos) {
 
-        binding.ahBottomNav.setCurrentItem(pos, false);
+       ahBottomNav.setCurrentItem(pos, false);
     }
 
 
@@ -144,7 +203,7 @@ public class DepartmentActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction().add(R.id.fragment_department_app_container, fragment_search, "fragment_search").addToBackStack("fragment_search").commit();
 
             }
-            binding.setTitle(getResources().getString(R.string.search));
+           setTitle(getResources().getString(R.string.search));
 
             updateBottomNavigationPosition(0);
         } catch (Exception e) {
@@ -175,7 +234,7 @@ public class DepartmentActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction().add(R.id.fragment_department_app_container, fragment_department, "fragment_department").addToBackStack("fragment_department").commit();
 
             }
-             binding.setTitle(getResources().getString(R.string.departments));
+            setTitle(getResources().getString(R.string.departments));
             updateBottomNavigationPosition(1);
         } catch (Exception e) {
         }
@@ -205,7 +264,7 @@ public class DepartmentActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction().add(R.id.fragment_department_app_container, fragment_views, "fragment_views").addToBackStack("fragment_views").commit();
 
             }
-            binding.setTitle(getResources().getString(R.string.views));
+           setTitle(getResources().getString(R.string.views));
 
             updateBottomNavigationPosition(2);
         } catch (Exception e) {
@@ -237,7 +296,7 @@ public class DepartmentActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction().add(R.id.fragment_department_app_container, fragment_contactUs, "fragment_contactUs").addToBackStack("fragment_contactUs").commit();
 
             }
-            binding.setTitle(getResources().getString(R.string.contact_us));
+           setTitle(getResources().getString(R.string.contact_us));
 
             updateBottomNavigationPosition(3);
         } catch (Exception e) {
