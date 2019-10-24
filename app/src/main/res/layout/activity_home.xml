@@ -312,12 +312,12 @@
                 <ImageView
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:layout_gravity="center_vertical"
+                    android:layout_gravity="center"
                     android:tint="@color/white"
-                    android:src="@drawable/ic_user"
-                    android:padding="10dp"
+                    android:src="@drawable/logout"
                     android:clickable="false"
                     android:longClickable="false"
+                    android:gravity="center"
 
                     />
 
