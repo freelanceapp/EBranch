@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,6 +15,7 @@ import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
+import androidx.viewpager.widget.ViewPager;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
@@ -22,16 +24,27 @@ import com.creative.share.apps.ebranch.activities_fragments.activity_department.
 import com.creative.share.apps.ebranch.activities_fragments.activity_department.fragments.Fragment_Search;
 import com.creative.share.apps.ebranch.activities_fragments.activity_department.fragments.Fragment_Views;
 import com.creative.share.apps.ebranch.activities_fragments.activity_department.fragments.Fragment_department;
+import com.creative.share.apps.ebranch.activities_fragments.activity_department_detials.DepartmentDetialsActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.HomeActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_Main;
 import com.creative.share.apps.ebranch.activities_fragments.activity_orders.OrdersActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_profile.profileActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_terms.TermsActivity;
+import com.creative.share.apps.ebranch.adapters.SlidingImage_Adapter;
+import com.creative.share.apps.ebranch.adapters.Work_Adapter;
+import com.creative.share.apps.ebranch.adapters.offer_Adapter;
 import com.creative.share.apps.ebranch.databinding.ActivityDepartmentBinding;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
+import com.creative.share.apps.ebranch.models.Slider_Model;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.paperdb.Paper;
 
@@ -46,8 +59,14 @@ public class DepartmentActivity extends AppCompatActivity {
 private  AHBottomNavigation ahBottomNav;
     private DrawerLayout drawer;
     private NavigationView navigationView;
-    private ImageView imagemenu;
+    private ImageView imagemenu,im_back;
     private LinearLayout ll_profile,ll_terms,ll_orders,ll_home;
+    private SlidingImage_Adapter slidingImage__adapter;
+private ViewPager viewPager;
+    private int current_page=0;
+    private int NUM_PAGES;
+    private String current_lang;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         Paper.init(newBase);
@@ -61,6 +80,7 @@ private  AHBottomNavigation ahBottomNav;
         super.onCreate(savedInstanceState);
        setContentView( R.layout.activity_department);
         initView();
+        change_slide_image();
         if (savedInstanceState == null) {
             displayFragmentDepartment();
         }
@@ -69,6 +89,9 @@ private  AHBottomNavigation ahBottomNav;
     }
 
     private void initView() {
+        Paper.init(this);
+        current_lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
+
         preferences = Preferences.newInstance();
         userModel = preferences.getUserData(this);
         fragmentManager = getSupportFragmentManager();
@@ -79,8 +102,13 @@ ahBottomNav=findViewById(R.id.ah_bottom_nav);
         ll_terms=findViewById(R.id.ll_terms);
         ll_orders=findViewById(R.id.ll_orders);
 ll_home=findViewById(R.id.ll_home);
-
+viewPager=findViewById(R.id.pager);
         imagemenu=findViewById(R.id.imagemenu);
+        im_back=findViewById(R.id.arrow);
+        if(current_lang.equals("ar")){
+            im_back.setRotation(180.0f);
+        }
+
         setUpBottomNavigation();
        ahBottomNav.setOnTabSelectedListener((position, wasSelected) -> {
             switch (position) {
@@ -148,6 +176,26 @@ ll_home=findViewById(R.id.ll_home);
                 drawer.openDrawer(GravityCompat.START);
             }
         });
+        setdata();
+        viewPager.setAdapter(slidingImage__adapter);
+    }
+    private void change_slide_image() {
+        final Handler handler = new Handler();
+        final Runnable Update = new Runnable() {
+            public void run() {
+                if (current_page == NUM_PAGES) {
+                    current_page = 0;
+                }
+                viewPager.setCurrentItem(current_page++, true);
+            }
+        };
+        Timer swipeTimer = new Timer();
+        swipeTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(Update);
+            }
+        }, 3000, 3000);
     }
 
     private void setUpBottomNavigation() {
@@ -303,5 +351,21 @@ ll_home=findViewById(R.id.ll_home);
         }
     }
 
+    private void setdata() {
+        List<Slider_Model.Data> dataArrayList=new ArrayList<>();
 
+        dataArrayList.add(new Slider_Model.Data());
+        dataArrayList.add(new Slider_Model.Data());
+
+        dataArrayList.add(new Slider_Model.Data());
+
+        dataArrayList.add(new Slider_Model.Data());
+        NUM_PAGES=dataArrayList.size();
+        slidingImage__adapter = new SlidingImage_Adapter(this, dataArrayList);
+    }
+
+    public void displaydetials() {
+        Intent intent=new Intent(DepartmentActivity.this, DepartmentDetialsActivity.class);
+        startActivity(intent);
+    }
 }

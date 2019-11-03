@@ -170,6 +170,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <androidx.recyclerview.widget.RecyclerView
+                         android:id="@+id/rec_offer"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             app:layout_constraintEnd_toStartOf="@+id/arrow3"
@@ -205,6 +206,7 @@
                         android:textColor="@color/white"
                         android:textSize="16sp" />
                     <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rec_department"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                    android:padding="10dp"
@@ -263,12 +265,14 @@
                         android:textColor="@color/white"
                         android:textSize="16sp" />
                     <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rec_bestseler"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
                         ></androidx.recyclerview.widget.RecyclerView>
 
                 </LinearLayout>
+
             </androidx.core.widget.NestedScrollView>
 
         </FrameLayout>
