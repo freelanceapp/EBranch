@@ -56,10 +56,6 @@ private  AHBottomNavigation ahBottomNav;
     private NavigationView navigationView;
     private ImageView imagemenu,im_back;
     private LinearLayout ll_profile,ll_terms,ll_orders,ll_home;
-    private SlidingImage_Adapter slidingImage__adapter;
-private ViewPager viewPager;
-    private int current_page=0;
-    private int NUM_PAGES;
     private String current_lang;
 
     @Override
@@ -75,7 +71,6 @@ private ViewPager viewPager;
         super.onCreate(savedInstanceState);
        setContentView( R.layout.activity_home);
         initView();
-        change_slide_image();
         if (savedInstanceState == null) {
             displayFragmentDepartment();
         }
@@ -97,7 +92,6 @@ ahBottomNav=findViewById(R.id.ah_bottom_nav);
         ll_terms=findViewById(R.id.ll_terms);
         ll_orders=findViewById(R.id.ll_orders);
 ll_home=findViewById(R.id.ll_home);
-viewPager=findViewById(R.id.pager);
         imagemenu=findViewById(R.id.imagemenu);
         im_back=findViewById(R.id.arrow);
         if(current_lang.equals("ar")){
@@ -172,25 +166,6 @@ viewPager=findViewById(R.id.pager);
             }
         });
         setdata();
-        viewPager.setAdapter(slidingImage__adapter);
-    }
-    private void change_slide_image() {
-        final Handler handler = new Handler();
-        final Runnable Update = new Runnable() {
-            public void run() {
-                if (current_page == NUM_PAGES) {
-                    current_page = 0;
-                }
-                viewPager.setCurrentItem(current_page++, true);
-            }
-        };
-        Timer swipeTimer = new Timer();
-        swipeTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(Update);
-            }
-        }, 3000, 3000);
     }
 
     private void setUpBottomNavigation() {
@@ -347,7 +322,7 @@ viewPager=findViewById(R.id.pager);
     }
 
     private void setdata() {
-        List<Slider_Model.Data> dataArrayList=new ArrayList<>();
+        List<Slider_Model.Data> dataArrayList = new ArrayList<>();
 
         dataArrayList.add(new Slider_Model.Data());
         dataArrayList.add(new Slider_Model.Data());
@@ -355,8 +330,6 @@ viewPager=findViewById(R.id.pager);
         dataArrayList.add(new Slider_Model.Data());
 
         dataArrayList.add(new Slider_Model.Data());
-        NUM_PAGES=dataArrayList.size();
-        slidingImage__adapter = new SlidingImage_Adapter(this, dataArrayList);
     }
 
     public void displaydetials() {
