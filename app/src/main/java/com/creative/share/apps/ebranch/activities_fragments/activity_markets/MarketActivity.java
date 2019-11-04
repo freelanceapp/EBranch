@@ -17,6 +17,7 @@ import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.activities_fragments.ActivityMarketProfile.MarketProfileActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_department_detials.DepartmentDetialsActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_product_detials.ProductDetialsActivity;
+import com.creative.share.apps.ebranch.adapters.Markets_Adapter;
 import com.creative.share.apps.ebranch.adapters.SlidingImage_Adapter;
 import com.creative.share.apps.ebranch.adapters.Work_Adapter;
 import com.creative.share.apps.ebranch.adapters.offer_Adapter;
@@ -42,7 +43,7 @@ public class MarketActivity extends AppCompatActivity {
     private UserModel userModel;
     private int NUM_PAGES,current_page=0;
     private SlidingImage_Adapter slidingImage__adapter;
-    private Work_Adapter work_adapter;
+    private Markets_Adapter markets_adapter;
 
     private String lang;
 
@@ -103,15 +104,15 @@ change_slide_image();
 
     private void setdata() {
         List<Slider_Model.Data> dataArrayList=new ArrayList<>();
-        work_adapter=new Work_Adapter(dataArrayList,this);
+        markets_adapter=new Markets_Adapter(dataArrayList,this);
 
-        binding.recDepartment.setAdapter(work_adapter);
-
-        dataArrayList.add(new Slider_Model.Data());
-        dataArrayList.add(new Slider_Model.Data());
+        binding.recDepartment.setAdapter(markets_adapter);
 
         dataArrayList.add(new Slider_Model.Data());
-        work_adapter.notifyDataSetChanged();
+        dataArrayList.add(new Slider_Model.Data());
+
+        dataArrayList.add(new Slider_Model.Data());
+        markets_adapter.notifyDataSetChanged();
 
         NUM_PAGES = dataArrayList.size();
         slidingImage__adapter = new SlidingImage_Adapter(this, dataArrayList);
