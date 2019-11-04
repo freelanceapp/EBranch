@@ -1,20 +1,23 @@
-package com.creative.share.apps.ebranch.activities_fragments.activity_department_detials;
+package com.creative.share.apps.ebranch.activities_fragments.ActivityMarketProfile;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.creative.share.apps.ebranch.R;
-import com.creative.share.apps.ebranch.activities_fragments.activity_product_detials.ProductDetialsActivity;
 import com.creative.share.apps.ebranch.adapters.SlidingImage_Adapter;
 import com.creative.share.apps.ebranch.adapters.Work_Adapter;
-import com.creative.share.apps.ebranch.databinding.ActivityDepartmentDetialsBinding;
+import com.creative.share.apps.ebranch.adapters.offer_Adapter;
+import com.creative.share.apps.ebranch.databinding.ActivityMarketProfileBinding;
+import com.creative.share.apps.ebranch.databinding.ActivityProductDetialsBinding;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
 import com.creative.share.apps.ebranch.models.Slider_Model;
 import com.creative.share.apps.ebranch.models.UserModel;
@@ -28,16 +31,16 @@ import java.util.TimerTask;
 
 import io.paperdb.Paper;
 
-public class DepartmentDetialsActivity extends AppCompatActivity {
-    private ActivityDepartmentDetialsBinding binding;
+public class MarketProfileActivity extends AppCompatActivity {
+    private ActivityMarketProfileBinding binding;
 
     private Preferences preferences;
     private UserModel userModel;
-    private Work_Adapter work_adapter;
     private int NUM_PAGES,current_page=0;
     private SlidingImage_Adapter slidingImage__adapter;
-    private String current_lang;
-
+    private Work_Adapter work_adapter;
+    private offer_Adapter offer_adapter;
+    private String lang;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -50,10 +53,11 @@ public class DepartmentDetialsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_department_detials);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_market_profile);
         initView();
-
+        setdata();
 change_slide_image();
+
 
     }
     private void change_slide_image() {
@@ -74,45 +78,59 @@ change_slide_image();
             }
         }, 3000, 3000);
     }
+
+
     @SuppressLint("RestrictedApi")
     private void initView() {
-        Paper.init(this);
-        current_lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
-
         preferences = Preferences.newInstance();
         userModel = preferences.getUserData(this);
         binding.toolbar.setTitle("");
-binding.recDepartment.setLayoutManager(new GridLayoutManager(this,2));
-        binding.setLang(current_lang);
-        if(current_lang.equals("ar")){
+
+        Paper.init(this);
+        lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
+        binding.setLang(lang);
+        if(lang.equals("ar")){
+            binding.tvOffer.setBackgroundDrawable(getResources().getDrawable(R.drawable.text_shape1));
             binding.tvDepart.setBackgroundDrawable(getResources().getDrawable(R.drawable.text_shape1));
+            binding.tvBestseller.setBackgroundDrawable(getResources().getDrawable(R.drawable.text_shape1));
 
         }
         else {
+            binding.tvOffer.setBackgroundDrawable(getResources().getDrawable(R.drawable.text_shape2));
             binding.tvDepart.setBackgroundDrawable(getResources().getDrawable(R.drawable.text_shape2));
+            binding.tvBestseller.setBackgroundDrawable(getResources().getDrawable(R.drawable.text_shape2));
         }
-setdata();
+        binding.progBarSlider.setVisibility(View.GONE);
+        binding.recOffer.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL,false));
+        binding.recDepartment.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
+        binding.recBestseler.setLayoutManager(new GridLayoutManager(this,2));
+
+
+        setdata();
+
     }
+
     private void setdata() {
         List<Slider_Model.Data> dataArrayList=new ArrayList<>();
         work_adapter=new Work_Adapter(dataArrayList,this);
+        offer_adapter=new offer_Adapter(dataArrayList,this);
 
         binding.recDepartment.setAdapter(work_adapter);
+        binding.recBestseler.setAdapter(offer_adapter);
+        binding.recOffer.setAdapter(offer_adapter);
         dataArrayList.add(new Slider_Model.Data());
         dataArrayList.add(new Slider_Model.Data());
 
         dataArrayList.add(new Slider_Model.Data());
-
-        dataArrayList.add(new Slider_Model.Data());
+        offer_adapter.notifyDataSetChanged();
         work_adapter.notifyDataSetChanged();
+
         NUM_PAGES = dataArrayList.size();
         slidingImage__adapter = new SlidingImage_Adapter(this, dataArrayList);
         binding.pager.setAdapter(slidingImage__adapter);
     }
 
 
-    public void displayproduct() {
-        Intent intent=new Intent(DepartmentDetialsActivity.this, ProductDetialsActivity.class);
-        startActivity(intent);
-    }
+
+
 }

@@ -1,4 +1,4 @@
-package com.creative.share.apps.ebranch.activities_fragments.activity_department.fragments;
+package com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,9 +11,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.creative.share.apps.ebranch.R;
-import com.creative.share.apps.ebranch.activities_fragments.activity_department.DepartmentActivity;
+import com.creative.share.apps.ebranch.activities_fragments.activity_home.HomeActivity;
 import com.creative.share.apps.ebranch.databinding.FragmentContactusBinding;
-import com.creative.share.apps.ebranch.databinding.FragmentSearchBinding;
 import com.creative.share.apps.ebranch.interfaces.Listeners;
 import com.creative.share.apps.ebranch.models.ContactUsModel;
 import com.creative.share.apps.ebranch.models.UserModel;
@@ -24,7 +23,7 @@ import java.util.Locale;
 import io.paperdb.Paper;
 
 public class Fragment_ContactUs extends Fragment implements Listeners.ContactListener {
-    private DepartmentActivity activity;
+    private HomeActivity activity;
     private FragmentContactusBinding binding;
     private Preferences preferences;
     private UserModel userModel;
@@ -46,7 +45,7 @@ private ContactUsModel contactUsModel;
 
     private void initView() {
 contactUsModel=new ContactUsModel();
-        activity = (DepartmentActivity) getActivity();
+        activity = (HomeActivity) getActivity();
         preferences = Preferences.newInstance();
         userModel = preferences.getUserData(activity);
         Paper.init(activity);

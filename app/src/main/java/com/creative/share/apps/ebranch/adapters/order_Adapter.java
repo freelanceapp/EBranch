@@ -10,10 +10,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.creative.share.apps.ebranch.R;
-import com.creative.share.apps.ebranch.activities_fragments.activity_department.DepartmentActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_orders.OrdersActivity;
 import com.creative.share.apps.ebranch.databinding.CartRowBinding;
-import com.creative.share.apps.ebranch.databinding.DepartmentRowBinding;
 import com.creative.share.apps.ebranch.models.Slider_Model;
 
 import java.util.List;

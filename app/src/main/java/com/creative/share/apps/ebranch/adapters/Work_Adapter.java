@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.activities_fragments.activity_department_detials.DepartmentDetialsActivity;
+import com.creative.share.apps.ebranch.activities_fragments.activity_markets.MarketActivity;
 import com.creative.share.apps.ebranch.databinding.DepartmentHomeRowBinding;
 import com.creative.share.apps.ebranch.models.Slider_Model;
 
@@ -28,6 +29,7 @@ public class Work_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private String lang;
     private int i = 0;
     private DepartmentDetialsActivity activity;
+    private MarketActivity marketActivity;
 
     public Work_Adapter(List<Slider_Model.Data> orderlist, Context context) {
         this.orderlist = orderlist;
@@ -37,6 +39,10 @@ public class Work_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
         if(context instanceof DepartmentDetialsActivity){
             activity=(DepartmentDetialsActivity)context;
+        }
+        else if(context instanceof MarketActivity){
+            marketActivity=(MarketActivity) context;
+
         }
       //  this.activity = (ProfileActivity) context;
 
@@ -62,6 +68,9 @@ public class Work_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             public void onClick(View view) {
                 if(context instanceof  DepartmentDetialsActivity){
                     activity.displayproduct();
+                }
+                else if(context instanceof  MarketActivity){
+                    marketActivity.displaymarketprofile();
                 }
             }
         });

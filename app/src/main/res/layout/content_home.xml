@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activities_fragments.activity_department.DepartmentActivity"
-    tools:showIn="@layout/app_bar_department">
+    tools:context=".activities_fragments.activity_home.HomeActivity"
+    tools:showIn="@layout/app_bar_home">
 
 
 
@@ -34,7 +35,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <FrameLayout
+                  <!--  <FrameLayout
                         android:id="@+id/flSlider"
                         android:layout_width="match_parent"
                         android:layout_height="400dp">
@@ -67,8 +68,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center" />
-                    </FrameLayout>
+                    </FrameLayout>-->
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp"
 
+                        >
+                    <fragment
+                        android:id="@+id/map"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        /></FrameLayout>
                     <com.aurelhubert.ahbottomnavigation.AHBottomNavigation
                         android:id="@+id/ah_bottom_nav"
                         android:layout_width="match_parent"
@@ -78,7 +89,7 @@
 
                     </com.aurelhubert.ahbottomnavigation.AHBottomNavigation>
                     <FrameLayout
-                        android:id="@+id/fragment_department_app_container"
+                        android:id="@+id/fragment_main_app_container"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:clickable="true"

@@ -1,85 +1,67 @@
 package com.creative.share.apps.ebranch.activities_fragments.activity_home;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
-import android.os.Looper;
-import android.util.Log;
+import android.os.Handler;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
-import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.viewpager.widget.ViewPager;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
-
 import com.creative.share.apps.ebranch.R;
-import com.creative.share.apps.ebranch.activities_fragments.activity_department.DepartmentActivity;
-import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_Main;
+import com.creative.share.apps.ebranch.activities_fragments.ActivityMarketProfile.MarketProfileActivity;
+import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_ContactUs;
+import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_Search;
+import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_Views;
+import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_department;
+import com.creative.share.apps.ebranch.activities_fragments.activity_department_detials.DepartmentDetialsActivity;
+import com.creative.share.apps.ebranch.activities_fragments.activity_markets.MarketActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_orders.OrdersActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_profile.profileActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_terms.TermsActivity;
+import com.creative.share.apps.ebranch.adapters.SlidingImage_Adapter;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
+import com.creative.share.apps.ebranch.models.Slider_Model;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.navigation.NavigationView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.paperdb.Paper;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class HomeActivity extends AppCompatActivity  {
+public class HomeActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
-    private Fragment_Main fragment_main;
-
+    private Fragment_Search fragment_search;
+    private Fragment_department fragment_department;
+    private Fragment_Views fragment_views;
+    private Fragment_ContactUs fragment_contactUs;
     private Preferences preferences;
     private UserModel userModel;
-
+private  AHBottomNavigation ahBottomNav;
     private DrawerLayout drawer;
     private NavigationView navigationView;
-    private ImageView imagemenu;
-private LinearLayout ll_profile,ll_terms,ll_orders;
+    private ImageView imagemenu,im_back;
+    private LinearLayout ll_profile,ll_terms,ll_orders,ll_home;
+    private SlidingImage_Adapter slidingImage__adapter;
+private ViewPager viewPager;
+    private int current_page=0;
+    private int NUM_PAGES;
+    private String current_lang;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         Paper.init(newBase);
@@ -91,37 +73,80 @@ private LinearLayout ll_profile,ll_terms,ll_orders;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+       setContentView( R.layout.activity_home);
         initView();
+        change_slide_image();
         if (savedInstanceState == null) {
-
-            displayFragmentMain();
+            displayFragmentDepartment();
         }
 
 
     }
 
     private void initView() {
+        Paper.init(this);
+        current_lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
+
         preferences = Preferences.newInstance();
         userModel = preferences.getUserData(this);
         fragmentManager = getSupportFragmentManager();
+ahBottomNav=findViewById(R.id.ah_bottom_nav);
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-ll_profile=findViewById(R.id.ll_profile);
+        ll_profile=findViewById(R.id.ll_profile);
         ll_terms=findViewById(R.id.ll_terms);
         ll_orders=findViewById(R.id.ll_orders);
+ll_home=findViewById(R.id.ll_home);
+viewPager=findViewById(R.id.pager);
+        imagemenu=findViewById(R.id.imagemenu);
+        im_back=findViewById(R.id.arrow);
+        if(current_lang.equals("ar")){
+            im_back.setRotation(180.0f);
+        }
+
+        setUpBottomNavigation();
+       ahBottomNav.setOnTabSelectedListener((position, wasSelected) -> {
+            switch (position) {
+                case 0:
+
+                    displayFragmentSearch();
+                    break;
+                case 1:
+
+                    displayFragmentDepartment();
 
 
-imagemenu=findViewById(R.id.imagemenu);
-ll_profile.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
-        drawer.closeDrawer(GravityCompat.START);
-        Intent intent=new Intent(HomeActivity.this, profileActivity.class);
-        startActivity(intent);
+                    break;
+                case 2:
+                    displayFragmentViews();
 
-    }
-});
+                    break;
+                case 3:
+                    displayFragmentContactUS();
+                    break;
+
+            }
+            return false;
+        });
+
+        ll_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer.closeDrawer(GravityCompat.START);
+                Intent intent=new Intent(HomeActivity.this, profileActivity.class);
+                startActivity(intent);
+
+            }
+        });
+        ll_home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer.closeDrawer(GravityCompat.START);
+                Intent intent=new Intent(HomeActivity.this, HomeActivity.class);
+                startActivity(intent);
+
+            }
+        });
         ll_terms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -140,48 +165,202 @@ ll_profile.setOnClickListener(new View.OnClickListener() {
 
             }
         });
-imagemenu.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
-        drawer.openDrawer(GravityCompat.START);
-    }
-});
-    }
-
-
-
-    private void displayFragmentMain() {
-        try {
-            if (fragment_main == null) {
-                fragment_main = Fragment_Main.newInstance();
+        imagemenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer.openDrawer(GravityCompat.START);
             }
+        });
+        setdata();
+        viewPager.setAdapter(slidingImage__adapter);
+    }
+    private void change_slide_image() {
+        final Handler handler = new Handler();
+        final Runnable Update = new Runnable() {
+            public void run() {
+                if (current_page == NUM_PAGES) {
+                    current_page = 0;
+                }
+                viewPager.setCurrentItem(current_page++, true);
+            }
+        };
+        Timer swipeTimer = new Timer();
+        swipeTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(Update);
+            }
+        }, 3000, 3000);
+    }
+
+    private void setUpBottomNavigation() {
+
+        AHBottomNavigationItem item1 = new AHBottomNavigationItem("", R.drawable.ic_search);
+        AHBottomNavigationItem item2 = new AHBottomNavigationItem("", R.drawable.ic_menudepert);
+        AHBottomNavigationItem item3 = new AHBottomNavigationItem("", R.drawable.ic_views);
+        AHBottomNavigationItem item4 = new AHBottomNavigationItem("", R.drawable.ic_email);
+
+       ahBottomNav.setTitleState(AHBottomNavigation.TitleState.ALWAYS_HIDE);
+       ahBottomNav.setDefaultBackgroundColor(ContextCompat.getColor(this, R.color.white));
+       ahBottomNav.setTitleTextSizeInSp(14, 12);
+       ahBottomNav.setForceTint(true);
+       ahBottomNav.setAccentColor(ContextCompat.getColor(this, R.color.colorAccent));
+       ahBottomNav.setInactiveColor(ContextCompat.getColor(this, R.color.gray5));
+
+       ahBottomNav.addItem(item1);
+       ahBottomNav.addItem(item2);
+       ahBottomNav.addItem(item3);
+       ahBottomNav.addItem(item4);
+
+       ahBottomNav.setCurrentItem(1);
 
 
-            if (fragment_main.isAdded()) {
-                fragmentManager.beginTransaction().show(fragment_main).commit();
+    }
+
+    public void updateBottomNavigationPosition(int pos) {
+
+       ahBottomNav.setCurrentItem(pos, false);
+    }
+
+
+    private void displayFragmentSearch() {
+        try {
+            if (fragment_search == null) {
+                fragment_search = Fragment_Search.newInstance();
+            }
+            if (fragment_department != null && fragment_department.isAdded()) {
+                fragmentManager.beginTransaction().hide(fragment_department).commit();
+            }
+            if (fragment_views != null && fragment_views.isAdded()) {
+                fragmentManager.beginTransaction().hide(fragment_views).commit();
+
+            }
+            if (fragment_contactUs != null && fragment_contactUs.isAdded()) {
+                fragmentManager.beginTransaction().hide(fragment_contactUs).commit();
+
+            }
+            if (fragment_search.isAdded()) {
+                fragmentManager.beginTransaction().show(fragment_search).commit();
 
             } else {
-                fragmentManager.beginTransaction().add(R.id.fragment_app_container, fragment_main, "fragment_main").addToBackStack("fragment_main").commit();
+                fragmentManager.beginTransaction().add(R.id.fragment_main_app_container, fragment_search, "fragment_search").addToBackStack("fragment_search").commit();
 
             }
+           setTitle(getResources().getString(R.string.search));
+
+            updateBottomNavigationPosition(0);
         } catch (Exception e) {
         }
     }
 
+    private void displayFragmentDepartment() {
+        try {
+            if (fragment_department == null) {
+                fragment_department = Fragment_department.newInstance();
+            }
+            if (fragment_search != null && fragment_search.isAdded()) {
+                fragmentManager.beginTransaction().hide(fragment_search).commit();
+            }
+            if (fragment_views != null && fragment_views.isAdded()) {
+                fragmentManager.beginTransaction().hide(fragment_views).commit();
 
+            }
+            if (fragment_contactUs != null && fragment_contactUs.isAdded()) {
+                fragmentManager.beginTransaction().hide(fragment_contactUs).commit();
 
-    public void refreshActivity(String lang) {
-        Paper.book().write("lang", lang);
-        LanguageHelper.setNewLocale(this, lang);
-        Intent intent = getIntent();
-        finish();
-        startActivity(intent);
+            }
 
+            if (fragment_department.isAdded()) {
+                fragmentManager.beginTransaction().show(fragment_department).commit();
+
+            } else {
+                fragmentManager.beginTransaction().add(R.id.fragment_main_app_container, fragment_department, "fragment_department").addToBackStack("fragment_department").commit();
+
+            }
+            setTitle(getResources().getString(R.string.departments));
+            updateBottomNavigationPosition(1);
+        } catch (Exception e) {
+        }
     }
 
+    private void displayFragmentViews() {
+        try {
+            if (fragment_views == null) {
+                fragment_views = Fragment_Views.newInstance();
+            }
+            if (fragment_search != null && fragment_search.isAdded()) {
+                fragmentManager.beginTransaction().hide(fragment_search).commit();
+            }
+            if (fragment_department != null && fragment_department.isAdded()) {
+                fragmentManager.beginTransaction().hide(fragment_department).commit();
 
-    public void DisplayDepartment() {
-        Intent intent = new Intent(HomeActivity.this, DepartmentActivity.class);
+            }
+            if (fragment_contactUs != null && fragment_contactUs.isAdded()) {
+                fragmentManager.beginTransaction().hide(fragment_contactUs).commit();
+
+            }
+
+            if (fragment_views.isAdded()) {
+                fragmentManager.beginTransaction().show(fragment_views).commit();
+
+            } else {
+                fragmentManager.beginTransaction().add(R.id.fragment_main_app_container, fragment_views, "fragment_views").addToBackStack("fragment_views").commit();
+
+            }
+           setTitle(getResources().getString(R.string.views));
+
+            updateBottomNavigationPosition(2);
+        } catch (Exception e) {
+        }
+    }
+
+    private void displayFragmentContactUS
+            () {
+        try {
+            if (fragment_contactUs == null) {
+                fragment_contactUs = Fragment_ContactUs.newInstance();
+            }
+            if (fragment_search != null && fragment_search.isAdded()) {
+                fragmentManager.beginTransaction().hide(fragment_search).commit();
+            }
+            if (fragment_department != null && fragment_department.isAdded()) {
+                fragmentManager.beginTransaction().hide(fragment_department).commit();
+
+            }
+            if (fragment_views != null && fragment_views.isAdded()) {
+                fragmentManager.beginTransaction().hide(fragment_views).commit();
+
+            }
+
+            if (fragment_contactUs.isAdded()) {
+                fragmentManager.beginTransaction().show(fragment_contactUs).commit();
+
+            } else {
+                fragmentManager.beginTransaction().add(R.id.fragment_main_app_container, fragment_contactUs, "fragment_contactUs").addToBackStack("fragment_contactUs").commit();
+
+            }
+           setTitle(getResources().getString(R.string.contact_us));
+
+            updateBottomNavigationPosition(3);
+        } catch (Exception e) {
+        }
+    }
+
+    private void setdata() {
+        List<Slider_Model.Data> dataArrayList=new ArrayList<>();
+
+        dataArrayList.add(new Slider_Model.Data());
+        dataArrayList.add(new Slider_Model.Data());
+
+        dataArrayList.add(new Slider_Model.Data());
+
+        dataArrayList.add(new Slider_Model.Data());
+        NUM_PAGES=dataArrayList.size();
+        slidingImage__adapter = new SlidingImage_Adapter(this, dataArrayList);
+    }
+
+    public void displaydetials() {
+        Intent intent=new Intent(HomeActivity.this, MarketActivity.class);
         startActivity(intent);
     }
 }

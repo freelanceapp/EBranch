@@ -10,9 +10,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.creative.share.apps.ebranch.R;
-import com.creative.share.apps.ebranch.activities_fragments.activity_department.DepartmentActivity;
+import com.creative.share.apps.ebranch.activities_fragments.activity_home.HomeActivity;
 import com.creative.share.apps.ebranch.databinding.DepartmentRowBinding;
-import com.creative.share.apps.ebranch.databinding.OfferHomeRowBinding;
 import com.creative.share.apps.ebranch.models.Slider_Model;
 
 import java.util.List;
@@ -22,7 +21,7 @@ import io.paperdb.Paper;
 
 public class department_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final DepartmentActivity activity;
+    private final HomeActivity activity;
     private List<Slider_Model.Data> orderlist;
     private Context context;
     private LayoutInflater inflater;
@@ -35,7 +34,7 @@ public class department_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         inflater = LayoutInflater.from(context);
         Paper.init(context);
         lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
-       this.activity = (DepartmentActivity) context;
+       this.activity = (HomeActivity) context;
 
     }
 
