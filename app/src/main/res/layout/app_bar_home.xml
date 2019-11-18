@@ -51,6 +51,7 @@
                 android:padding="8dp"
                 android:src="@drawable/ic_right_arrow"
                 android:tint="@color/white"
+
                 />
 
         </androidx.appcompat.widget.Toolbar>
