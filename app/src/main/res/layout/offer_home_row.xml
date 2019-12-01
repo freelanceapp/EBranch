@@ -12,7 +12,7 @@
     android:layout_marginBottom="5dp"
     app:cardCornerRadius="10dp"
     app:cardElevation="2dp"
-
+app:contentPadding="5dp"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -60,13 +60,13 @@
 
                 <TextView
                     android:id="@+id/tv_price"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="45dp"
                     android:gravity="center"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:text="22333"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -75,7 +75,6 @@
                     android:id="@+id/rateBar"
                     android:layout_width="0dp"
                     android:layout_height="45dp"
-                    android:layout_gravity="end"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -85,10 +84,14 @@
                     app:srb_fillColor="@color/colorPrimary"
                     app:srb_numberOfStars="5"
                     app:srb_starBackgroundColor="@color/white"
-                    app:srb_starBorderWidth="1"
-                    app:srb_starSize="15dp"
+                    app:srb_starBorderWidth=".5"
+
+
+                    app:srb_starSize="10dp"
                     app:srb_starsSeparation="10dp"
-                    app:srb_stepSize=".5" />
+                    app:srb_stepSize=".5"
+
+                    />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

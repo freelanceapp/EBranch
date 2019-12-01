@@ -43,7 +43,10 @@
                 android:padding="13dp"
                 android:rotation='@{lang.equals("en")?180:0}'
                 android:src="@drawable/ic_right_arrow"
-                android:tint="@color/white" />
+                android:tint="@color/white"
+                android:onClick="@{()->backListener.back()}"
+
+                />
 
             <TextView
                 android:layout_width="wrap_content"

@@ -12,7 +12,7 @@
     android:layout_marginBottom="5dp"
     app:cardCornerRadius="10dp"
     app:cardElevation="2dp"
-
+app:contentPadding="5dp"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,7 +37,7 @@
 
                 <com.makeramen.roundedimageview.RoundedImageView
                     android:id="@+id/im_offer"
-                    android:layout_width="180dp"
+                    android:layout_width="190dp"
                     android:layout_height="90dp"
                     android:layout_gravity="center"
                     android:adjustViewBounds="true"
@@ -49,6 +49,7 @@
                     app:riv_corner_radius="10dp"
                     app:riv_border_color="@color/black"
                     android:src="@drawable/clothes"
+
                     />
                 <FrameLayout
                     android:layout_width="match_parent"

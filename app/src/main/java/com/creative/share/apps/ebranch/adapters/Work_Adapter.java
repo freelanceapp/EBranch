@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.creative.share.apps.ebranch.R;
-import com.creative.share.apps.ebranch.activities_fragments.activity_department_detials.DepartmentDetialsActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_markets.MarketActivity;
 import com.creative.share.apps.ebranch.databinding.DepartmentHomeRowBinding;
+import com.creative.share.apps.ebranch.databinding.OfferHomeRowBinding;
 import com.creative.share.apps.ebranch.models.Slider_Model;
 
 import java.util.List;
@@ -28,7 +28,6 @@ public class Work_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private LayoutInflater inflater;
     private String lang;
     private int i = 0;
-    private DepartmentDetialsActivity activity;
     private MarketActivity marketActivity;
 
     public Work_Adapter(List<Slider_Model.Data> orderlist, Context context) {
@@ -37,10 +36,7 @@ public class Work_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         inflater = LayoutInflater.from(context);
         Paper.init(context);
         lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
-        if(context instanceof DepartmentDetialsActivity){
-            activity=(DepartmentDetialsActivity)context;
-        }
-        else if(context instanceof MarketActivity){
+       if(context instanceof MarketActivity){
             marketActivity=(MarketActivity) context;
 
         }
@@ -53,7 +49,7 @@ public class Work_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
 
-        DepartmentHomeRowBinding binding = DataBindingUtil.inflate(inflater, R.layout.department_home_row, parent, false);
+        OfferHomeRowBinding binding = DataBindingUtil.inflate(inflater, R.layout.offer_home_row, parent, false);
         return new EventHolder(binding);
 
 
@@ -66,10 +62,7 @@ public class Work_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         eventHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(context instanceof  DepartmentDetialsActivity){
-                    activity.displayproduct();
-                }
-                else if(context instanceof  MarketActivity){
+              if(context instanceof  MarketActivity){
                     marketActivity.displaymarketprofile();
                 }
             }
@@ -82,9 +75,9 @@ public class Work_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public class EventHolder extends RecyclerView.ViewHolder {
-        public DepartmentHomeRowBinding binding;
+        public OfferHomeRowBinding binding;
 
-        public EventHolder(@NonNull DepartmentHomeRowBinding binding) {
+        public EventHolder(@NonNull OfferHomeRowBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
 

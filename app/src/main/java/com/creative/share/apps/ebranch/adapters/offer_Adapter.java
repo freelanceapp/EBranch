@@ -2,6 +2,7 @@ package com.creative.share.apps.ebranch.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -9,7 +10,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.creative.share.apps.ebranch.R;
+import com.creative.share.apps.ebranch.activities_fragments.ActivityMarketProfile.MarketProfileActivity;
 import com.creative.share.apps.ebranch.databinding.DepartmentHomeRowBinding;
+import com.creative.share.apps.ebranch.databinding.DepartmentMarketRowBinding;
 import com.creative.share.apps.ebranch.databinding.OfferHomeRowBinding;
 import com.creative.share.apps.ebranch.models.Slider_Model;
 
@@ -25,14 +28,14 @@ public class offer_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private LayoutInflater inflater;
     private String lang;
     private int i = 0;
-
+private MarketProfileActivity marketProfileActivity;
     public offer_Adapter(List<Slider_Model.Data> orderlist, Context context) {
         this.orderlist = orderlist;
         this.context = context;
         inflater = LayoutInflater.from(context);
         Paper.init(context);
         lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
-      //  this.activity = (ProfileActivity) context;
+        this.marketProfileActivity = (MarketProfileActivity) context;
 
     }
 
@@ -41,7 +44,7 @@ public class offer_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
 
-        OfferHomeRowBinding binding = DataBindingUtil.inflate(inflater, R.layout.offer_home_row, parent, false);
+        DepartmentMarketRowBinding binding = DataBindingUtil.inflate(inflater, R.layout.department_market_row, parent, false);
         return new EventHolder(binding);
 
 
@@ -51,6 +54,12 @@ public class offer_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
         EventHolder eventHolder = (EventHolder) holder;
+        eventHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                marketProfileActivity.displayproduct();
+            }
+        });
     }
 
     @Override
@@ -59,9 +68,9 @@ public class offer_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public class EventHolder extends RecyclerView.ViewHolder {
-        public OfferHomeRowBinding binding;
+        public DepartmentMarketRowBinding binding;
 
-        public EventHolder(@NonNull OfferHomeRowBinding binding) {
+        public EventHolder(@NonNull DepartmentMarketRowBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
 

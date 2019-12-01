@@ -434,6 +434,8 @@
                 android:background="@drawable/btn_login_bg"
                 app:layout_constraintVertical_bias="0"
                 android:textColor="@color/white"
+                android:layout_marginBottom="20dp"
+
                 android:textSize="15sp"
                 android:text="@string/register"
                 android:onClick="@{()->signUpListener.checkDataSignUp(signUpModel.name,signUpModel.phone_code,signUpModel.phone,signUpModel.email,signUpModel.password,signUpModel.confirmpassword)}"

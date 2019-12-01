@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="lang"
+            type="String" />
+        <variable
+            name="backListener"
+            type="com.creative.share.apps.ebranch.interfaces.Listeners.BackListener"
+            />
+    </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -25,7 +35,12 @@
             android:longClickable="false"
             android:padding="13dp"
             android:src="@drawable/ic_right_arrow"
-            android:tint="@color/white" />
+            android:tint="@color/white"
+
+            android:rotation='@{lang.equals("en")?180:0}'
+            android:onClick="@{()->backListener.back()}"
+
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -84,6 +99,43 @@
         app:layout_constraintBottom_toTopOf="@+id/bt_com"
         android:layout_marginBottom="8dp"
         />
+
+    <RadioGroup
+        android:id="@+id/radio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/tv_total"
+        app:layout_constraintBottom_toTopOf="@+id/bt_com"
+       >
+
+
+        <RadioButton
+            android:id="@+id/bags"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="false"
+            android:text="Receiving from branches"
+
+            android:theme="@style/MyRadioButton"
+
+            />
+
+        <RadioButton
+            android:id="@+id/plates"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="false"
+            android:text="Home delivery"
+            android:layout_marginTop="8dp"
+            android:theme="@style/MyRadioButton"
+
+            />
+    </RadioGroup>
     <Button
         android:id="@+id/bt_com"
         android:layout_width="180dp"
@@ -92,8 +144,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radio"
         android:background="@drawable/btn_login_bg"
         android:layout_marginBottom="8dp"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

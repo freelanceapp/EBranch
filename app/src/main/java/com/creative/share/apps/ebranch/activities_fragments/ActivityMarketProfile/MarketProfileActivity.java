@@ -2,6 +2,7 @@ package com.creative.share.apps.ebranch.activities_fragments.ActivityMarketProfi
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.creative.share.apps.ebranch.R;
+import com.creative.share.apps.ebranch.activities_fragments.activity_product_detials.ProductDetialsActivity;
 import com.creative.share.apps.ebranch.adapters.SlidingImage_Adapter;
 import com.creative.share.apps.ebranch.adapters.Work_Adapter;
 import com.creative.share.apps.ebranch.adapters.offer_Adapter;
@@ -109,15 +111,19 @@ change_slide_image();
         setdata();
 
     }
+    public void displayproduct() {
+        Intent intent=new Intent(MarketProfileActivity.this, ProductDetialsActivity.class);
+        startActivity(intent);
+    }
 
     private void setdata() {
         List<Slider_Model.Data> dataArrayList=new ArrayList<>();
         work_adapter=new Work_Adapter(dataArrayList,this);
         offer_adapter=new offer_Adapter(dataArrayList,this);
 
-        binding.recDepartment.setAdapter(work_adapter);
-        binding.recBestseler.setAdapter(offer_adapter);
-        binding.recOffer.setAdapter(offer_adapter);
+        binding.recDepartment.setAdapter(offer_adapter);
+        binding.recBestseler.setAdapter(work_adapter);
+        binding.recOffer.setAdapter(work_adapter);
         dataArrayList.add(new Slider_Model.Data());
         dataArrayList.add(new Slider_Model.Data());
 

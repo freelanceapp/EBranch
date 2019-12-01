@@ -3,7 +3,6 @@ package com.creative.share.apps.ebranch.activities_fragments.activity_home;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,22 +12,19 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
-import androidx.viewpager.widget.ViewPager;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.creative.share.apps.ebranch.R;
-import com.creative.share.apps.ebranch.activities_fragments.ActivityMarketProfile.MarketProfileActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_ContactUs;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_Search;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_Views;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_department;
-import com.creative.share.apps.ebranch.activities_fragments.activity_department_detials.DepartmentDetialsActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_markets.MarketActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_orders.OrdersActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_profile.profileActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_terms.TermsActivity;
-import com.creative.share.apps.ebranch.adapters.SlidingImage_Adapter;
+import com.creative.share.apps.ebranch.activity_cart.CartActivity;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
 import com.creative.share.apps.ebranch.models.Slider_Model;
 import com.creative.share.apps.ebranch.models.UserModel;
@@ -38,8 +34,6 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import io.paperdb.Paper;
 
@@ -54,7 +48,7 @@ public class HomeActivity extends AppCompatActivity {
 private  AHBottomNavigation ahBottomNav;
     private DrawerLayout drawer;
     private NavigationView navigationView;
-    private ImageView imagemenu,im_back;
+    private ImageView imagemenu, im_cart;
     private LinearLayout ll_profile,ll_terms,ll_orders,ll_home;
     private String current_lang;
 
@@ -93,11 +87,15 @@ ahBottomNav=findViewById(R.id.ah_bottom_nav);
         ll_orders=findViewById(R.id.ll_orders);
 ll_home=findViewById(R.id.ll_home);
         imagemenu=findViewById(R.id.imagemenu);
-        im_back=findViewById(R.id.arrow);
-        if(current_lang.equals("ar")){
-            im_back.setRotation(180.0f);
-        }
+        im_cart =findViewById(R.id.cart);
 
+im_cart.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        Intent intent=new Intent(HomeActivity.this, CartActivity.class);
+        startActivity(intent);
+    }
+});
         setUpBottomNavigation();
        ahBottomNav.setOnTabSelectedListener((position, wasSelected) -> {
             switch (position) {

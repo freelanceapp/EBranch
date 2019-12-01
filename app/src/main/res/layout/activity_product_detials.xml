@@ -8,7 +8,10 @@
     <data>
 
 
-
+        <variable
+            name="backListener"
+            type="com.creative.share.apps.ebranch.interfaces.Listeners.BackListener"
+            />
         <variable
             name="lang"
             type="String" />
@@ -53,7 +56,9 @@
             android:rotation='@{lang.equals("ar")?180:0}'
             android:src="@drawable/ic_right_arrow"
             android:tint="@color/white"
-             />
+            android:onClick="@{()->backListener.back()}"
+
+            />
 
     </androidx.appcompat.widget.Toolbar>
 

@@ -16,5 +16,10 @@
 
 
 
+    <color name="secondColor">#32db64</color>
+    <color name="endColor">#26A84D</color>
+    <color name="book_trans">#99000000</color>
+
+
 
 </resources>

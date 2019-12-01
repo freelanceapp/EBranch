@@ -15,12 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.activities_fragments.ActivityMarketProfile.MarketProfileActivity;
-import com.creative.share.apps.ebranch.activities_fragments.activity_department_detials.DepartmentDetialsActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_product_detials.ProductDetialsActivity;
 import com.creative.share.apps.ebranch.adapters.Markets_Adapter;
 import com.creative.share.apps.ebranch.adapters.SlidingImage_Adapter;
 import com.creative.share.apps.ebranch.adapters.Work_Adapter;
-import com.creative.share.apps.ebranch.adapters.offer_Adapter;
 import com.creative.share.apps.ebranch.databinding.ActivityMarketProfileBinding;
 import com.creative.share.apps.ebranch.databinding.ActivityMarketsBinding;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
@@ -95,7 +93,7 @@ change_slide_image();
         lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
 
         binding.progBarSlider.setVisibility(View.GONE);
-        binding.recDepartment.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
+        binding.recDepartment.setLayoutManager(new GridLayoutManager(this,2));
 
 
         setdata();
