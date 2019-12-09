@@ -3,6 +3,7 @@ package com.creative.share.apps.ebranch.activities_fragments.activity_home;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,15 +21,23 @@ import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragme
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_Search;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_Views;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_department;
-import com.creative.share.apps.ebranch.activities_fragments.activity_markets.MarketActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_orders.OrdersActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_profile.profileActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_terms.TermsActivity;
 import com.creative.share.apps.ebranch.activity_cart.CartActivity;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
-import com.creative.share.apps.ebranch.models.Slider_Model;
+import com.creative.share.apps.ebranch.models.Markets_Model;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
+import com.creative.share.apps.ebranch.remote.Api;
+import com.creative.share.apps.ebranch.tags.Tags;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -36,8 +45,11 @@ import java.util.List;
 import java.util.Locale;
 
 import io.paperdb.Paper;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements OnMapReadyCallback {
     private FragmentManager fragmentManager;
     private Fragment_Search fragment_search;
     private Fragment_department fragment_department;
@@ -51,7 +63,11 @@ private  AHBottomNavigation ahBottomNav;
     private ImageView imagemenu, im_cart;
     private LinearLayout ll_profile,ll_terms,ll_orders,ll_home;
     private String current_lang;
+    private float zoom = 15.6f;
 
+    private Marker marker;
+    private GoogleMap mMap;
+    private List<Markets_Model.Data> maDataList;
     @Override
     protected void attachBaseContext(Context newBase) {
         Paper.init(newBase);
@@ -65,6 +81,9 @@ private  AHBottomNavigation ahBottomNav;
         super.onCreate(savedInstanceState);
        setContentView( R.layout.activity_home);
         initView();
+        updateUI();
+        getmarkets();
+
         if (savedInstanceState == null) {
             displayFragmentDepartment();
         }
@@ -75,7 +94,7 @@ private  AHBottomNavigation ahBottomNav;
     private void initView() {
         Paper.init(this);
         current_lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
-
+maDataList=new ArrayList<>();
         preferences = Preferences.newInstance();
         userModel = preferences.getUserData(this);
         fragmentManager = getSupportFragmentManager();
@@ -163,7 +182,6 @@ im_cart.setOnClickListener(new View.OnClickListener() {
                 drawer.openDrawer(GravityCompat.START);
             }
         });
-        setdata();
     }
 
     private void setUpBottomNavigation() {
@@ -319,19 +337,103 @@ im_cart.setOnClickListener(new View.OnClickListener() {
         }
     }
 
-    private void setdata() {
-        List<Slider_Model.Data> dataArrayList = new ArrayList<>();
 
-        dataArrayList.add(new Slider_Model.Data());
-        dataArrayList.add(new Slider_Model.Data());
 
-        dataArrayList.add(new Slider_Model.Data());
 
-        dataArrayList.add(new Slider_Model.Data());
+    private void updateUI() {
+
+        SupportMapFragment fragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+
+        fragment.getMapAsync(this);
+
     }
 
-    public void displaydetials() {
-        Intent intent=new Intent(HomeActivity.this, MarketActivity.class);
-        startActivity(intent);
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+        if (googleMap != null) {
+            mMap = googleMap;
+            // mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getActivity(), R.raw.maps));
+            mMap.setTrafficEnabled(false);
+            mMap.setBuildingsEnabled(false);
+            mMap.setIndoorEnabled(true);
+
+            // AddMarker();
+
+
+        }
+    }
+
+    private void AddMarker() {
+
+
+        // IconGenerator iconGenerator = new IconGenerator(getActivity());
+        //iconGenerator.setBackground(null);
+        //View view = LayoutInflater.from(getActivity()).inflate(R.layout.search_map_icon, null);
+        //iconGenerator.setContentView(view);
+        //iconGenerator.setBackground(null);
+        //   iconGenerator.setContentView(view);
+
+        //  LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        Log.e("data",maDataList.size()+"");
+        for (int i = 0; i < maDataList.size(); i++) {
+            //   LatLng ll = new LatLng(x[i], ys[i]);
+
+            // bld.include(ll);
+            //Log.e("dd", x[i] + "");
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(new LatLng(Double.parseDouble(maDataList.get(i).getLatitude()), Double.parseDouble(maDataList.get(i).getLongitude())));
+            marker=mMap.addMarker(markerOptions);
+            //  builder.include(marker[i].getPosition());
+            // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(maDataList.get(i).getLatitude()), Double.parseDouble(maDataList.get(i).getLongitude())), zoom));
+
+
+        }
+
+        // CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(builder.build(),200);
+
+        // mMap.animateCamera(cameraUpdate);
+
+
+    }
+    private void getmarkets() {
+        Api.getService(Tags.base_url).getmarkets().enqueue(new Callback<Markets_Model>() {
+            @Override
+            public void onResponse(Call<Markets_Model> call, Response<Markets_Model> response) {
+                if (response.isSuccessful()) {
+                    maDataList.clear();
+                    if (response.body() != null && response.body().getData() != null && response.body().getData().size() > 0) {
+                        maDataList.addAll(response.body().getData());
+                        Log.e("erorr",response.code()+"");
+
+                        AddMarker();
+                    }
+                    else {
+                        Log.e("erorr",response.code()+"");
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Markets_Model> call, Throwable t) {
+                Log.e("erorr",t.getMessage()+"");
+
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+
+Back();    }
+
+    private void Back() {
+        if(drawer.isDrawerOpen(GravityCompat.START)){
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        else {
+            finish();
+        }
     }
 }

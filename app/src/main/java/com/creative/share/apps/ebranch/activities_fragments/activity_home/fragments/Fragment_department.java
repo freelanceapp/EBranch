@@ -1,9 +1,11 @@
 package com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,17 +15,23 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.HomeActivity;
-import com.creative.share.apps.ebranch.adapters.department_Adapter;
+import com.creative.share.apps.ebranch.adapters.Department_Adapter;
 import com.creative.share.apps.ebranch.databinding.FragmentDepartmentBinding;
-import com.creative.share.apps.ebranch.models.Slider_Model;
+import com.creative.share.apps.ebranch.models.Catogries_Model;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
+import com.creative.share.apps.ebranch.remote.Api;
+import com.creative.share.apps.ebranch.tags.Tags;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import io.paperdb.Paper;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Fragment_department extends Fragment {
     private HomeActivity activity;
@@ -31,7 +39,8 @@ public class Fragment_department extends Fragment {
     private Preferences preferences;
     private UserModel userModel;
     private String current_lang;
-    private department_Adapter depart_adapter;
+    private Department_Adapter depart_adapter;
+    private List<Catogries_Model.Data> dataList;
 
     public static Fragment_department newInstance() {
         return new Fragment_department();
@@ -41,42 +50,76 @@ public class Fragment_department extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_department, container, false);
         initView();
-
+getDepartments();
 
         return binding.getRoot();
     }
 
 
     private void initView() {
-
+dataList=new ArrayList<>();
         activity = (HomeActivity) getActivity();
         preferences = Preferences.newInstance();
         userModel = preferences.getUserData(activity);
         Paper.init(activity);
         current_lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
 binding.recDeparment.setLayoutManager(new GridLayoutManager(activity,2));
+depart_adapter=new Department_Adapter(dataList,activity);
+        binding.recDeparment.setItemViewCacheSize(25);
+        binding.recDeparment.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        binding.recDeparment.setDrawingCacheEnabled(true);
+binding.recDeparment.setAdapter(depart_adapter);
 
         binding.setLang(current_lang);
         binding.recDeparment.setNestedScrollingEnabled(true);
-setdata();
 
     }
-    private void setdata() {
-        List<Slider_Model.Data> dataArrayList=new ArrayList<>();
-        depart_adapter=new department_Adapter(dataArrayList,activity);
+    public void getDepartments() {
+        Api.getService(Tags.base_url)
+                .getDepartment()
+                .enqueue(new Callback<Catogries_Model>() {
+                    @Override
+                    public void onResponse(Call<Catogries_Model> call, Response<Catogries_Model> response) {
+                        //   progBar.setVisibility(View.GONE);
+                        if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
 
-        binding.recDeparment.setAdapter(depart_adapter);
+                            dataList.addAll(response.body().getData());
+                            if (response.body().getData().size() > 0) {
+                                // rec_sent.setVisibility(View.VISIBLE);
 
-        dataArrayList.add(new Slider_Model.Data());
-        dataArrayList.add(new Slider_Model.Data());
+                                //   ll_no_order.setVisibility(View.GONE);
+                                depart_adapter.notifyDataSetChanged();
+                                //   total_page = response.body().getMeta().getLast_page();
 
-        dataArrayList.add(new Slider_Model.Data());
+                            } else {
+                                //  ll_no_order.setVisibility(View.VISIBLE);
 
-        dataArrayList.add(new Slider_Model.Data());
+                            }
+                        } else {
 
-    depart_adapter.notifyDataSetChanged();
+                            Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            try {
+                                Log.e("Error_code", response.code() + "_" + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Catogries_Model> call, Throwable t) {
+                        try {
+
+
+                            //    Toast.makeText(activity, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                            Log.e("error", t.getMessage());
+                        } catch (Exception e) {
+                        }
+                    }
+                });
 
     }
+
 
 
 

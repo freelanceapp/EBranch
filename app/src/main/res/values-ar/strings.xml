@@ -43,6 +43,8 @@
     <string name="terms_and_conditions">الشروط والاحكام</string>
     <string name="log_out">تسجيل الخروج</string>
     <string name="edit">تعديل</string>
-
-
+    <string name="suc">تم بنجاح</string>
+    <string name="wait">إنتظر قليلا...</string>
+    <string name="failed">فشل حاول مرة اخرى لاحقا</string>
+    <string name="something">تحقق من الاتصال بالانترنت</string>
 </resources>

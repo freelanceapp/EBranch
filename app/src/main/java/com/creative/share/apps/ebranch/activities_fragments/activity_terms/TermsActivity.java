@@ -15,6 +15,9 @@ import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.databinding.ActivityTermsBinding;
 import com.creative.share.apps.ebranch.interfaces.Listeners;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
+import com.creative.share.apps.ebranch.models.App_Data_Model;
+import com.creative.share.apps.ebranch.remote.Api;
+import com.creative.share.apps.ebranch.tags.Tags;
 
 
 import java.io.IOException;
@@ -51,10 +54,56 @@ public class TermsActivity extends AppCompatActivity implements Listeners.BackLi
         binding.setLang(lang);
         binding.setBackListener(this);
         binding.progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
-
+getTerms();
 
     }
+    private void getTerms() {
 
+        Api.getService(Tags.base_url)
+                .getterms(0)
+                .enqueue(new Callback<App_Data_Model>() {
+                    @Override
+                    public void onResponse(Call<App_Data_Model> call, Response<App_Data_Model> response) {
+                        binding.progBar.setVisibility(View.GONE);
+                        if (response.isSuccessful() && response.body() != null ) {
+
+                            binding.setAppdatamodel(response.body());
+                        } else {
+                            try {
+
+                                Log.e("error", response.code() + "_" + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            if (response.code() == 500) {
+                                Toast.makeText(TermsActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                Toast.makeText(TermsActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+
+
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<App_Data_Model> call, Throwable t) {
+                        try {
+                            binding.progBar.setVisibility(View.GONE);
+                            if (t.getMessage() != null) {
+                                Log.e("error", t.getMessage());
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    Toast.makeText(TermsActivity.this, R.string.something, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(TermsActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                        } catch (Exception e) {
+                        }
+                    }
+                });
+    }
 
     @Override
     public void back() {

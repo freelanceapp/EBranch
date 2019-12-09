@@ -43,6 +43,9 @@
     <string name="terms_and_conditions">Terms And Conditions</string>
     <string name="log_out">Log Out</string>
     <string name="edit">Edit</string>
-
+    <string name="wait">Wait...</string>
+    <string name="failed">Failed</string>
+    <string name="something">Check internet connection</string>
+    <string name="suc">Success !</string>
 
 </resources>
