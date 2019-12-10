@@ -7,10 +7,12 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.HomeActivity;
+import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_department;
 import com.creative.share.apps.ebranch.databinding.DepartmentRowBinding;
 import com.creative.share.apps.ebranch.models.Catogries_Model;
 import com.creative.share.apps.ebranch.models.Slider_Model;
@@ -28,14 +30,16 @@ public class Department_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private LayoutInflater inflater;
     private String lang;
     private int i = 0;
-
-    public Department_Adapter(List<Catogries_Model.Data> orderlist, Context context) {
+private Fragment_department fragment_department;
+private Fragment fragment;
+    public Department_Adapter(List<Catogries_Model.Data> orderlist, Context context, Fragment fragment) {
         this.orderlist = orderlist;
         this.context = context;
         inflater = LayoutInflater.from(context);
         Paper.init(context);
         lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
        this.activity = (HomeActivity) context;
+       this.fragment=fragment;
 
     }
 
@@ -57,7 +61,15 @@ public class Department_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         EventHolder eventHolder = (EventHolder) holder;
        eventHolder.binding.setLang(lang);
         eventHolder.binding.setCatogrymodel(orderlist.get(position));
-
+eventHolder.itemView.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        if(fragment instanceof  Fragment_department){
+            fragment_department=(Fragment_department)fragment;
+            fragment_department.DisplayDepartmentMarket(orderlist.get(eventHolder.getLayoutPosition()));
+        }
+    }
+});
     }
 
     @Override

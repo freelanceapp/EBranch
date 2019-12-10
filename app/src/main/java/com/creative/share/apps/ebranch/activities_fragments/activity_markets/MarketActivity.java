@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -17,15 +15,11 @@ import com.creative.share.apps.ebranch.adapters.Markets_Adapter;
 import com.creative.share.apps.ebranch.adapters.SlidingImage_Adapter;
 import com.creative.share.apps.ebranch.databinding.ActivityMarketsBinding;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
-import com.creative.share.apps.ebranch.models.Slider_Model;
+import com.creative.share.apps.ebranch.models.Catogries_Model;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import io.paperdb.Paper;
 
@@ -39,7 +33,7 @@ public class MarketActivity extends AppCompatActivity {
     private Markets_Adapter markets_adapter;
 
     private String lang;
-
+private Catogries_Model.Data data;
     @Override
     protected void attachBaseContext(Context newBase) {
         Paper.init(newBase);
@@ -52,29 +46,16 @@ public class MarketActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_markets);
-        initView();
-        setdata();
-change_slide_image();
+        getdatafromintent();
 
+        initView();
 
     }
-    private void change_slide_image() {
-        final Handler handler = new Handler();
-        final Runnable Update = new Runnable() {
-            public void run() {
-                if (current_page == NUM_PAGES) {
-                    current_page = 0;
-                }
-                binding.pager.setCurrentItem(current_page++, true);
-            }
-        };
-        Timer swipeTimer = new Timer();
-        swipeTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(Update);
-            }
-        }, 3000, 3000);
+
+    private void getdatafromintent() {
+        if(getIntent().getStringExtra("cat")!=null){
+            data = (Catogries_Model.Data) getIntent().getSerializableExtra("cat");
+        }
     }
 
 
@@ -87,30 +68,13 @@ change_slide_image();
         Paper.init(this);
         lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
 
-        binding.progBarSlider.setVisibility(View.GONE);
-        binding.recDepartment.setLayoutManager(new GridLayoutManager(this,2));
-
-
-        setdata();
-
+        binding.recMarket.setLayoutManager(new GridLayoutManager(this,2));
+binding.setLang(lang);
+if(data!=null) {
+    binding.setMarketmodel(data);
+}
     }
 
-    private void setdata() {
-        List<Slider_Model.Data> dataArrayList=new ArrayList<>();
-        markets_adapter=new Markets_Adapter(dataArrayList,this);
-
-        binding.recDepartment.setAdapter(markets_adapter);
-
-        dataArrayList.add(new Slider_Model.Data());
-        dataArrayList.add(new Slider_Model.Data());
-
-        dataArrayList.add(new Slider_Model.Data());
-        markets_adapter.notifyDataSetChanged();
-
-        NUM_PAGES = dataArrayList.size();
-        slidingImage__adapter = new SlidingImage_Adapter(this, dataArrayList);
-        binding.pager.setAdapter(slidingImage__adapter);
-    }
 
 
     public void displaymarketprofile() {

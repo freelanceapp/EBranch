@@ -1,5 +1,6 @@
 package com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments;
 
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.HomeActivity;
+import com.creative.share.apps.ebranch.activities_fragments.activity_markets.MarketActivity;
 import com.creative.share.apps.ebranch.adapters.Department_Adapter;
 import com.creative.share.apps.ebranch.databinding.FragmentDepartmentBinding;
 import com.creative.share.apps.ebranch.models.Catogries_Model;
@@ -68,7 +70,7 @@ dataList=new ArrayList<>();
         binding.progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(activity, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
 
         binding.recDeparment.setLayoutManager(new GridLayoutManager(activity,2));
-depart_adapter=new Department_Adapter(dataList,activity);
+depart_adapter=new Department_Adapter(dataList,activity,this);
         binding.recDeparment.setItemViewCacheSize(25);
         binding.recDeparment.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         binding.recDeparment.setDrawingCacheEnabled(true);
@@ -128,6 +130,9 @@ binding.recDeparment.setAdapter(depart_adapter);
     }
 
 
-
-
+    public void DisplayDepartmentMarket(Catogries_Model.Data data) {
+        Intent intent=new Intent(activity, MarketActivity.class);
+        intent.putExtra("cat",data);
+        startActivity(intent);
+    }
 }
