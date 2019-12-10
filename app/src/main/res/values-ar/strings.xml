@@ -47,4 +47,9 @@
     <string name="wait">إنتظر قليلا...</string>
     <string name="failed">فشل حاول مرة اخرى لاحقا</string>
     <string name="something">تحقق من الاتصال بالانترنت</string>
+    <string name="no_products_to_display">لا يوجد منتجات لعرضها</string>
+    <string name="no_department_to_display">لا يوجد اقسام لعرضها</string>
+    <string name="real">ر.س</string>
+    <string name="language_settings">اعدادات اللغه</string>
+
 </resources>

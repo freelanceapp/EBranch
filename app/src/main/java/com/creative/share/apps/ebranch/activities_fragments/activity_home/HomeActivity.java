@@ -1,9 +1,12 @@
 package com.creative.share.apps.ebranch.activities_fragments.activity_home;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -11,6 +14,8 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
+import androidx.core.widget.NestedScrollView;
+import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 
@@ -24,14 +29,15 @@ import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragme
 import com.creative.share.apps.ebranch.activities_fragments.activity_orders.OrdersActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_profile.profileActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_terms.TermsActivity;
-import com.creative.share.apps.ebranch.activity_cart.CartActivity;
+import com.creative.share.apps.ebranch.activities_fragments.activity_cart.CartActivity;
+import com.creative.share.apps.ebranch.databinding.DialogLanguageBinding;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
 import com.creative.share.apps.ebranch.models.Markets_Model;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
 import com.creative.share.apps.ebranch.remote.Api;
+import com.creative.share.apps.ebranch.share.Common;
 import com.creative.share.apps.ebranch.tags.Tags;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -40,11 +46,16 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.navigation.NavigationView;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import io.paperdb.Paper;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -61,7 +72,8 @@ private  AHBottomNavigation ahBottomNav;
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private ImageView imagemenu, im_cart;
-    private LinearLayout ll_profile,ll_terms,ll_orders,ll_home;
+    private LinearLayout ll_profile,ll_terms,ll_orders,ll_lang;
+    private NestedScrollView nestedScrollView;
     private String current_lang;
     private float zoom = 15.6f;
 
@@ -71,8 +83,7 @@ private  AHBottomNavigation ahBottomNav;
     @Override
     protected void attachBaseContext(Context newBase) {
         Paper.init(newBase);
-        super.attachBaseContext(LanguageHelper.updateResources(newBase, Paper.book().read("lang", "ar")));
-
+        super.attachBaseContext(LanguageHelper.updateResources(newBase, Paper.book().read("lang", Locale.getDefault().getLanguage())));
     }
 
 
@@ -104,15 +115,32 @@ ahBottomNav=findViewById(R.id.ah_bottom_nav);
         ll_profile=findViewById(R.id.ll_profile);
         ll_terms=findViewById(R.id.ll_terms);
         ll_orders=findViewById(R.id.ll_orders);
-ll_home=findViewById(R.id.ll_home);
+        ll_lang=findViewById(R.id.ll_lang);
+//ll_home=findViewById(R.id.ll_home);
         imagemenu=findViewById(R.id.imagemenu);
         im_cart =findViewById(R.id.cart);
+nestedScrollView=findViewById(R.id.nestedScrollView);
+        String visitTime = preferences.getVisitTime(this);
+        Calendar calendar = Calendar.getInstance();
+        long timeNow = calendar.getTimeInMillis();
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        String date = dateFormat.format(new Date(timeNow));
+
+        if (!date.equals(visitTime)) {
+            addVisit(date);
+        }
 im_cart.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View view) {
         Intent intent=new Intent(HomeActivity.this, CartActivity.class);
         startActivity(intent);
+    }
+});
+ll_lang.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+CreateLanguageDialog();
     }
 });
         setUpBottomNavigation();
@@ -149,7 +177,7 @@ im_cart.setOnClickListener(new View.OnClickListener() {
 
             }
         });
-        ll_home.setOnClickListener(new View.OnClickListener() {
+     /*   ll_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 drawer.closeDrawer(GravityCompat.START);
@@ -157,7 +185,7 @@ im_cart.setOnClickListener(new View.OnClickListener() {
                 startActivity(intent);
 
             }
-        });
+        });*/
         ll_terms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -357,6 +385,12 @@ im_cart.setOnClickListener(new View.OnClickListener() {
             mMap.setTrafficEnabled(false);
             mMap.setBuildingsEnabled(false);
             mMap.setIndoorEnabled(true);
+mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+    @Override
+    public void onMapClick(LatLng latLng) {
+        nestedScrollView.requestDisallowInterceptTouchEvent(true);
+    }
+});
 
             // AddMarker();
 
@@ -375,7 +409,7 @@ im_cart.setOnClickListener(new View.OnClickListener() {
         //   iconGenerator.setContentView(view);
 
         //  LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        Log.e("data",maDataList.size()+"");
+       // Log.e("data",maDataList.size()+"");
         for (int i = 0; i < maDataList.size(); i++) {
             //   LatLng ll = new LatLng(x[i], ys[i]);
 
@@ -404,7 +438,7 @@ im_cart.setOnClickListener(new View.OnClickListener() {
                     maDataList.clear();
                     if (response.body() != null && response.body().getData() != null && response.body().getData().size() > 0) {
                         maDataList.addAll(response.body().getData());
-                        Log.e("erorr",response.code()+"");
+                        //Log.e("erorr",response.code()+"");
 
                         AddMarker();
                     }
@@ -436,4 +470,104 @@ Back();    }
             finish();
         }
     }
+    private void CreateLanguageDialog()
+    {
+        final AlertDialog dialog = new AlertDialog.Builder(this)
+                .setCancelable(true)
+                .create();
+
+        DialogLanguageBinding binding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.dialog_language, null, false);
+
+
+
+        if (current_lang.equals("ar"))
+        {
+            binding.rbAr.setChecked(true);
+
+        }else if (current_lang.equals("en"))
+        {
+            binding.rbEn.setChecked(true);
+
+        }
+        binding.rbAr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                refreshActivity("ar");
+
+
+            }
+        });
+
+        binding.rbEn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                refreshActivity("en");
+
+
+            }
+        });
+
+
+        binding.btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        //  dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_congratulation_animation;
+        dialog.setView(binding.getRoot());
+        dialog.show();
+    }
+    private void refreshActivity(String lang) {
+        preferences.create_update_language(this, lang);
+        Paper.book().write("lang", lang);
+        LanguageHelper.setNewLocale(this, lang);
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);}
+    private void addVisit(final String timeNow) {
+        final ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
+        dialog.setCancelable(false);
+        dialog.show();
+        Api.getService(Tags.base_url)
+                .updateVisit("1", timeNow)
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        dialog.dismiss();
+                        if (response.isSuccessful()) {
+
+                            try {
+                                preferences.saveVisitTime(HomeActivity.this, timeNow);
+
+                            } catch (Exception e) {
+                                // e.printStackTrace();
+                            }
+                            // Log.e("msg",response.body().toString());
+
+                        } else {
+                            try {
+                                Log.e("error_code", response.code() + response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        dialog.dismiss();
+                        try {
+                            Log.e("Error", t.getMessage());
+                        } catch (Exception e) {
+                        }
+                    }
+                });
+
+    }
+
+
 }

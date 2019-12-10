@@ -16,11 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.activities_fragments.activity_product_detials.ProductDetialsActivity;
 import com.creative.share.apps.ebranch.adapters.SlidingImage_Adapter;
-import com.creative.share.apps.ebranch.adapters.Work_Adapter;
+import com.creative.share.apps.ebranch.adapters.Products_Adapter;
 import com.creative.share.apps.ebranch.adapters.offer_Adapter;
 import com.creative.share.apps.ebranch.databinding.ActivityMarketProfileBinding;
-import com.creative.share.apps.ebranch.databinding.ActivityProductDetialsBinding;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
+import com.creative.share.apps.ebranch.models.Products_Model;
 import com.creative.share.apps.ebranch.models.Slider_Model;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
@@ -40,14 +40,14 @@ public class MarketProfileActivity extends AppCompatActivity {
     private UserModel userModel;
     private int NUM_PAGES,current_page=0;
     private SlidingImage_Adapter slidingImage__adapter;
-    private Work_Adapter work_adapter;
+    private Products_Adapter products_adapter;
     private offer_Adapter offer_adapter;
     private String lang;
 
     @Override
     protected void attachBaseContext(Context newBase) {
         Paper.init(newBase);
-        super.attachBaseContext(LanguageHelper.updateResources(newBase, Paper.book().read("lang", "ar")));
+        super.attachBaseContext(LanguageHelper.updateResources(newBase, Paper.book().read("lang", Locale.getDefault().getLanguage())));
 
     }
 
@@ -57,7 +57,6 @@ public class MarketProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_market_profile);
         initView();
-        setdata();
 change_slide_image();
 
 
@@ -108,7 +107,6 @@ change_slide_image();
         binding.recBestseler.setLayoutManager(new GridLayoutManager(this,2));
 
 
-        setdata();
 
     }
     public void displayproduct() {
@@ -116,25 +114,6 @@ change_slide_image();
         startActivity(intent);
     }
 
-    private void setdata() {
-        List<Slider_Model.Data> dataArrayList=new ArrayList<>();
-        work_adapter=new Work_Adapter(dataArrayList,this);
-        offer_adapter=new offer_Adapter(dataArrayList,this);
-
-        binding.recDepartment.setAdapter(offer_adapter);
-        binding.recBestseler.setAdapter(work_adapter);
-        binding.recOffer.setAdapter(work_adapter);
-        dataArrayList.add(new Slider_Model.Data());
-        dataArrayList.add(new Slider_Model.Data());
-
-        dataArrayList.add(new Slider_Model.Data());
-        offer_adapter.notifyDataSetChanged();
-        work_adapter.notifyDataSetChanged();
-
-        NUM_PAGES = dataArrayList.size();
-        slidingImage__adapter = new SlidingImage_Adapter(this, dataArrayList);
-        binding.pager.setAdapter(slidingImage__adapter);
-    }
 
 
 

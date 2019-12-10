@@ -1,7 +1,6 @@
 package com.creative.share.apps.ebranch.activities_fragments.activity_orders;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,13 +8,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.creative.share.apps.ebranch.R;
-import com.creative.share.apps.ebranch.activities_fragments.activity_product_detials.ProductDetialsActivity;
-import com.creative.share.apps.ebranch.adapters.SlidingImage_Adapter;
-import com.creative.share.apps.ebranch.adapters.Work_Adapter;
-import com.creative.share.apps.ebranch.adapters.offer_Adapter;
 import com.creative.share.apps.ebranch.adapters.order_Adapter;
 import com.creative.share.apps.ebranch.databinding.ActivityOrderBinding;
-import com.creative.share.apps.ebranch.databinding.ActivityProfileBinding;
 import com.creative.share.apps.ebranch.interfaces.Listeners;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
 import com.creative.share.apps.ebranch.models.Slider_Model;
@@ -34,7 +28,7 @@ public class OrdersActivity extends AppCompatActivity implements Listeners.BackL
     @Override
     protected void attachBaseContext(Context newBase) {
         Paper.init(newBase);
-        super.attachBaseContext(LanguageHelper.updateResources(newBase, Paper.book().read("lang", "ar")));
+        super.attachBaseContext(LanguageHelper.updateResources(newBase, Paper.book().read("lang", Locale.getDefault().getLanguage())));
     }
 
     @Override

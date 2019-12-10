@@ -1,5 +1,6 @@
 package com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments;
 
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -63,7 +65,9 @@ dataList=new ArrayList<>();
         userModel = preferences.getUserData(activity);
         Paper.init(activity);
         current_lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
-binding.recDeparment.setLayoutManager(new GridLayoutManager(activity,2));
+        binding.progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(activity, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+
+        binding.recDeparment.setLayoutManager(new GridLayoutManager(activity,2));
 depart_adapter=new Department_Adapter(dataList,activity);
         binding.recDeparment.setItemViewCacheSize(25);
         binding.recDeparment.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
@@ -75,24 +79,26 @@ binding.recDeparment.setAdapter(depart_adapter);
 
     }
     public void getDepartments() {
+        binding.progBar.setVisibility(View.VISIBLE);
+
         Api.getService(Tags.base_url)
                 .getDepartment()
                 .enqueue(new Callback<Catogries_Model>() {
                     @Override
                     public void onResponse(Call<Catogries_Model> call, Response<Catogries_Model> response) {
-                        //   progBar.setVisibility(View.GONE);
+                        binding.progBar.setVisibility(View.GONE);
                         if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
 
                             dataList.addAll(response.body().getData());
                             if (response.body().getData().size() > 0) {
                                 // rec_sent.setVisibility(View.VISIBLE);
 
-                                //   ll_no_order.setVisibility(View.GONE);
+                                binding.llNoStore.setVisibility(View.GONE);
                                 depart_adapter.notifyDataSetChanged();
                                 //   total_page = response.body().getMeta().getLast_page();
 
                             } else {
-                                //  ll_no_order.setVisibility(View.VISIBLE);
+                                 binding.llNoStore.setVisibility(View.VISIBLE);
 
                             }
                         } else {
@@ -110,6 +116,7 @@ binding.recDeparment.setAdapter(depart_adapter);
                     public void onFailure(Call<Catogries_Model> call, Throwable t) {
                         try {
 
+                            binding.progBar.setVisibility(View.GONE);
 
                             //    Toast.makeText(activity, getString(R.string.something), Toast.LENGTH_SHORT).show();
                             Log.e("error", t.getMessage());

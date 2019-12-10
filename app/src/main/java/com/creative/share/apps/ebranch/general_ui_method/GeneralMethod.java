@@ -60,7 +60,7 @@ public class GeneralMethod {
     @BindingAdapter("offerImage")
     public static void offerImage(RoundedImageView imageView, String endPoint)
     {
-        Picasso.with(imageView.getContext()).load(Uri.parse(Tags.IMAGE_URL+endPoint)).fit().into(imageView);
+        Picasso.with(imageView.getContext()).load(Uri.parse(Tags.IMAGE_URL+endPoint)).placeholder(R.drawable.clothes).fit().into(imageView);
     }
 
 

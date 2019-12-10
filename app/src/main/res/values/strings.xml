@@ -47,5 +47,9 @@
     <string name="failed">Failed</string>
     <string name="something">Check internet connection</string>
     <string name="suc">Success !</string>
+    <string name="no_products_to_display">No products To Display</string>
+    <string name="no_department_to_display">No DepartMent To Display</string>
+    <string name="real">r.s</string>
+    <string name="language_settings">Language Settings</string>
 
 </resources>

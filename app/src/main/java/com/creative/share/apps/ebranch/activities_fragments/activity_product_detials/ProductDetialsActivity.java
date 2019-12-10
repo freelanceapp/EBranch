@@ -10,9 +10,6 @@ import androidx.databinding.DataBindingUtil;
 
 import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.adapters.SlidingImage_Adapter;
-import com.creative.share.apps.ebranch.adapters.Work_Adapter;
-import com.creative.share.apps.ebranch.adapters.offer_Adapter;
-import com.creative.share.apps.ebranch.databinding.ActivityDepartmentDetialsBinding;
 import com.creative.share.apps.ebranch.databinding.ActivityProductDetialsBinding;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
 import com.creative.share.apps.ebranch.models.Slider_Model;
@@ -39,7 +36,7 @@ private SlidingImage_Adapter slidingImage__adapter;
     @Override
     protected void attachBaseContext(Context newBase) {
         Paper.init(newBase);
-        super.attachBaseContext(LanguageHelper.updateResources(newBase, Paper.book().read("lang", "ar")));
+        super.attachBaseContext(LanguageHelper.updateResources(newBase, Paper.book().read("lang", Locale.getDefault().getLanguage())));
 
     }
 
