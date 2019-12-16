@@ -4,8 +4,10 @@ package com.creative.share.apps.ebranch.services;
 import com.creative.share.apps.ebranch.models.App_Data_Model;
 import com.creative.share.apps.ebranch.models.Catogries_Market_Model;
 import com.creative.share.apps.ebranch.models.Catogries_Model;
+import com.creative.share.apps.ebranch.models.Cities_Model;
 import com.creative.share.apps.ebranch.models.Markets_Model;
 import com.creative.share.apps.ebranch.models.Products_Model;
+import com.creative.share.apps.ebranch.models.UserModel;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -17,7 +19,33 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface Service {
+    @FormUrlEncoded
+    @POST("api/client/register")
+    Call<UserModel> signUp(@Field("full_name") String full_name,
+                           @Field("city_id") String city_id,
+                           @Field("email") String email,
+                           @Field("password") String password,
+                           @Field("phone") String phone,
+                           @Field("phone_code") String phone_code,
 
+                           @Field("software_type") String software_type
+    );
+    @FormUrlEncoded
+    @POST("api/login")
+    Call<UserModel> login(@Field("phone") String user_phone,
+                          @Field("phone_code") String phone_code,
+                          @Field("password") String user_pass);
+    @FormUrlEncoded
+    @POST("api/client/cofirm-code")
+    Call<ResponseBody> confirmCode(@Field("user_id") int user_id,
+                                   @Field("code") String code
+    );
+    @FormUrlEncoded
+    @POST("api/client/code/send")
+    Call<ResponseBody> resendCode(@Field("user_id") int user_id
+    );
+    @GET("api/ALl-Cities")
+    Call<Cities_Model> getAllCities();
     @FormUrlEncoded
     @POST("api/contact-us")
     Call<ResponseBody> sendContact(@Field("name") String name,

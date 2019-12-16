@@ -12,29 +12,30 @@ public class Cities_Model implements Serializable {
 
     public static class Data implements Serializable
     {
-        private int id;
-            private String name;
-        private String created_at;
-        private String updated_at;
+         private int id_city;
+                 private String ar_city_title;
+                 private String en_city_title;
+                 private String country_id;
 
-        public Data(String name) {
-            this.name = name;
+        public Data(String ar_city_title, String en_city_title) {
+            this.ar_city_title = ar_city_title;
+            this.en_city_title = en_city_title;
         }
 
-        public int getId() {
-            return id;
+        public int getId_city() {
+            return id_city;
         }
 
-        public String getName() {
-            return name;
+        public String getAr_city_title() {
+            return ar_city_title;
         }
 
-        public String getCreated_at() {
-            return created_at;
+        public String getEn_city_title() {
+            return en_city_title;
         }
 
-        public String getUpdated_at() {
-            return updated_at;
+        public String getCountry_id() {
+            return country_id;
         }
     }
 }

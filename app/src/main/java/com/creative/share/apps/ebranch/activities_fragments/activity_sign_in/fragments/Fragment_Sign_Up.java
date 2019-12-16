@@ -23,6 +23,7 @@ import com.creative.share.apps.ebranch.databinding.FragmentSignUpBinding;
 import com.creative.share.apps.ebranch.interfaces.Listeners;
 import com.creative.share.apps.ebranch.models.Cities_Model;
 import com.creative.share.apps.ebranch.models.SignUpModel;
+import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
 import com.creative.share.apps.ebranch.remote.Api;
 import com.creative.share.apps.ebranch.share.Common;
@@ -94,7 +95,7 @@ binding.spinnerCity.setAdapter(adapter);
                     signUpModel.setCity_id(city_id);
                     binding.setSignUpModel(signUpModel);
                 } else {
-                    city_id = String.valueOf(dataList.get(i).getId());
+                    city_id = String.valueOf(dataList.get(i).getId_city());
                     signUpModel.setCity_id(city_id);
                     binding.setSignUpModel(signUpModel);
 
@@ -108,17 +109,76 @@ binding.spinnerCity.setAdapter(adapter);
         });
 
     }
+    private void getCities() {
+        try {
+            ProgressDialog dialog = Common.createProgressDialog(activity, getString(R.string.wait));
+            dialog.setCancelable(false);
+            dialog.show();
+            Api.getService(Tags.base_url)
+                    .getAllCities()
+                    .enqueue(new Callback<Cities_Model>() {
+                        @Override
+                        public void onResponse(Call<Cities_Model> call, Response<Cities_Model> response) {
+                            dialog.dismiss();
+                            if (response.isSuccessful() && response.body() != null) {
+                                if(response.body().getData()!=null){
+                                    updateCityAdapter(response.body());}
+                                else {
+                                    Log.e("error",response.code()+"_"+response.errorBody());
+
+                                }
+
+                            } else {
+
+                                try {
+
+                                    Log.e("error",response.code()+"_"+response.errorBody().string());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                if (response.code() == 500) {
+                                    Toast.makeText(activity, "Server Error", Toast.LENGTH_SHORT).show();
+
+
+                                }else
+                                {
+                                    Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+
+
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Cities_Model> call, Throwable t) {
+                            try {
+                                dialog.dismiss();
+                                if (t.getMessage() != null) {
+                                    Log.e("error", t.getMessage());
+                                    if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                        Toast.makeText(activity, R.string.something, Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(activity, t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                            } catch (Exception e) {
+                            }
+                        }
+                    });
+        } catch (Exception e) {
+        }
+
+    }
+
     private void updateCityAdapter(Cities_Model body) {
 
-        dataList.add(new Cities_Model.Data("إختر"));
+        dataList.add(new Cities_Model.Data("إختر","choose"));
 if(body.getData()!=null){
         dataList.addAll(body.getData());
         adapter.notifyDataSetChanged();}
     }
-    private void getCities() {
 
-
-    }
 
 
 
@@ -190,8 +250,71 @@ if(body.getData()!=null){
     }
 
     private void signUp(SignUpModel signUpModel) {
+        try {
+            ProgressDialog dialog = Common.createProgressDialog(activity, getString(R.string.wait));
+            dialog.setCancelable(false);
+            dialog.show();
+            Api.getService(Tags.base_url)
+                    .signUp(signUpModel.getName(),signUpModel.getCity_id(),signUpModel.getEmail(),signUpModel.getPassword(),signUpModel.getPhone(),signUpModel.getPhone_code(),"1")
+                    .enqueue(new Callback<UserModel>() {
+                        @Override
+                        public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                            dialog.dismiss();
+                            if (response.isSuccessful() && response.body() != null) {
+                                activity.displayFragmentCodeVerification(response.body());
 
+                            } else {
+                                if (response.code() == 422) {
+                                    Toast.makeText(activity,getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                    try {
+
+                                        Log.e("error",response.code()+"_"+response.errorBody().string());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                } else if (response.code() == 500) {
+                                    Toast.makeText(activity, "Server Error", Toast.LENGTH_SHORT).show();
+
+                                }else if (response.code() == 406) {
+                                    Toast.makeText(activity,getString(R.string.em_exist), Toast.LENGTH_SHORT).show();
+
+                                }else
+                                {
+                                    Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+
+                                    try {
+
+                                        Log.e("error",response.code()+"_"+response.errorBody().string());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<UserModel> call, Throwable t) {
+                            try {
+                                dialog.dismiss();
+                                if (t.getMessage() != null) {
+                                    Log.e("error", t.getMessage());
+                                    if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                        Toast.makeText(activity, R.string.something, Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(activity, t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                            } catch (Exception e) {
+                            }
+                        }
+                    });
+        } catch (Exception e) {
+        }
     }
+
 
     @Override
     public void back() {

@@ -51,5 +51,15 @@
     <string name="no_department_to_display">لا يوجد اقسام لعرضها</string>
     <string name="real">ر.س</string>
     <string name="language_settings">اعدادات اللغه</string>
+    <string name="inc_phone_pas">رقم الجوال او كلمة المرور غير صحيحة</string>
+    <string name="enter_the_sms_verification_code_below_that_was_sent_to_your_mobile_phone">أرجو منك إدخال الرمز المرسل إلى هاتفك الجوال.</string>
+    <string name="inc_code_verification">رمز التحقق غير صحيح</string>
+    <string name="you_will_receive_4_digit">ارسلنا لك رمز التفعيل على جوالك نرجو منك إدخال الرمز.</string>
+    <string name="resend">أعد الارسال</string>
+    <string name="confirm">تحقق</string>
+    <string name="enter_code">أدخل الرمز</string>
+    <string name="we_ll_never_share_or_sell_your_phone_number_your_privacy_is_100_guaranteed">بياناتك في الحفظ والصون لدينا، ماراح نشارك بياناتك مع اي احد ولأي سبب.</string>
+    <string name="inc_code">رمز التحقق غير صحيح</string>
+    <string name="em_exist">البريد الالكتروني او رقم الجوال موجود مسبقا</string>
 
 </resources>

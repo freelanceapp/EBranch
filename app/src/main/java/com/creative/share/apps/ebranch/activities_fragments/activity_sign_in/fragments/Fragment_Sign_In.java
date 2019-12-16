@@ -22,7 +22,11 @@ import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.act
 import com.creative.share.apps.ebranch.databinding.FragmentSignInBinding;
 import com.creative.share.apps.ebranch.interfaces.Listeners;
 import com.creative.share.apps.ebranch.models.LoginModel;
+import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
+import com.creative.share.apps.ebranch.remote.Api;
+import com.creative.share.apps.ebranch.share.Common;
+import com.creative.share.apps.ebranch.tags.Tags;
 import com.mukesh.countrypicker.Country;
 import com.mukesh.countrypicker.CountryPicker;
 import com.mukesh.countrypicker.listeners.OnCountryPickerListener;
@@ -117,16 +121,81 @@ binding.tvForget.setOnClickListener(new View.OnClickListener() {
         loginModel = new LoginModel(phone_code,phone,password);
         binding.setLoginModel(loginModel);
 
-       /* if (loginModel.isDataValid(activity))
+       if (loginModel.isDataValid(activity))
         {
             login(phone_code,phone,password);
-        }*/
-        navigateToHomeActivity();
+        }
+      //  navigateToHomeActivity();
     }
 
     private void login(String phone_code, String phone, String password)
     {
+        ProgressDialog dialog = Common.createProgressDialog(activity,getString(R.string.wait));
+        dialog.setCancelable(false);
+        dialog.show();
+        try {
 
+            Api.getService(Tags.base_url)
+                    .login(phone,phone_code,password)
+                    .enqueue(new Callback<UserModel>() {
+                        @Override
+                        public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                            dialog.dismiss();
+                            if (response.isSuccessful()&&response.body()!=null)
+                            {
+                                activity.displayFragmentCodeVerification(response.body());
+
+                            }else
+                            {
+                                try {
+
+                                    Log.e("error",response.code()+"_"+response.errorBody().string());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                if (response.code() == 422) {
+                                    Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                    //  Log.e("error",response.code()+"_"+response.errorBody()+response.message()+password+phone+phone_code);
+
+                                }else if (response.code()==404)
+                                {
+                                    Toast.makeText(activity, R.string.inc_phone_pas, Toast.LENGTH_SHORT).show();
+
+                                }else if (response.code() == 500) {
+                                    Toast.makeText(activity, "Server Error", Toast.LENGTH_SHORT).show();
+
+                                }else
+                                {
+                                    Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+
+
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<UserModel> call, Throwable t) {
+                            try {
+                                dialog.dismiss();
+                                if (t.getMessage()!=null)
+                                {
+                                    Log.e("error",t.getMessage());
+                                    if (t.getMessage().toLowerCase().contains("failed to connect")||t.getMessage().toLowerCase().contains("unable to resolve host"))
+                                    {
+                                        Toast.makeText(activity,R.string.something, Toast.LENGTH_SHORT).show();
+                                    }else
+                                    {
+                                        Toast.makeText(activity,t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                            }catch (Exception e){}
+                        }
+                    });
+        }catch (Exception e){
+            dialog.dismiss();
+
+        }
     }
 
 

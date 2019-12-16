@@ -18,6 +18,6 @@
         android:gravity="center"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:text='@{cityModel.name}'
+        android:text='@{lang.equals("ar")?cityModel.ar_city_title:cityModel.en_city_title}'
         />
 </layout>

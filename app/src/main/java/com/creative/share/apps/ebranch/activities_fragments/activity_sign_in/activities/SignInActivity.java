@@ -10,12 +10,14 @@ import androidx.fragment.app.FragmentManager;
 
 
 import com.creative.share.apps.ebranch.R;
+import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments.Fragment_Code_Verification;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments.Fragment_ForgetPassword;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments.Fragment_Language;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments.Fragment_Sign_In;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments.Fragment_Sign_Up;
 import com.creative.share.apps.ebranch.databinding.ActivitySignInBinding;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
+import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
 
 
@@ -35,6 +37,7 @@ public class SignInActivity extends AppCompatActivity {
     private String cuurent_language;
     private Preferences preferences;
     private Fragment_ForgetPassword fragment_forgetpass;
+    private Fragment_Code_Verification fragment_code_verification;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -110,7 +113,12 @@ public class SignInActivity extends AppCompatActivity {
         fragmentManager.beginTransaction().add(R.id.fragment_sign_in_container, fragment_forgetpass, "fragment_forgetpass").addToBackStack("fragment_forgetpass").commit();
 
     }
+    public void displayFragmentCodeVerification(UserModel userModel) {
+        fragment_count ++;
+        fragment_code_verification = Fragment_Code_Verification.newInstance(userModel);
+        fragmentManager.beginTransaction().add(R.id.fragment_sign_in_container, fragment_code_verification, "fragment_code_verification").addToBackStack("fragment_code_verification").commit();
 
+    }
     public void RefreshActivity(String selected_language) {
         Paper.book().write("lang", selected_language);
         LanguageHelper.setNewLocale(this, selected_language);
