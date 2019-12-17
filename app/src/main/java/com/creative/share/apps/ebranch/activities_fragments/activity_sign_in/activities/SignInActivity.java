@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager;
 
 
 import com.creative.share.apps.ebranch.R;
+import com.creative.share.apps.ebranch.activities_fragments.activity_map.MapActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments.Fragment_Code_Verification;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments.Fragment_ForgetPassword;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments.Fragment_Language;
@@ -173,5 +174,10 @@ if(fragment_sign_up!=null&&fragment_sign_up.isAdded()){
             }
         }
 
+    }
+
+    public void selectlocation() {
+        Intent intent = new Intent(SignInActivity.this, MapActivity.class);
+        startActivityForResult(intent, 1);
     }
 }

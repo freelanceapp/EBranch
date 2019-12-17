@@ -88,8 +88,7 @@ binding.spinnerCity.setAdapter(adapter);
         binding.tvLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(activity, MapActivity.class);
-                startActivityForResult(intent, 1);
+               activity.selectlocation();
             }
         });
 
