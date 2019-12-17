@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentManager;
@@ -17,6 +18,7 @@ import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fra
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments.Fragment_Sign_Up;
 import com.creative.share.apps.ebranch.databinding.ActivitySignInBinding;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
+import com.creative.share.apps.ebranch.models.SelectedLocation;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
 
@@ -38,6 +40,7 @@ public class SignInActivity extends AppCompatActivity {
     private Preferences preferences;
     private Fragment_ForgetPassword fragment_forgetpass;
     private Fragment_Code_Verification fragment_code_verification;
+    private SelectedLocation selectedLocation;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -63,7 +66,7 @@ public class SignInActivity extends AppCompatActivity {
                 DisplayFragmentSignIn();
 
             }
-            DisplayFragmentSignIn();
+          //  DisplayFragmentSignIn();
 
         }
 
@@ -155,6 +158,20 @@ public class SignInActivity extends AppCompatActivity {
             }
         }
 
+
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+            if (data.hasExtra("location")) {
+                selectedLocation = (SelectedLocation) data.getSerializableExtra("location");
+
+if(fragment_sign_up!=null&&fragment_sign_up.isAdded()){
+    fragment_sign_up.setlocation(selectedLocation);
+}
+            }
+        }
 
     }
 }

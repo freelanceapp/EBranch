@@ -10,10 +10,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.creative.share.apps.ebranch.R;
-import com.creative.share.apps.ebranch.activities_fragments.ActivityMarketProfile.MarketProfileActivity;
-import com.creative.share.apps.ebranch.databinding.DepartmentHomeRowBinding;
+import com.creative.share.apps.ebranch.activities_fragments.activitymarketprofile.MarketProfileActivity;
 import com.creative.share.apps.ebranch.databinding.DepartmentMarketRowBinding;
-import com.creative.share.apps.ebranch.databinding.OfferHomeRowBinding;
 import com.creative.share.apps.ebranch.models.Slider_Model;
 
 import java.util.List;

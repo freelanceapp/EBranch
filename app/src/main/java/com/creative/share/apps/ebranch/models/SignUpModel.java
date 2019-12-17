@@ -32,6 +32,7 @@ public class SignUpModel extends BaseObservable implements Serializable {
 
     public ObservableField<String> error_password = new ObservableField<>();
     public ObservableField<String> error_confirm_password = new ObservableField<>();
+    public ObservableField<String> address_error = new ObservableField<>();
 
 
     public SignUpModel() {
@@ -42,7 +43,9 @@ public class SignUpModel extends BaseObservable implements Serializable {
         this.confirmpassword = "";
         this.email = "";
         this.city_id = "";
-    }
+    }    private String longitude;
+    private String latitude;
+    private String address;
 
     public SignUpModel(String name, String city_id, String phone_code, String phone, String email, String password, String confirmpassword) {
         setName(name);
@@ -52,8 +55,40 @@ public class SignUpModel extends BaseObservable implements Serializable {
         setPassword(password);
         setConfirmpassword(confirmpassword);
         setCity_id(city_id);
+
+    }
+    @Bindable
+    public String getLongitude() {
+        return longitude;
     }
 
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+        notifyPropertyChanged(BR.latitude);
+
+    }
+
+    @Bindable
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+        notifyPropertyChanged(BR.latitude);
+
+    }
+
+    @Bindable
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+        notifyPropertyChanged(BR.address);
+
+    }
     @Bindable
     public String getName() {
         return name;
@@ -142,7 +177,7 @@ public class SignUpModel extends BaseObservable implements Serializable {
                 !TextUtils.isEmpty(name) &&
                 ((!TextUtils.isEmpty(email) &&
                         Patterns.EMAIL_ADDRESS.matcher(email).matches()) || TextUtils.isEmpty(email)) &&
-                !TextUtils.isEmpty(city_id)
+                !TextUtils.isEmpty(city_id)&&address!=null&&!TextUtils.isEmpty(address)
         ) {
             error_name.set(null);
             error_phone_code.set(null);
@@ -176,7 +211,13 @@ public class SignUpModel extends BaseObservable implements Serializable {
             } else {
                 error_phone.set(null);
             }
+            if (address==null||address.isEmpty()) {
+                address_error.set(context.getString(R.string.field_req));
+            }
+            else {
+                address_error.set(null);
 
+            }
 
             if (password.isEmpty()) {
                 error_password.set(context.getString(R.string.field_req));

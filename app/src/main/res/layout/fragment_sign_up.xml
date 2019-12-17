@@ -11,7 +11,9 @@
         <variable
             name="signUpModel"
             type="com.creative.share.apps.ebranch.models.SignUpModel" />
-
+        <variable
+            name="location"
+            type="com.creative.share.apps.ebranch.models.SelectedLocation" />
         <variable
             name="showCountryListener"
             type="com.creative.share.apps.ebranch.interfaces.Listeners.ShowCountryDialogListener" />
@@ -417,7 +419,22 @@
 
 
                 </LinearLayout>
-
+                <TextView
+                    android:id="@+id/tvLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/linear_shape"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:textColorHint="@color/gray4"
+                    android:hint="@string/location"
+                    android:textSize="13sp"
+                    android:text="@{location.address}"
+                    android:singleLine="true"
+                    error="@{signUpModel.address_error}"
+                    />
             </LinearLayout>
 
 

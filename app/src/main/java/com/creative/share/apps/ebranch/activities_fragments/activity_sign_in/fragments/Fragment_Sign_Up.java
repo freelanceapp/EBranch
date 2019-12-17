@@ -1,8 +1,10 @@
 package com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -12,16 +14,19 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 
 import com.creative.share.apps.ebranch.R;
+import com.creative.share.apps.ebranch.activities_fragments.activity_map.MapActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.activities.SignInActivity;
 import com.creative.share.apps.ebranch.adapters.CityAdapter;
 import com.creative.share.apps.ebranch.databinding.FragmentSignUpBinding;
 import com.creative.share.apps.ebranch.interfaces.Listeners;
 import com.creative.share.apps.ebranch.models.Cities_Model;
+import com.creative.share.apps.ebranch.models.SelectedLocation;
 import com.creative.share.apps.ebranch.models.SignUpModel;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
@@ -42,6 +47,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.app.Activity.RESULT_OK;
+
 public class Fragment_Sign_Up extends Fragment implements Listeners.SignUpListener,Listeners.BackListener,Listeners.ShowCountryDialogListener, OnCountryPickerListener {
     private SignInActivity activity;
     private String current_language;
@@ -52,6 +59,8 @@ public class Fragment_Sign_Up extends Fragment implements Listeners.SignUpListen
     private CityAdapter adapter;
     private List<Cities_Model.Data> dataList;
     private String city_id = "";
+    private SelectedLocation selectedLocation;
+
 
     @Override
     public View onCreateView(@androidx.annotation.NonNull LayoutInflater inflater, @androidx.annotation.Nullable ViewGroup container, @androidx.annotation.Nullable Bundle savedInstanceState) {
@@ -76,7 +85,13 @@ public class Fragment_Sign_Up extends Fragment implements Listeners.SignUpListen
         createCountryDialog();
 adapter=new CityAdapter(dataList,activity);
 binding.spinnerCity.setAdapter(adapter);
-
+        binding.tvLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(activity, MapActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
 
 
 
@@ -322,4 +337,12 @@ if(body.getData()!=null){
     }
 
 
+    public void setlocation(SelectedLocation selectedLocation) {
+        this.selectedLocation=selectedLocation;
+        binding.setLocation(selectedLocation);
+        signUpModel.setLatitude(String.valueOf(selectedLocation.getLat()));
+        signUpModel.setLongitude(String.valueOf(selectedLocation.getLng()));
+        signUpModel.setAddress(selectedLocation.getAddress());
+        binding.setSignUpModel(signUpModel);
+    }
 }

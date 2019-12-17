@@ -8,6 +8,8 @@ import com.creative.share.apps.ebranch.models.Cities_Model;
 import com.creative.share.apps.ebranch.models.Markets_Model;
 import com.creative.share.apps.ebranch.models.OrderDataModel;
 import com.creative.share.apps.ebranch.models.OrderModel;
+import com.creative.share.apps.ebranch.models.PlaceGeocodeData;
+import com.creative.share.apps.ebranch.models.PlaceMapDetailsData;
 import com.creative.share.apps.ebranch.models.Products_Model;
 import com.creative.share.apps.ebranch.models.UserModel;
 
@@ -21,6 +23,18 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface Service {
+    @GET("place/findplacefromtext/json")
+    Call<PlaceMapDetailsData> searchOnMap(@Query(value = "inputtype") String inputtype,
+                                          @Query(value = "input") String input,
+                                          @Query(value = "fields") String fields,
+                                          @Query(value = "language") String language,
+                                          @Query(value = "key") String key
+    );
+
+    @GET("geocode/json")
+    Call<PlaceGeocodeData> getGeoData(@Query(value = "latlng") String latlng,
+                                      @Query(value = "language") String language,
+                                      @Query(value = "key") String key);
     @FormUrlEncoded
     @POST("api/client/register")
     Call<UserModel> signUp(@Field("full_name") String full_name,

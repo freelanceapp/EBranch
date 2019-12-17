@@ -2,7 +2,6 @@ package com.creative.share.apps.ebranch.activities_fragments.activity_order_deti
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,15 +14,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.creative.share.apps.ebranch.R;
-import com.creative.share.apps.ebranch.activities_fragments.ActivityMarketProfile.MarketProfileActivity;
-import com.creative.share.apps.ebranch.adapters.Markets_Adapter;
 import com.creative.share.apps.ebranch.adapters.Order_Detials_Adapter;
-import com.creative.share.apps.ebranch.databinding.ActivityMarketsBinding;
 import com.creative.share.apps.ebranch.databinding.ActivityOrderdetialsBinding;
 import com.creative.share.apps.ebranch.interfaces.Listeners;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
-import com.creative.share.apps.ebranch.models.Catogries_Market_Model;
-import com.creative.share.apps.ebranch.models.Catogries_Model;
 import com.creative.share.apps.ebranch.models.OrderModel;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;

@@ -1,4 +1,4 @@
-package com.creative.share.apps.ebranch.activities_fragments.ActivityMarketProfile;
+package com.creative.share.apps.ebranch.activities_fragments.activitymarketprofile;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -21,13 +21,9 @@ import com.creative.share.apps.ebranch.adapters.offer_Adapter;
 import com.creative.share.apps.ebranch.databinding.ActivityMarketProfileBinding;
 import com.creative.share.apps.ebranch.interfaces.Listeners;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
-import com.creative.share.apps.ebranch.models.Products_Model;
-import com.creative.share.apps.ebranch.models.Slider_Model;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
