@@ -46,6 +46,10 @@ public class UserModel implements Serializable {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getUser_type() {
         return user_type;
     }

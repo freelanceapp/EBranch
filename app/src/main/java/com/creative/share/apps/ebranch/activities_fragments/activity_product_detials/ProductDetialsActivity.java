@@ -11,11 +11,13 @@ import androidx.databinding.DataBindingUtil;
 import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.adapters.SlidingImage_Adapter;
 import com.creative.share.apps.ebranch.databinding.ActivityProductDetialsBinding;
+import com.creative.share.apps.ebranch.interfaces.Listeners;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
 import com.creative.share.apps.ebranch.models.Slider_Model;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -24,7 +26,7 @@ import java.util.TimerTask;
 
 import io.paperdb.Paper;
 
-public class ProductDetialsActivity extends AppCompatActivity {
+public class ProductDetialsActivity extends AppCompatActivity implements Listeners.BackListener {
     private ActivityProductDetialsBinding binding;
 
     private Preferences preferences;
@@ -80,6 +82,7 @@ change_slide_image();
         Paper.init(this);
         lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
         binding.setLang(lang);
+        binding.setBackListener(this);
 
     }
 
@@ -99,5 +102,8 @@ change_slide_image();
     }
 
 
-
+    @Override
+    public void back() {
+        finish();
+    }
 }

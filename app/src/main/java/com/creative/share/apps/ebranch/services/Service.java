@@ -6,6 +6,8 @@ import com.creative.share.apps.ebranch.models.Catogries_Market_Model;
 import com.creative.share.apps.ebranch.models.Catogries_Model;
 import com.creative.share.apps.ebranch.models.Cities_Model;
 import com.creative.share.apps.ebranch.models.Markets_Model;
+import com.creative.share.apps.ebranch.models.OrderDataModel;
+import com.creative.share.apps.ebranch.models.OrderModel;
 import com.creative.share.apps.ebranch.models.Products_Model;
 import com.creative.share.apps.ebranch.models.UserModel;
 
@@ -31,7 +33,7 @@ public interface Service {
                            @Field("software_type") String software_type
     );
     @FormUrlEncoded
-    @POST("api/login")
+    @POST("api/client/login")
     Call<UserModel> login(@Field("phone") String user_phone,
                           @Field("phone_code") String phone_code,
                           @Field("password") String user_pass);
@@ -87,5 +89,20 @@ public interface Service {
     @FormUrlEncoded
     @POST("api/visit")
     Call<ResponseBody> updateVisit(@Field("type") String type, @Field("date") String date);
+    @FormUrlEncoded
+    @POST("api/client/currentOrders")
+    Call<OrderDataModel> getcurrentOrders(@Field("user_id") int user_id,
+                                          @Field("page") int page
+    );
+    @FormUrlEncoded
+    @POST("api/client/previousOrders")
+    Call<OrderDataModel> getfinshiorders(@Field("user_id") int user_id,
+                                          @Field("page") int page
+    );
+    @FormUrlEncoded
+    @POST("api/single-order")
+    Call<OrderModel> getorderdetials(
+            @Field("order_id") String order_id
 
+    );
 }

@@ -1,6 +1,7 @@
 package com.creative.share.apps.ebranch.general_ui_method;
 
 import android.net.Uri;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.EditText;
@@ -48,7 +49,7 @@ public class GeneralMethod {
     @BindingAdapter("serviceImage")
     public static void serviceImage(ImageView imageView,String endPoint)
     {
-        Picasso.with(imageView.getContext()).load(Uri.parse(Tags.IMAGE_URL+endPoint)).fit().into(imageView);
+        Picasso.with(imageView.getContext()).load(Uri.parse(Tags.IMAGE_URL+endPoint)).placeholder(R.drawable.logo).fit().into(imageView);
     }
 
     @BindingAdapter("profileImage")
@@ -66,16 +67,13 @@ public class GeneralMethod {
 
 
 
-    @BindingAdapter({"date","workTimehoosen","workTime"})
-    public static void displayDate (TextView textView,long date,String work_time_choosen,String work_time)
+    @BindingAdapter({"date"})
+    public static void displayDate (TextView textView,long date)
     {
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE dd/MMM",Locale.ENGLISH);
         String m_date = dateFormat.format(new Date(date*1000));
-        if(work_time!=null){
-        textView.setText(work_time+" "+work_time_choosen+"\n"+String.format("%s",m_date));}
-        else {
+
             textView.setText(String.format("%s",m_date));
-        }
 
     }
 

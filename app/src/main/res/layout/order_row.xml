@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="model"
+            type="com.creative.share.apps.ebranch.models.OrderModel" />
+        <variable
+            name="lang"
+            type="String" />
+    </data>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="3dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+
+            >
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+
+
+                >
+
+                <ImageView
+                    android:id="@+id/im1"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    serviceImage="@{model.market.logo}"
+                    />
+
+
+                <TextView
+                    android:id="@+id/tv1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/im1"
+                    app:layout_constraintEnd_toStartOf="@id/tv2"
+                    android:textColor="@color/gray4"
+                    android:text="@string/market_name"
+                    android:layout_marginTop="5dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:gravity="start"
+
+                    />
+
+                <TextView
+                    android:id="@+id/tv2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="@id/tv1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv1"
+                    android:textColor="@color/gray4"
+                    android:text="@string/market_phone"
+                    />
+
+
+                <TextView
+                    android:id="@+id/tvstorename"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@id/im1"
+                    app:layout_constraintEnd_toStartOf="@id/tvPhone"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintTop_toBottomOf="@id/tv1"
+                    android:layout_marginTop="8dp"
+                    android:textSize="14sp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="@{model.market.full_name}"
+                    />
+
+                <TextView
+                    android:id="@+id/tvPhone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="@id/tvstorename"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tvstorename"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp"
+                    android:text="@{model.market.phone}"
+                    />
+
+
+                <TextView
+                    android:id="@+id/tv3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/tvstorename"
+                    app:layout_constraintStart_toEndOf="@id/im1"
+                    app:layout_constraintEnd_toStartOf="@id/tv2"
+                    android:textColor="@color/gray4"
+                    android:text="@string/price"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+
+                    />
+
+                <TextView
+                    android:id="@+id/tv4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="@id/tv3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv3"
+                    android:textColor="@color/gray4"
+                    android:text="@string/amount"
+                    />
+
+
+                <TextView
+                    android:id="@+id/tvprice"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@id/im1"
+                    app:layout_constraintEnd_toStartOf="@id/tvquantity"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintTop_toBottomOf="@id/tv3"
+                    android:layout_marginTop="8dp"
+                    android:textSize="14sp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text='@{model.total_cost+""}'
+                    />
+
+                <TextView
+                    android:id="@+id/tvquantity"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="@id/tvprice"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tvprice"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp"
+                    android:text='@{model.order_details!=null?model.order_details.size()+"":"0"}'
+                    />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="35dp"
+            android:layout_marginTop="-10dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:gravity="center_horizontal"
+            android:paddingTop="12dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp"
+            android:background="@drawable/tv_bg"
+            date="@{model.order_date}"
+
+            />
+    </LinearLayout>
+
+</layout>
+

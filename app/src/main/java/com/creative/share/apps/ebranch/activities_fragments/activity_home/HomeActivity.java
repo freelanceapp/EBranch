@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,7 @@ import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragme
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_department;
 import com.creative.share.apps.ebranch.activities_fragments.activity_orders.OrdersActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_profile.profileActivity;
+import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.activities.SignInActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_terms.TermsActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_cart.CartActivity;
 import com.creative.share.apps.ebranch.databinding.DialogLanguageBinding;
@@ -72,7 +74,7 @@ private  AHBottomNavigation ahBottomNav;
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private ImageView imagemenu, im_cart;
-    private LinearLayout ll_profile,ll_terms,ll_orders,ll_lang;
+    private LinearLayout ll_profile,ll_terms,ll_orders,ll_lang,ll_logout;
     private NestedScrollView nestedScrollView;
     private String current_lang;
     private float zoom = 15.6f;
@@ -116,6 +118,7 @@ ahBottomNav=findViewById(R.id.ah_bottom_nav);
         ll_terms=findViewById(R.id.ll_terms);
         ll_orders=findViewById(R.id.ll_orders);
         ll_lang=findViewById(R.id.ll_lang);
+        ll_logout=findViewById(R.id.ll_logout);
 //ll_home=findViewById(R.id.ll_home);
         imagemenu=findViewById(R.id.imagemenu);
         im_cart =findViewById(R.id.cart);
@@ -143,6 +146,12 @@ ll_lang.setOnClickListener(new View.OnClickListener() {
 CreateLanguageDialog();
     }
 });
+        ll_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               Logout();
+            }
+        });
         setUpBottomNavigation();
        ahBottomNav.setOnTabSelectedListener((position, wasSelected) -> {
             switch (position) {
@@ -570,4 +579,26 @@ Back();    }
     }
 
 
+    private void Logout() {
+
+        if (userModel==null)
+        {
+            navigateToSignInActivity();
+        }else
+        {
+            preferences.clear(this);
+            navigateToSignInActivity();
+
+        }
+
+    }
+
+    private void navigateToSignInActivity() {
+
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent(this, SignInActivity.class);
+            startActivity(intent);
+            finish();
+        },200);
+    }
 }

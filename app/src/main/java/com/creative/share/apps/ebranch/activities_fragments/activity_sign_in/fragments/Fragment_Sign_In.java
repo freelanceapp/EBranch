@@ -31,6 +31,9 @@ import com.mukesh.countrypicker.Country;
 import com.mukesh.countrypicker.CountryPicker;
 import com.mukesh.countrypicker.listeners.OnCountryPickerListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.Locale;
 
@@ -143,29 +146,81 @@ binding.tvForget.setOnClickListener(new View.OnClickListener() {
                             dialog.dismiss();
                             if (response.isSuccessful()&&response.body()!=null)
                             {
-                                activity.displayFragmentCodeVerification(response.body());
-
+                              //  activity.displayFragmentCodeVerification(response.body());
+                                preferences.create_update_userdata(activity, response.body());
+                                preferences.create_update_session(activity, Tags.session_login);
+                                Intent intent = new Intent(activity, HomeActivity.class);
+                                startActivity(intent);
+                                activity.finish();
                             }else
                             {
-                                try {
 
-                                    Log.e("error",response.code()+"_"+response.errorBody().string());
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
                                 if (response.code() == 422) {
                                     Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                                     //  Log.e("error",response.code()+"_"+response.errorBody()+response.message()+password+phone+phone_code);
+                                    try {
 
-                                }else if (response.code()==404)
+                                        Log.e("error",response.code()+"_"+response.errorBody().string());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                else if(response.code()==405){
+                                    try {
+
+                                        JSONObject obj = null;
+
+                                        try {
+                                            String re=response.errorBody().string();
+                                            Log.e("data",re);
+                                            obj = new JSONObject(re);
+                                            // Log.e("data",obj.stri);
+
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                            Log.e("data",e.getMessage());
+                                        }
+                                        UserModel userModel=new UserModel();
+
+
+
+                                        Log.e("data",obj.get("id").toString());
+                                        userModel.setId(Integer.parseInt(obj.get("id").toString()));
+                                        activity.displayFragmentCodeVerification(userModel);
+
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        //    Log.e("data",e.getMessage());
+                                    }
+
+                                }
+                                else if (response.code()==404)
                                 {
+                                    try {
+
+                                        Log.e("error",response.code()+"_"+response.errorBody().string());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                     Toast.makeText(activity, R.string.inc_phone_pas, Toast.LENGTH_SHORT).show();
 
                                 }else if (response.code() == 500) {
+                                    try {
+
+                                        Log.e("error",response.code()+"_"+response.errorBody().string());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                     Toast.makeText(activity, "Server Error", Toast.LENGTH_SHORT).show();
 
                                 }else
                                 {
+                                    try {
+
+                                        Log.e("error",response.code()+"_"+response.errorBody().string());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                     Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
 
 

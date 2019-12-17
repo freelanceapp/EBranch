@@ -19,6 +19,7 @@ import com.creative.share.apps.ebranch.adapters.SlidingImage_Adapter;
 import com.creative.share.apps.ebranch.adapters.Products_Adapter;
 import com.creative.share.apps.ebranch.adapters.offer_Adapter;
 import com.creative.share.apps.ebranch.databinding.ActivityMarketProfileBinding;
+import com.creative.share.apps.ebranch.interfaces.Listeners;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
 import com.creative.share.apps.ebranch.models.Products_Model;
 import com.creative.share.apps.ebranch.models.Slider_Model;
@@ -33,7 +34,7 @@ import java.util.TimerTask;
 
 import io.paperdb.Paper;
 
-public class MarketProfileActivity extends AppCompatActivity {
+public class MarketProfileActivity extends AppCompatActivity implements Listeners.BackListener {
     private ActivityMarketProfileBinding binding;
 
     private Preferences preferences;
@@ -88,8 +89,10 @@ change_slide_image();
         binding.toolbar.setTitle("");
 
         Paper.init(this);
+
         lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
         binding.setLang(lang);
+        binding.setBackListener(this);
         if(lang.equals("ar")){
             binding.tvOffer.setBackgroundDrawable(getResources().getDrawable(R.drawable.text_shape1));
             binding.tvDepart.setBackgroundDrawable(getResources().getDrawable(R.drawable.text_shape1));
@@ -115,7 +118,8 @@ change_slide_image();
     }
 
 
-
-
-
+    @Override
+    public void back() {
+        finish();
+    }
 }
