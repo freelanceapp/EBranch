@@ -256,7 +256,11 @@ if(body.getData()!=null){
             phone = phone.replaceFirst("0", "");
         }
         signUpModel = new SignUpModel(name,city_id,phone_code,phone,email,password,confirmpassword);
+        signUpModel.setAddress(selectedLocation.getAddress());
+        signUpModel.setLatitude(selectedLocation.getLat()+"");
+        signUpModel.setLongitude(selectedLocation.getLng()+"");
         binding.setSignUpModel(signUpModel);
+
         if (signUpModel.isDataValid(activity))
         {
             signUp(signUpModel);

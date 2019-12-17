@@ -185,6 +185,7 @@ public class SignUpModel extends BaseObservable implements Serializable {
             error_email.set(null);
             error_password.set(null);
             error_confirm_password.set(null);
+            address_error.set(null);
             return true;
         } else {
             if (name.isEmpty()) {
