@@ -39,7 +39,8 @@ public class Fragment_ContactUs extends Fragment implements Listeners.ContactLis
     private Preferences preferences;
     private UserModel userModel;
     private String current_lang;
-private ContactUsModel contactUsModel;
+    private ContactUsModel contactUsdataModel;
+
     public static Fragment_ContactUs newInstance() {
         return new Fragment_ContactUs();
     }
@@ -55,14 +56,14 @@ private ContactUsModel contactUsModel;
 
 
     private void initView() {
-contactUsModel=new ContactUsModel();
+        contactUsdataModel = new ContactUsModel();
         activity = (HomeActivity) getActivity();
         preferences = Preferences.newInstance();
         userModel = preferences.getUserData(activity);
         Paper.init(activity);
         current_lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
-binding.setContactListener(this);
-binding.setContactUs(contactUsModel);
+        binding.setContactListener(this);
+        binding.setContactUs(contactUsdataModel);
         binding.setLang(current_lang);
 
 
@@ -71,36 +72,39 @@ binding.setContactUs(contactUsModel);
 
     @Override
     public void sendContact(ContactUsModel contactUsModel) {
-        if(contactUsModel.isDataValid(activity)){
-sendmessge(contactUsModel);
+        if (contactUsModel.isDataValid(activity)) {
+            sendmessge(contactUsModel);
         }
     }
+
     private void sendmessge(ContactUsModel contactUsModel) {
         try {
             ProgressDialog dialog = Common.createProgressDialog(activity, getString(R.string.wait));
             dialog.setCancelable(false);
             dialog.show();
             Api.getService(Tags.base_url)
-                    .sendContact(contactUsModel.getName(),contactUsModel.getEmail(),contactUsModel.getPhone(),contactUsModel.getMessage())
+                    .sendContact(contactUsModel.getName(), contactUsModel.getEmail(), contactUsModel.getPhone(), contactUsModel.getMessage())
                     .enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             dialog.dismiss();
-                            if (response.isSuccessful() ) {
+                            if (response.isSuccessful()) {
                                 Toast.makeText(activity, getString(R.string.suc), Toast.LENGTH_SHORT).show();
+                                contactUsdataModel = new ContactUsModel();
+                                binding.setContactUs(contactUsdataModel);
+                                activity.displayFragmentDepartment();
                             } else {
                                 if (response.code() == 422) {
-                                    Toast.makeText(activity,getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                                 } else if (response.code() == 500) {
                                     Toast.makeText(activity, "Server Error", Toast.LENGTH_SHORT).show();
 
-                                }else
-                                {
+                                } else {
                                     Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
 
                                     try {
 
-                                        Log.e("error",response.code()+"_"+response.errorBody().string());
+                                        Log.e("error", response.code() + "_" + response.errorBody().string());
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }

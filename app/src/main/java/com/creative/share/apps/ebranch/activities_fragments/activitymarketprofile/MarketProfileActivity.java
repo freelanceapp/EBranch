@@ -120,7 +120,7 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
         }
         binding.progBarSlider.setVisibility(View.GONE);
         binding.recOffer.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-        binding.recDepartment.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+        binding.recDepartment.setLayoutManager(new GridLayoutManager(this, 2));
         binding.recBestseler.setLayoutManager(new GridLayoutManager(this, 2));
         market_department_adapter = new Market_Department_Adapter(categoriesList, this);
         binding.recDepartment.setAdapter(market_department_adapter);

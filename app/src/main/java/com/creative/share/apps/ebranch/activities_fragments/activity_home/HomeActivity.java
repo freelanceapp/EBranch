@@ -282,7 +282,7 @@ CreateLanguageDialog();
         }
     }
 
-    private void displayFragmentDepartment() {
+    public void displayFragmentDepartment() {
         try {
             if (fragment_department == null) {
                 fragment_department = Fragment_department.newInstance();

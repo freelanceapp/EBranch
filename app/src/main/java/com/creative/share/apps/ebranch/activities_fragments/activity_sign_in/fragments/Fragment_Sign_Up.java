@@ -187,7 +187,7 @@ binding.spinnerCity.setAdapter(adapter);
 
     private void updateCityAdapter(Cities_Model body) {
 
-        dataList.add(new Cities_Model.Data("إختر","choose"));
+        dataList.add(new Cities_Model.Data("إختر المدينه ","choose city"));
 if(body.getData()!=null){
         dataList.addAll(body.getData());
         adapter.notifyDataSetChanged();}
