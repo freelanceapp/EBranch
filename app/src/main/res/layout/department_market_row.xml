@@ -2,6 +2,9 @@
 <layout>
     <data>
         <variable
+            name="lang"
+            type="String" />
+        <variable
             name="marketcatmodel"
             type="com.creative.share.apps.ebranch.models.Single_Market_Model.Categories" />
     </data>
@@ -51,7 +54,7 @@ app:contentPadding="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text='@{lang.equals("ar")?catogrymodel.ar_title:catogrymodel.en_title}'
+            android:text='@{lang.equals("ar")?marketcatmodel.ar_title:marketcatmodel.en_title}'
             android:textColor="@color/white"
             android:textSize="15sp"
 

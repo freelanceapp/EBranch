@@ -58,6 +58,7 @@ public class Market_Department_Adapter extends RecyclerView.Adapter<RecyclerView
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
         EventHolder eventHolder = (EventHolder) holder;
+        eventHolder.binding.setLang(lang);
         eventHolder.binding.setMarketcatmodel(orderlist.get(position));
 
     }
