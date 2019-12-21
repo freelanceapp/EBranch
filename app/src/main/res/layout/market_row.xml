@@ -71,6 +71,7 @@
                             android:textColor="@color/white"
                             android:padding="3dp"
                             android:layout_marginTop="8dp"
+                            android:text="@{marketmodel.full_name}"
                             />
                         <TextView
                             android:id="@+id/tv_detials"
