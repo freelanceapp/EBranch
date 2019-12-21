@@ -14,6 +14,7 @@ import com.creative.share.apps.ebranch.databinding.MarketRowBinding;
 import com.creative.share.apps.ebranch.databinding.SearchMarketRowBinding;
 import com.creative.share.apps.ebranch.models.Catogries_Market_Model;
 import com.creative.share.apps.ebranch.models.Markets_Model;
+import com.creative.share.apps.ebranch.models.Single_Market_Model;
 
 import java.util.List;
 import java.util.Locale;
@@ -22,12 +23,12 @@ import io.paperdb.Paper;
 
 public class Search_Markets_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<Markets_Model.Data> orderlist;
+    private List<Single_Market_Model> orderlist;
     private Context context;
     private LayoutInflater inflater;
     private String lang;
     private int i = 0;
-    public Search_Markets_Adapter(List<Markets_Model.Data> orderlist, Context context) {
+    public Search_Markets_Adapter(List<Single_Market_Model> orderlist, Context context) {
         this.orderlist = orderlist;
         this.context = context;
         inflater = LayoutInflater.from(context);

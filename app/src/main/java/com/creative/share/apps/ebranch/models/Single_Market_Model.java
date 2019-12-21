@@ -4,15 +4,8 @@ package com.creative.share.apps.ebranch.models;
 import java.io.Serializable;
 import java.util.List;
 
-public class Markets_Model implements Serializable {
-    private List<Single_Market_Model> data;
+public class Single_Market_Model implements Serializable {
 
-    public List<Single_Market_Model> getData() {
-        return data;
-    }
-
- /*   public class  Data
-    {
           private int id;
                   private String user_type;
         private String name;
@@ -50,6 +43,7 @@ public class Markets_Model implements Serializable {
         private String email_verified_at;
         private String is_deleted;
         private String default_theme;
+    private List<Categories> categories;
 
         public int getId() {
             return id;
@@ -198,7 +192,64 @@ public class Markets_Model implements Serializable {
         public String getDefault_theme() {
             return default_theme;
         }
-    }/*
 
-  */
-}
+    public List<Categories> getCategories() {
+        return categories;
+    }
+
+    public class Categories implements Serializable
+    {
+        private int id;
+            private String ar_title;
+            private String en_title;
+            private String image;
+        private String level;
+        private String market_added;
+        private String is_deleted;
+        private String deleted_at;
+        private String created_at;
+        private String updated_at;
+
+        public int getId() {
+            return id;
+        }
+
+        public String getAr_title() {
+            return ar_title;
+        }
+
+        public String getEn_title() {
+            return en_title;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public String getLevel() {
+            return level;
+        }
+
+        public String getMarket_added() {
+            return market_added;
+        }
+
+        public String getIs_deleted() {
+            return is_deleted;
+        }
+
+        public String getDeleted_at() {
+            return deleted_at;
+        }
+
+        public String getCreated_at() {
+            return created_at;
+        }
+
+        public String getUpdated_at() {
+            return updated_at;
+        }
+    }
+
+    }
+

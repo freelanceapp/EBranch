@@ -100,8 +100,9 @@ if(data!=null) {
 
 
 
-    public void displaymarketprofile() {
+    public void displaymarketprofile(Catogries_Market_Model.Data.Users users) {
         Intent intent=new Intent(MarketActivity.this, MarketProfileActivity.class);
+        intent.putExtra("marketid",users.getId()+"");
         startActivity(intent);
     }
     public void getMarkets() {

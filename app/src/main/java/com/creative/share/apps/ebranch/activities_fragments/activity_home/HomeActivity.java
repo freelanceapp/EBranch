@@ -35,6 +35,7 @@ import com.creative.share.apps.ebranch.activities_fragments.activity_cart.CartAc
 import com.creative.share.apps.ebranch.databinding.DialogLanguageBinding;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
 import com.creative.share.apps.ebranch.models.Markets_Model;
+import com.creative.share.apps.ebranch.models.Single_Market_Model;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
 import com.creative.share.apps.ebranch.remote.Api;
@@ -81,7 +82,7 @@ private  AHBottomNavigation ahBottomNav;
 
     private Marker marker;
     private GoogleMap mMap;
-    private List<Markets_Model.Data> maDataList;
+    private List<Single_Market_Model> maDataList;
     @Override
     protected void attachBaseContext(Context newBase) {
         Paper.init(newBase);

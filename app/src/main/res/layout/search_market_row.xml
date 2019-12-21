@@ -5,7 +5,7 @@
 
         <variable
             name="marketmodel"
-            type="com.creative.share.apps.ebranch.models.Markets_Model.Data" />
+            type="com.creative.share.apps.ebranch.models.Single_Market_Model" />
     </data>
 
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"

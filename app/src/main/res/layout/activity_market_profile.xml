@@ -16,7 +16,12 @@
             />
         <variable
             name="lang"
-            type="String" />
+            type="String"
+
+            />
+        <variable
+            name="marketmodel"
+            type="com.creative.share.apps.ebranch.models.Single_Market_Model" />
 
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -97,7 +102,9 @@ app:layout_constraintTop_toBottomOf="@+id/toolbar"
                         <androidx.viewpager.widget.ViewPager
                             android:id="@+id/pager"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
+                            android:layout_height="match_parent"
+                            android:visibility="gone"
+                            />
 
 
                         <com.google.android.material.tabs.TabLayout
@@ -118,11 +125,18 @@ app:layout_constraintTop_toBottomOf="@+id/toolbar"
                             />
 
                         <ProgressBar
+                            android:visibility="gone"
                             android:id="@+id/progBarSlider"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center" />
-                    </FrameLayout>
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+
+                            android:scaleType="fitXY"
+                            serviceImage="@{marketmodel.banner}"
+                            />                    </FrameLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"

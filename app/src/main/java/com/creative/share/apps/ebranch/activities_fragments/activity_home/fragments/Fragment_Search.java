@@ -22,6 +22,7 @@ import com.creative.share.apps.ebranch.activities_fragments.activity_home.HomeAc
 import com.creative.share.apps.ebranch.adapters.Search_Markets_Adapter;
 import com.creative.share.apps.ebranch.databinding.FragmentSearchBinding;
 import com.creative.share.apps.ebranch.models.Markets_Model;
+import com.creative.share.apps.ebranch.models.Single_Market_Model;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
 import com.creative.share.apps.ebranch.remote.Api;
@@ -46,7 +47,7 @@ public class Fragment_Search extends Fragment {
     private String current_lang;
     private String query;
     private GridLayoutManager manager;
-private List<Markets_Model.Data> dataList;
+private List<Single_Market_Model> dataList;
 private Search_Markets_Adapter search_markets_adapter;
     public static Fragment_Search newInstance() {
         return new Fragment_Search();
