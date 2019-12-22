@@ -108,6 +108,11 @@ public interface Service {
     Call<Products_Model> getproducts(@Header(value = "page") int page
     );
     @FormUrlEncoded
+    @POST("api/productsByMarket")
+    Call<Products_Model> getproductbymarket(@Field("market_id") String market_id,
+                                          @Field("page") int page
+    );
+    @FormUrlEncoded
     @POST("api/visit")
     Call<ResponseBody> updateVisit(@Field("type") String type, @Field("date") String date);
     @FormUrlEncoded

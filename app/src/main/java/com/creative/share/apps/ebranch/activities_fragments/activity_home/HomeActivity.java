@@ -26,6 +26,7 @@ import androidx.fragment.app.FragmentManager;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.creative.share.apps.ebranch.R;
+import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.FragmentMapTouchListener;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_ContactUs;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_Search;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_Views;
@@ -86,6 +87,8 @@ private  AHBottomNavigation ahBottomNav;
 
     private Marker marker;
     private GoogleMap mMap;
+    private FragmentMapTouchListener fragment;
+
     private List<Single_Market_Model> maDataList;
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -384,10 +387,12 @@ CreateLanguageDialog();
 
     private void updateUI() {
 
-        SupportMapFragment fragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        fragment = (FragmentMapTouchListener) getSupportFragmentManager().findFragmentById(R.id.map);
 
-        fragment.getMapAsync(this);
+        if (fragment != null) {
+            fragment.getMapAsync(this);
 
+        }
     }
 
     @Override
@@ -409,12 +414,15 @@ CreateLanguageDialog();
 
                 }
             });
-mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-    @Override
-    public void onMapClick(LatLng latLng) {
-        nestedScrollView.requestDisallowInterceptTouchEvent(true);
-    }
-});
+            fragment.setListener(new FragmentMapTouchListener.OnTouchListener() {
+                @Override
+                public void onTouch() {
+                    nestedScrollView.requestDisallowInterceptTouchEvent(true);
+
+                }
+            });
+
+
 
             // AddMarker();
 

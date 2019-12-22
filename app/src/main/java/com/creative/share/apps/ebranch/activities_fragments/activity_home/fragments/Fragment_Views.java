@@ -46,7 +46,7 @@ public class Fragment_Views extends Fragment {
     private String current_lang;
     private Products_Adapter products_adapter;
 private List<Products_Model.Data> products;
-    private LinearLayoutManager manager;
+    private GridLayoutManager manager;
     private boolean isLoading = false;
     private int current_page2 = 1;
     public static Fragment_Views newInstance() {
@@ -72,10 +72,9 @@ products=new ArrayList<>();
         current_lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
 
         products_adapter = new Products_Adapter(products, activity);
-        binding.recView.setLayoutManager(new GridLayoutManager(activity, 2));
         binding.recView.setItemViewCacheSize(25);
         binding.progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(activity, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
-        manager = new LinearLayoutManager(activity);
+        manager = new GridLayoutManager(activity,2);
         binding.recView.setLayoutManager(manager);
         binding.recView.setAdapter(products_adapter);
         binding.setLang(current_lang);

@@ -3,13 +3,16 @@ package com.creative.share.apps.ebranch.activities_fragments.activitymarketprofi
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,9 +21,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.activities_fragments.activity_product_detials.ProductDetialsActivity;
 import com.creative.share.apps.ebranch.adapters.Market_Department_Adapter;
+import com.creative.share.apps.ebranch.adapters.Products_Adapter;
 import com.creative.share.apps.ebranch.databinding.ActivityMarketProfileBinding;
 import com.creative.share.apps.ebranch.interfaces.Listeners;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
+import com.creative.share.apps.ebranch.models.Products_Model;
 import com.creative.share.apps.ebranch.models.Single_Market_Model;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
@@ -50,6 +55,11 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
 
     private String lang;
     private String marketid;
+    private Products_Adapter products_adapter;
+    private List<Products_Model.Data> products;
+    private LinearLayoutManager manager;
+    private boolean isLoading = false;
+    private int current_page2 = 1;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -120,8 +130,33 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
         }
         binding.progBarSlider.setVisibility(View.GONE);
         binding.recOffer.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-        binding.recDepartment.setLayoutManager(new GridLayoutManager(this, 2));
-        binding.recBestseler.setLayoutManager(new GridLayoutManager(this, 2));
+        binding.recDepartment.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        products_adapter = new Products_Adapter(products, this);
+        binding.recBestseler.setItemViewCacheSize(25);
+        binding.progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+        manager = new GridLayoutManager(this, 2);
+        binding.recBestseler.setLayoutManager(manager);
+        binding.recBestseler.setAdapter(products_adapter);
+        binding.recBestseler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (dy > 0) {
+                    int totalItems = products_adapter.getItemCount();
+                    int lastVisiblePos = manager.findLastCompletelyVisibleItemPosition();
+                    if (lastVisiblePos >= (totalItems - 10) && !isLoading) {
+                        isLoading = true;
+                        products.add(null);
+                        products_adapter.notifyItemInserted(products.size() - 1);
+                        int page = current_page2 + 1;
+                        loadMore(page);
+
+
+                    }
+                }
+            }
+        });
         market_department_adapter = new Market_Department_Adapter(categoriesList, this);
         binding.recDepartment.setAdapter(market_department_adapter);
 
@@ -185,4 +220,117 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
         }
     }
 
+    private void getproducts() {
+        products.clear();
+        products_adapter.notifyDataSetChanged();
+        binding.progBar.setVisibility(View.VISIBLE);
+
+        try {
+
+
+            Api.getService(Tags.base_url)
+                    .getproductbymarket(marketid, 1)
+                    .enqueue(new Callback<Products_Model>() {
+                        @Override
+                        public void onResponse(Call<Products_Model> call, Response<Products_Model> response) {
+                            binding.progBar.setVisibility(View.GONE);
+                            if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                                products.clear();
+                                products.addAll(response.body().getData());
+                                if (response.body().getData().size() > 0) {
+                                    // rec_sent.setVisibility(View.VISIBLE);
+                                    //  Log.e("data",response.body().getData().get(0).getAr_title());
+
+                                    binding.llNoStore.setVisibility(View.GONE);
+                                    products_adapter.notifyDataSetChanged();
+                                    //   total_page = response.body().getMeta().getLast_page();
+
+                                } else {
+                                    products_adapter.notifyDataSetChanged();
+
+                                    binding.llNoStore.setVisibility(View.VISIBLE);
+
+                                }
+                            } else {
+                                products_adapter.notifyDataSetChanged();
+
+                                binding.llNoStore.setVisibility(View.VISIBLE);
+
+                                //Toast.makeText(this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                try {
+                                    Log.e("Error_code", response.code() + "_" + response.errorBody().string());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Products_Model> call, Throwable t) {
+                            try {
+
+                                binding.progBar.setVisibility(View.GONE);
+                                binding.llNoStore.setVisibility(View.VISIBLE);
+                                Toast.makeText(MarketProfileActivity.this, getResources().getString(R.string.something), Toast.LENGTH_LONG).show();
+
+
+                                Log.e("error", t.getMessage());
+                            } catch (Exception e) {
+                            }
+                        }
+                    });
+        } catch (Exception e) {
+            binding.progBar.setVisibility(View.GONE);
+            binding.llNoStore.setVisibility(View.VISIBLE);
+
+        }
+    }
+
+    private void loadMore(int page) {
+        try {
+
+
+            Api.getService(Tags.base_url)
+                    .getproductbymarket(marketid, page)
+                    .enqueue(new Callback<Products_Model>() {
+                        @Override
+                        public void onResponse(Call<Products_Model> call, Response<Products_Model> response) {
+                            products.remove(products.size() - 1);
+                            products_adapter.notifyItemRemoved(products.size() - 1);
+                            isLoading = false;
+                            if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+
+                                products.addAll(response.body().getData());
+                                // categories.addAll(response.body().getCategories());
+                                current_page2 = response.body().getCurrent_page();
+                                products_adapter.notifyDataSetChanged();
+
+                            } else {
+                                //Toast.makeText(this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                try {
+                                    Log.e("Error_code", response.code() + "_" + response.errorBody().string());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Products_Model> call, Throwable t) {
+                            try {
+                                products.remove(products.size() - 1);
+                                products_adapter.notifyItemRemoved(products.size() - 1);
+                                isLoading = false;
+                                // Toast.makeText(this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                Log.e("error", t.getMessage());
+                            } catch (Exception e) {
+                            }
+                        }
+                    });
+        } catch (Exception e) {
+            products.remove(products.size() - 1);
+            products_adapter.notifyItemRemoved(products.size() - 1);
+            isLoading = false;
+        }
+    }
 }
