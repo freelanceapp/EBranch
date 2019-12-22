@@ -105,12 +105,21 @@ public interface Service {
 
     );
     @GET("api/all-products")
-    Call<Products_Model> getproducts(@Header(value = "page") int page
+    Call<Products_Model> getproducts(@Query(value = "page") int page
     );
     @FormUrlEncoded
     @POST("api/productsByMarket")
     Call<Products_Model> getproductbymarket(@Field("market_id") String market_id,
                                           @Field("page") int page
+    );
+    @FormUrlEncoded
+    @POST("api/products-filter")
+    Call<Products_Model> getproductbyfilter(@Field("cat_id") String cat_id,
+                                            @Field("name") String name,
+                                            @Field("newest") int newest,
+                                            @Field("best_sales") int best_sales,
+                                            @Field("lowest_price") int lowest_price,
+                                            @Field("page") int page
     );
     @FormUrlEncoded
     @POST("api/visit")

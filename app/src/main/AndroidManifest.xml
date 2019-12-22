@@ -38,6 +38,10 @@
             android:name=".activities_fragments.activity_sign_in.activities.SignInActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+        <activity
+            android:name=".activities_fragments.activity_departmnet_detials.DepartmentDetialsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 
         <activity
             android:name=".activities_fragments.activity_profile.profileActivity"

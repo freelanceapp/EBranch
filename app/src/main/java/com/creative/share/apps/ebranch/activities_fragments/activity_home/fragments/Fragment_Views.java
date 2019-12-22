@@ -86,6 +86,7 @@ products=new ArrayList<>();
                 if (dy > 0) {
                     int totalItems = products_adapter.getItemCount();
                     int lastVisiblePos = manager.findLastCompletelyVisibleItemPosition();
+                    Log.e("data",totalItems+" "+lastVisiblePos);
                     if (lastVisiblePos >= (totalItems - 10) && !isLoading) {
                         isLoading = true;
                         products.add(null);

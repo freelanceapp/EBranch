@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.creative.share.apps.ebranch.R;
+import com.creative.share.apps.ebranch.activities_fragments.activity_departmnet_detials.DepartmentDetialsActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_product_detials.ProductDetialsActivity;
 import com.creative.share.apps.ebranch.adapters.Market_Department_Adapter;
 import com.creative.share.apps.ebranch.adapters.Products_Adapter;
@@ -76,6 +77,7 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
         getdatafromintent();
         initView();
         getSingleMarket();
+        getproducts();
 //change_slide_image();
 
 
@@ -113,11 +115,13 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
         userModel = preferences.getUserData(this);
         binding.toolbar.setTitle("");
         categoriesList = new ArrayList<>();
+        products=new ArrayList<>();
         Paper.init(this);
 
         lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
         binding.setLang(lang);
         binding.setBackListener(this);
+        binding.recBestseler.setNestedScrollingEnabled(false);
         if (lang.equals("ar")) {
             binding.tvOffer.setBackgroundDrawable(getResources().getDrawable(R.drawable.text_shape1));
             binding.tvDepart.setBackgroundDrawable(getResources().getDrawable(R.drawable.text_shape1));
@@ -332,5 +336,11 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
             products_adapter.notifyItemRemoved(products.size() - 1);
             isLoading = false;
         }
+    }
+
+    public void DisplayDepartdetials(int id) {
+        Intent intent = new Intent(MarketProfileActivity.this, DepartmentDetialsActivity.class);
+        intent.putExtra("cat_id",id+"");
+        startActivity(intent);
     }
 }
