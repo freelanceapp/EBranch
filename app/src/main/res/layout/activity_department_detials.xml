@@ -147,7 +147,7 @@ android:layout_weight="1"
                             android:id="@+id/sp_countryfrom"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:spinnerMode="dropdown"
+
                             android:background="@drawable/spinner"
                             android:layout_marginRight="8dp"
                             android:layout_marginLeft="8dp"
