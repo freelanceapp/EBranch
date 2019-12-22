@@ -261,23 +261,23 @@ android:background="@color/white"
                             >
 
                         </androidx.recyclerview.widget.RecyclerView>
-                        <TextView
-                            android:id="@+id/tv_bestseller"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:background="@drawable/text_shape2"
-                            android:gravity="center"
-                            android:padding="15dp"
-                            android:text="@string/best_seller"
 
-                            android:textColor="@color/white"
-                            android:textSize="16sp" />
 
                     </LinearLayout>
 
                 </com.google.android.material.appbar.CollapsingToolbarLayout>
+                <TextView
+                    android:id="@+id/tv_bestseller"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/text_shape2"
+                    android:gravity="center"
+                    android:padding="15dp"
+                    android:text="@string/best_seller"
 
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
             </com.google.android.material.appbar.AppBarLayout>
 
 
