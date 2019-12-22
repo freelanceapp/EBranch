@@ -36,14 +36,14 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="150dp">
+                    android:layout_height="180dp">
 
 
                     <com.makeramen.roundedimageview.RoundedImageView
                         android:id="@+id/im_offer"
                         offerImage="@{marketmodel.logo}"
                         android:layout_width="match_parent"
-                        android:layout_height="150dp"
+                        android:layout_height="180dp"
                         android:layout_gravity="center"
                         android:adjustViewBounds="true"
                         android:scaleType="centerCrop"
@@ -73,13 +73,7 @@
                             android:layout_marginTop="8dp"
                             android:text="@{marketmodel.full_name}"
                             />
-                        <TextView
-                            android:id="@+id/tv_detials"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:textColor="@color/white"
-                            android:padding="3dp"/>
+
                     </LinearLayout>
 
 

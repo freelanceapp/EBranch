@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -11,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -48,6 +51,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.navigation.NavigationView;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -395,6 +399,16 @@ CreateLanguageDialog();
             mMap.setTrafficEnabled(false);
             mMap.setBuildingsEnabled(false);
             mMap.setIndoorEnabled(true);
+            mMap.setInfoWindowAdapter(new WindowInfo());
+            mMap.setOnInfoWindowClickListener(marker -> {
+                Single_Market_Model adModel = (Single_Market_Model) marker.getTag();
+                if (adModel!=null)
+                {
+                  marker.showInfoWindow();
+
+
+                }
+            });
 mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
     @Override
     public void onMapClick(LatLng latLng) {
@@ -430,7 +444,7 @@ mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             marker=mMap.addMarker(markerOptions);
             //  builder.include(marker[i].getPosition());
             // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(maDataList.get(i).getLatitude()), Double.parseDouble(maDataList.get(i).getLongitude())), zoom));
-
+marker.setTag(maDataList.get(i));
 
         }
 
@@ -601,5 +615,85 @@ Back();    }
             startActivity(intent);
             finish();
         },200);
+    }
+    public  class WindowInfo implements GoogleMap.InfoWindowAdapter
+    {
+
+        @Override
+        public View getInfoWindow(Marker marker) {
+
+            return null;
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+            Single_Market_Model adModel = (Single_Market_Model) marker.getTag();
+            if (adModel==null)
+            {
+                return null;
+            }else
+            {
+                View view = LayoutInflater.from(HomeActivity.this).inflate(R.layout.window_info_view,null);
+                TextView tvTitle = view.findViewById(R.id.tvTitle);
+                TextView tvPrice = view.findViewById(R.id.tvPrice);
+                TextView tvDetails = view.findViewById(R.id.tvDetails);
+                TextView tvAddress = view.findViewById(R.id.tvAddress);
+                ImageView image = view.findViewById(R.id.image);
+
+                ProgressBar progBar = view.findViewById(R.id.progBar);
+
+                try {
+
+                    if (adModel.getName()!=null&&!adModel.getName().isEmpty())
+                    {
+                        tvTitle.setText(adModel.getName());
+
+                    }else
+                    {
+                        tvTitle.setText(getString(R.string.no_name));
+
+                    }
+
+
+
+
+
+
+                            tvAddress.setText(adModel.getAddress());
+
+
+
+
+
+
+
+
+                    Picasso.with(HomeActivity.this).load(Uri.parse(Tags.base_url+adModel.getLogo())).fit().into(image, new com.squareup.picasso.Callback() {
+                        @Override
+                        public void onSuccess() {
+                            progBar.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onError() {
+                            progBar.setVisibility(View.GONE);
+
+                        }
+                    });
+
+                }catch (Exception e)
+                {
+                    if (e!=null&&e.getMessage()!=null)
+                    {
+                        Log.e("error",e.getMessage());
+                    }
+                }
+
+                return view;
+            }
+
+        }
+
+
     }
 }
