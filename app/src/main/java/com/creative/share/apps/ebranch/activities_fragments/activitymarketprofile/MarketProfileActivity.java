@@ -140,6 +140,7 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
         binding.progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
         manager = new GridLayoutManager(this, 2);
         binding.recBestseler.setLayoutManager(manager);
+        binding.recBestseler.setNestedScrollingEnabled(false);
         binding.recBestseler.setAdapter(products_adapter);
         binding.recBestseler.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
