@@ -145,7 +145,7 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
+Log.e("dy",dy+"");
                 if (dy > 0) {
                     int totalItems = products_adapter.getItemCount();
                     int lastVisiblePos = manager.findLastCompletelyVisibleItemPosition();

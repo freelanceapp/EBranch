@@ -84,7 +84,7 @@ private  AHBottomNavigation ahBottomNav;
     private NavigationView navigationView;
     private ImageView imagemenu, im_cart;
     private LinearLayout ll_profile,ll_terms,ll_orders,ll_lang,ll_logout;
-    private NestedScrollView nestedScrollView;
+    private ConstraintLayout nestedScrollView;
     private String current_lang;
     private float zoom = 15.6f;
 

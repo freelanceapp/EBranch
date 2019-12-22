@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -76,12 +77,16 @@ products=new ArrayList<>();
         binding.progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(activity, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
         manager = new GridLayoutManager(activity,2);
         binding.recView.setLayoutManager(manager);
+        binding.recView.setNestedScrollingEnabled(true);
+        binding.recView.setHasFixedSize(false);
         binding.recView.setAdapter(products_adapter);
         binding.setLang(current_lang);
+
         binding.recView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                Log.e("dy",dy+""+dx);
 
                 if (dy > 0) {
                     int totalItems = products_adapter.getItemCount();
