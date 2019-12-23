@@ -10,18 +10,18 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
@@ -29,17 +29,16 @@ import androidx.fragment.app.FragmentManager;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.creative.share.apps.ebranch.R;
+import com.creative.share.apps.ebranch.activities_fragments.activity_cart.CartActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.FragmentMapTouchListener;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_ContactUs;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_Search;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_Views;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_department;
-import com.creative.share.apps.ebranch.activities_fragments.activity_markets.MarketActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_orders.OrdersActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_profile.profileActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.activities.SignInActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_terms.TermsActivity;
-import com.creative.share.apps.ebranch.activities_fragments.activity_cart.CartActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activitymarketprofile.MarketProfileActivity;
 import com.creative.share.apps.ebranch.databinding.DialogLanguageBinding;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
@@ -52,7 +51,6 @@ import com.creative.share.apps.ebranch.share.Common;
 import com.creative.share.apps.ebranch.tags.Tags;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -67,6 +65,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import io.paperdb.Paper;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -81,11 +80,13 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Fragment_ContactUs fragment_contactUs;
     private Preferences preferences;
     private UserModel userModel;
-private  AHBottomNavigation ahBottomNav;
+    private AHBottomNavigation ahBottomNav;
+    private CircleImageView image;
+    private TextView tvName, tvEmail;
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private ImageView imagemenu, im_cart;
-    private LinearLayout ll_profile,ll_terms,ll_orders,ll_lang,ll_logout;
+    private LinearLayout ll_profile, ll_terms, ll_orders, ll_lang, ll_logout;
     private ConstraintLayout nestedScrollView;
     private String current_lang;
     private float zoom = 15.6f;
@@ -93,8 +94,10 @@ private  AHBottomNavigation ahBottomNav;
     private Marker marker;
     private GoogleMap mMap;
     private FragmentMapTouchListener fragment;
-
     private List<Single_Market_Model> maDataList;
+    private ActionBarDrawerToggle toggle;
+    private Toolbar toolbar;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         Paper.init(newBase);
@@ -105,7 +108,7 @@ private  AHBottomNavigation ahBottomNav;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       setContentView( R.layout.activity_home);
+        setContentView(R.layout.activity_home);
         initView();
         updateUI();
         getmarkets();
@@ -120,22 +123,30 @@ private  AHBottomNavigation ahBottomNav;
     private void initView() {
         Paper.init(this);
         current_lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
-maDataList=new ArrayList<>();
+        maDataList = new ArrayList<>();
         preferences = Preferences.newInstance();
         userModel = preferences.getUserData(this);
         fragmentManager = getSupportFragmentManager();
-ahBottomNav=findViewById(R.id.ah_bottom_nav);
+        ahBottomNav = findViewById(R.id.ah_bottom_nav);
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-        ll_profile=findViewById(R.id.ll_profile);
-        ll_terms=findViewById(R.id.ll_terms);
-        ll_orders=findViewById(R.id.ll_orders);
-        ll_lang=findViewById(R.id.ll_lang);
-        ll_logout=findViewById(R.id.ll_logout);
+        toolbar = findViewById(R.id.toolbar);
+        toggle = new ActionBarDrawerToggle(this,drawer,toolbar,R.string.open,R.string.close);
+        toggle.syncState();
+
+        ll_profile = findViewById(R.id.ll_profile);
+        ll_terms = findViewById(R.id.ll_terms);
+        ll_orders = findViewById(R.id.ll_orders);
+        ll_lang = findViewById(R.id.ll_lang);
+        ll_logout = findViewById(R.id.ll_logout);
+
+        image = findViewById(R.id.image);
+        tvName = findViewById(R.id.tvName);
+        tvEmail = findViewById(R.id.tvEmail);
+
 //ll_home=findViewById(R.id.ll_home);
-        imagemenu=findViewById(R.id.imagemenu);
-        im_cart =findViewById(R.id.cart);
-nestedScrollView=findViewById(R.id.nestedScrollView);
+        im_cart = findViewById(R.id.cart);
+        nestedScrollView = findViewById(R.id.nestedScrollView);
         String visitTime = preferences.getVisitTime(this);
         Calendar calendar = Calendar.getInstance();
         long timeNow = calendar.getTimeInMillis();
@@ -146,27 +157,27 @@ nestedScrollView=findViewById(R.id.nestedScrollView);
         if (!date.equals(visitTime)) {
             addVisit(date);
         }
-im_cart.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
-        Intent intent=new Intent(HomeActivity.this, CartActivity.class);
-        startActivity(intent);
-    }
-});
-ll_lang.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-CreateLanguageDialog();
-    }
-});
+        im_cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, CartActivity.class);
+                startActivity(intent);
+            }
+        });
+        ll_lang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateLanguageDialog();
+            }
+        });
         ll_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               Logout();
+                Logout();
             }
         });
         setUpBottomNavigation();
-       ahBottomNav.setOnTabSelectedListener((position, wasSelected) -> {
+        ahBottomNav.setOnTabSelectedListener((position, wasSelected) -> {
             switch (position) {
                 case 0:
 
@@ -194,8 +205,8 @@ CreateLanguageDialog();
             @Override
             public void onClick(View view) {
                 drawer.closeDrawer(GravityCompat.START);
-                Intent intent=new Intent(HomeActivity.this, profileActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(HomeActivity.this, profileActivity.class);
+                startActivityForResult(intent, 100);
 
             }
         });
@@ -212,7 +223,7 @@ CreateLanguageDialog();
             @Override
             public void onClick(View view) {
                 drawer.closeDrawer(GravityCompat.START);
-                Intent intent=new Intent(HomeActivity.this, TermsActivity.class);
+                Intent intent = new Intent(HomeActivity.this, TermsActivity.class);
                 startActivity(intent);
 
             }
@@ -221,17 +232,22 @@ CreateLanguageDialog();
             @Override
             public void onClick(View view) {
                 drawer.closeDrawer(GravityCompat.START);
-                Intent intent=new Intent(HomeActivity.this, OrdersActivity.class);
+                Intent intent = new Intent(HomeActivity.this, OrdersActivity.class);
                 startActivity(intent);
 
             }
         });
-        imagemenu.setOnClickListener(new View.OnClickListener() {
+        /*imagemenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 drawer.openDrawer(GravityCompat.START);
             }
-        });
+        });*/
+
+        if (userModel!=null)
+        {
+            updateImageUI();
+        }
     }
 
     private void setUpBottomNavigation() {
@@ -241,28 +257,27 @@ CreateLanguageDialog();
         AHBottomNavigationItem item3 = new AHBottomNavigationItem("", R.drawable.ic_views);
         AHBottomNavigationItem item4 = new AHBottomNavigationItem("", R.drawable.ic_email);
 
-       ahBottomNav.setTitleState(AHBottomNavigation.TitleState.ALWAYS_HIDE);
-       ahBottomNav.setDefaultBackgroundColor(ContextCompat.getColor(this, R.color.white));
-       ahBottomNav.setTitleTextSizeInSp(14, 12);
-       ahBottomNav.setForceTint(true);
-       ahBottomNav.setAccentColor(ContextCompat.getColor(this, R.color.colorAccent));
-       ahBottomNav.setInactiveColor(ContextCompat.getColor(this, R.color.gray5));
+        ahBottomNav.setTitleState(AHBottomNavigation.TitleState.ALWAYS_HIDE);
+        ahBottomNav.setDefaultBackgroundColor(ContextCompat.getColor(this, R.color.white));
+        ahBottomNav.setTitleTextSizeInSp(14, 12);
+        ahBottomNav.setForceTint(true);
+        ahBottomNav.setAccentColor(ContextCompat.getColor(this, R.color.colorAccent));
+        ahBottomNav.setInactiveColor(ContextCompat.getColor(this, R.color.gray5));
 
-       ahBottomNav.addItem(item1);
-       ahBottomNav.addItem(item2);
-       ahBottomNav.addItem(item3);
-       ahBottomNav.addItem(item4);
+        ahBottomNav.addItem(item1);
+        ahBottomNav.addItem(item2);
+        ahBottomNav.addItem(item3);
+        ahBottomNav.addItem(item4);
 
-       ahBottomNav.setCurrentItem(1);
+        ahBottomNav.setCurrentItem(1);
 
 
     }
 
     public void updateBottomNavigationPosition(int pos) {
 
-       ahBottomNav.setCurrentItem(pos, false);
+        ahBottomNav.setCurrentItem(pos, false);
     }
-
 
     private void displayFragmentSearch() {
         try {
@@ -287,7 +302,7 @@ CreateLanguageDialog();
                 fragmentManager.beginTransaction().add(R.id.fragment_main_app_container, fragment_search, "fragment_search").addToBackStack("fragment_search").commit();
 
             }
-           setTitle(getResources().getString(R.string.search));
+            setTitle(getResources().getString(R.string.search));
 
             updateBottomNavigationPosition(0);
         } catch (Exception e) {
@@ -348,15 +363,14 @@ CreateLanguageDialog();
                 fragmentManager.beginTransaction().add(R.id.fragment_main_app_container, fragment_views, "fragment_views").addToBackStack("fragment_views").commit();
 
             }
-           setTitle(getResources().getString(R.string.views));
+            setTitle(getResources().getString(R.string.views));
 
             updateBottomNavigationPosition(2);
         } catch (Exception e) {
         }
     }
 
-    private void displayFragmentContactUS
-            () {
+    private void displayFragmentContactUS() {
         try {
             if (fragment_contactUs == null) {
                 fragment_contactUs = Fragment_ContactUs.newInstance();
@@ -380,15 +394,12 @@ CreateLanguageDialog();
                 fragmentManager.beginTransaction().add(R.id.fragment_main_app_container, fragment_contactUs, "fragment_contactUs").addToBackStack("fragment_contactUs").commit();
 
             }
-           setTitle(getResources().getString(R.string.contact_us));
+            setTitle(getResources().getString(R.string.contact_us));
 
             updateBottomNavigationPosition(3);
         } catch (Exception e) {
         }
     }
-
-
-
 
     private void updateUI() {
 
@@ -398,6 +409,16 @@ CreateLanguageDialog();
             fragment.getMapAsync(this);
 
         }
+    }
+
+    private void updateImageUI() {
+        if (userModel.getLogo()!=null&&!userModel.getLogo().isEmpty()&&!userModel.getLogo().equals("0"))
+        {
+            Picasso.with(this).load(Uri.parse(Tags.IMAGE_URL)).fit().into(image);
+
+        }
+        tvName.setText(userModel.getFull_name());
+        tvEmail.setText(userModel.getEmail());
     }
 
     @Override
@@ -420,12 +441,11 @@ CreateLanguageDialog();
             });
             mMap.setOnInfoWindowClickListener(marker -> {
                 Single_Market_Model adModel = (Single_Market_Model) marker.getTag();
-                Intent intent=new Intent(HomeActivity.this, MarketProfileActivity.class);
-                intent.putExtra("marketid",adModel.getId()+"");
+                Intent intent = new Intent(HomeActivity.this, MarketProfileActivity.class);
+                intent.putExtra("marketid", adModel.getId() + "");
                 startActivity(intent);
 
             });
-
 
 
             // AddMarker();
@@ -445,7 +465,7 @@ CreateLanguageDialog();
         //   iconGenerator.setContentView(view);
 
         //  LatLngBounds.Builder builder = new LatLngBounds.Builder();
-       // Log.e("data",maDataList.size()+"");
+        // Log.e("data",maDataList.size()+"");
         for (int i = 0; i < maDataList.size(); i++) {
             //   LatLng ll = new LatLng(x[i], ys[i]);
 
@@ -453,10 +473,10 @@ CreateLanguageDialog();
             //Log.e("dd", x[i] + "");
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(new LatLng(Double.parseDouble(maDataList.get(i).getLatitude()), Double.parseDouble(maDataList.get(i).getLongitude())));
-            marker=mMap.addMarker(markerOptions);
+            marker = mMap.addMarker(markerOptions);
             //  builder.include(marker[i].getPosition());
             // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(maDataList.get(i).getLatitude()), Double.parseDouble(maDataList.get(i).getLongitude())), zoom));
-marker.setTag(maDataList.get(i));
+            marker.setTag(maDataList.get(i));
 
         }
 
@@ -466,6 +486,7 @@ marker.setTag(maDataList.get(i));
 
 
     }
+
     private void getmarkets() {
         Api.getService(Tags.base_url).getmarkets().enqueue(new Callback<Markets_Model>() {
             @Override
@@ -477,9 +498,8 @@ marker.setTag(maDataList.get(i));
                         //Log.e("erorr",response.code()+"");
 
                         AddMarker();
-                    }
-                    else {
-                        Log.e("erorr",response.code()+"");
+                    } else {
+                        Log.e("erorr", response.code() + "");
                     }
 
                 }
@@ -487,27 +507,37 @@ marker.setTag(maDataList.get(i));
 
             @Override
             public void onFailure(Call<Markets_Model> call, Throwable t) {
-                Log.e("erorr",t.getMessage()+"");
+                Log.e("erorr", t.getMessage() + "");
 
             }
         });
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
+            userModel = preferences.getUserData(this);
+
+        }
+    }
+
     @Override
     public void onBackPressed() {
 
-Back();    }
+        Back();
+    }
 
     private void Back() {
-        if(drawer.isDrawerOpen(GravityCompat.START)){
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }
-        else {
+        } else {
             finish();
         }
     }
-    private void CreateLanguageDialog()
-    {
+
+    private void CreateLanguageDialog() {
         final AlertDialog dialog = new AlertDialog.Builder(this)
                 .setCancelable(true)
                 .create();
@@ -515,13 +545,10 @@ Back();    }
         DialogLanguageBinding binding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.dialog_language, null, false);
 
 
-
-        if (current_lang.equals("ar"))
-        {
+        if (current_lang.equals("ar")) {
             binding.rbAr.setChecked(true);
 
-        }else if (current_lang.equals("en"))
-        {
+        } else if (current_lang.equals("en")) {
             binding.rbEn.setChecked(true);
 
         }
@@ -557,13 +584,16 @@ Back();    }
         dialog.setView(binding.getRoot());
         dialog.show();
     }
+
     private void refreshActivity(String lang) {
         preferences.create_update_language(this, lang);
         Paper.book().write("lang", lang);
         LanguageHelper.setNewLocale(this, lang);
         Intent intent = getIntent();
         finish();
-        startActivity(intent);}
+        startActivity(intent);
+    }
+
     private void addVisit(final String timeNow) {
         final ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.setCancelable(false);
@@ -605,14 +635,11 @@ Back();    }
 
     }
 
-
     private void Logout() {
 
-        if (userModel==null)
-        {
+        if (userModel == null) {
             navigateToSignInActivity();
-        }else
-        {
+        } else {
             preferences.clear(this);
             navigateToSignInActivity();
 
@@ -626,10 +653,10 @@ Back();    }
             Intent intent = new Intent(this, SignInActivity.class);
             startActivity(intent);
             finish();
-        },200);
+        }, 200);
     }
-    public  class WindowInfo implements GoogleMap.InfoWindowAdapter
-    {
+
+    public class WindowInfo implements GoogleMap.InfoWindowAdapter {
 
         @Override
         public View getInfoWindow(Marker marker) {
@@ -640,12 +667,10 @@ Back();    }
         @Override
         public View getInfoContents(Marker marker) {
             Single_Market_Model adModel = (Single_Market_Model) marker.getTag();
-            if (adModel==null)
-            {
+            if (adModel == null) {
                 return null;
-            }else
-            {
-                View view = LayoutInflater.from(HomeActivity.this).inflate(R.layout.window_info_view,null);
+            } else {
+                View view = LayoutInflater.from(HomeActivity.this).inflate(R.layout.window_info_view, null);
                 TextView tvTitle = view.findViewById(R.id.tvTitle);
                 TextView tvPrice = view.findViewById(R.id.tvPrice);
                 TextView tvDetails = view.findViewById(R.id.tvDetails);
@@ -656,31 +681,19 @@ Back();    }
 
                 try {
 
-                    if (adModel.getName()!=null&&!adModel.getName().isEmpty())
-                    {
+                    if (adModel.getName() != null && !adModel.getName().isEmpty()) {
                         tvTitle.setText(adModel.getName());
 
-                    }else
-                    {
+                    } else {
                         tvTitle.setText(getString(R.string.no_name));
 
                     }
 
 
+                    tvAddress.setText(adModel.getAddress());
 
 
-
-
-                            tvAddress.setText(adModel.getAddress());
-
-
-
-
-
-
-
-
-                    Picasso.with(HomeActivity.this).load(Uri.parse(Tags.base_url+adModel.getLogo())).fit().into(image, new com.squareup.picasso.Callback() {
+                    Picasso.with(HomeActivity.this).load(Uri.parse(Tags.base_url + adModel.getLogo())).fit().into(image, new com.squareup.picasso.Callback() {
                         @Override
                         public void onSuccess() {
                             progBar.setVisibility(View.GONE);
@@ -693,11 +706,9 @@ Back();    }
                         }
                     });
 
-                }catch (Exception e)
-                {
-                    if (e!=null&&e.getMessage()!=null)
-                    {
-                        Log.e("error",e.getMessage());
+                } catch (Exception e) {
+                    if (e != null && e.getMessage() != null) {
+                        Log.e("error", e.getMessage());
                     }
                 }
 

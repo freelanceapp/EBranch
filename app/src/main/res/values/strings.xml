@@ -77,5 +77,7 @@
     <string name="name">Name</string>
     <string name="email">Email</string>
     <string name="edit_profile">Edit profile</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
 
 </resources>

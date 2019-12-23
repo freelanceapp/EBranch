@@ -33,11 +33,11 @@
     <string name="send">ارسال</string>
     <string name="messge">رساله</string>
     <string name="contact_us">اتصل بنا</string>
-    <string name="home">الرئيسيه</string>
+    <string name="home">الرئيسية</string>
     <string name="detials">تفاصيل</string>
     <string name="amount">الكميه</string>
     <string name="order"> اطلب الان</string>
-    <string name="profile">الحساب الشخصى</string>
+    <string name="profile">الحساب الشخصي</string>
     <string name="orders">الطلبات</string>
     <string name="setting">الاعدادات</string>
     <string name="terms_and_conditions">الشروط والاحكام</string>
@@ -77,5 +77,7 @@
     <string name="name">الإسم</string>
     <string name="email">البريد الالكتروني</string>
     <string name="edit_profile">تعديل الملف الشخصي</string>
+    <string name="open">فتح</string>
+    <string name="close">غلق</string>
 
 </resources>
