@@ -408,21 +408,18 @@ CreateLanguageDialog();
             mMap.setBuildingsEnabled(false);
             mMap.setIndoorEnabled(true);
             mMap.setInfoWindowAdapter(new WindowInfo());
-            mMap.setOnInfoWindowClickListener(marker -> {
-                Single_Market_Model adModel = (Single_Market_Model) marker.getTag();
-                if (adModel!=null)
-                {
-                  marker.showInfoWindow();
+            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    marker.showInfoWindow();
 
-
+                    return false;
                 }
             });
-            fragment.setListener(new FragmentMapTouchListener.OnTouchListener() {
-                @Override
-                public void onTouch() {
-                    nestedScrollView.requestDisallowInterceptTouchEvent(true);
+            mMap.setOnInfoWindowClickListener(marker -> {
+                Single_Market_Model adModel = (Single_Market_Model) marker.getTag();
 
-                }
+
             });
 
 
