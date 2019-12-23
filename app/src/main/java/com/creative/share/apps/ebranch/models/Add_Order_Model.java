@@ -6,31 +6,15 @@ import java.util.List;
 public class Add_Order_Model implements Serializable {
 
 
-    private int type;
     private int user_id;
     private int market_id;
-    private String title;
-    private long next_date;
+    private String branch_id;
+    private int order_type;
     private double longitude;
     private double latitude;
     private String address;
-    private int offer_id;
     private double total_cost;
     private List<Order_details> order_details;
-    private List<Services> services;
-    private String name;
-
-    public String getName() {
-        return name;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
 
     public int getUser_id() {
         return user_id;
@@ -48,20 +32,20 @@ public class Add_Order_Model implements Serializable {
         this.market_id = market_id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getBranch_id() {
+        return branch_id;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setBranch_id(String branch_id) {
+        this.branch_id = branch_id;
     }
 
-    public long getNext_date() {
-        return next_date;
+    public int getOrder_type() {
+        return order_type;
     }
 
-    public void setNext_date(long next_date) {
-        this.next_date = next_date;
+    public void setOrder_type(int order_type) {
+        this.order_type = order_type;
     }
 
     public double getLongitude() {
@@ -88,14 +72,6 @@ public class Add_Order_Model implements Serializable {
         this.address = address;
     }
 
-    public int getOffer_id() {
-        return offer_id;
-    }
-
-    public void setOffer_id(int offer_id) {
-        this.offer_id = offer_id;
-    }
-
     public double getTotal_cost() {
         return total_cost;
     }
@@ -112,52 +88,15 @@ public class Add_Order_Model implements Serializable {
         this.order_details = order_details;
     }
 
-    public List<Services> getServices() {
-        return services;
-    }
-
-    public void setServices(List<Services> services) {
-        this.services = services;
-    }
-
-    public void setname(String name_of_market) {
-        this.name=name_of_market;
-    }
-
     public static class Order_details implements Serializable {
-        private int product_id;
-        private int offer_id;
-        private int amount;
-        private double total_price;
-        private String des;
+      private int product_id;
+              private int amount;
+              private double total_price;
+private String ar_title;
+private String en_title;
+private String ar_desc;
+private String en_des;
 private String image;
-private String ar_name;
-        private String en_name;
-
-        public String getAr_name() {
-            return ar_name;
-        }
-
-        public void setAr_name(String ar_name) {
-            this.ar_name = ar_name;
-        }
-
-        public String getEn_name() {
-            return en_name;
-        }
-
-        public void setEn_name(String en_name) {
-            this.en_name = en_name;
-        }
-
-        public String getImage() {
-            return image;
-        }
-
-        public void setImage(String image) {
-            this.image = image;
-        }
-
         public int getProduct_id() {
             return product_id;
         }
@@ -166,12 +105,24 @@ private String ar_name;
             this.product_id = product_id;
         }
 
-        public int getOffer_id() {
-            return offer_id;
+        public void setAr_title(String ar_title) {
+            this.ar_title = ar_title;
         }
 
-        public void setOffer_id(int offer_id) {
-            this.offer_id = offer_id;
+        public void setEn_title(String en_title) {
+            this.en_title = en_title;
+        }
+
+        public void setAr_desc(String ar_desc) {
+            this.ar_desc = ar_desc;
+        }
+
+        public void setEn_des(String en_des) {
+            this.en_des = en_des;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
         }
 
         public int getAmount() {
@@ -190,26 +141,27 @@ private String ar_name;
             this.total_price = total_price;
         }
 
-        public String getDes() {
-            return des;
+        public String getAr_title() {
+            return ar_title;
         }
 
-        public void setDes(String des) {
-            this.des = des;
+        public String getEn_title() {
+            return en_title;
+        }
+
+        public String getAr_desc() {
+            return ar_desc;
+        }
+
+        public String getEn_des() {
+            return en_des;
+        }
+
+        public String getImage() {
+            return image;
         }
     }
 
-    public static class Services implements Serializable {
-        private int service_id;
-
-        public int getService_id() {
-            return service_id;
-        }
-
-        public void setService_id(int service_id) {
-            this.service_id = service_id;
-        }
-    }
 
 
 }

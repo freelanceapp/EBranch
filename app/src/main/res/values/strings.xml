@@ -73,6 +73,7 @@
     <string name="location">Location</string>
     <string name="no_name">No Name</string>
     <string name="search">Search</string>
+<string name="order_pref">You cannot order two stores at the same time</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
     <string name="edit_profile">Edit profile</string>

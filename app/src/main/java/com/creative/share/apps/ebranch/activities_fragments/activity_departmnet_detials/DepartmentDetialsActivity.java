@@ -312,6 +312,7 @@ getproducts();
 
     public void displayproduct(String s) {
         Intent intent = new Intent(DepartmentDetialsActivity.this, ProductDetialsActivity.class);
+        Log.e("p",s);
         intent.putExtra("productid",s);
         startActivity(intent);
     }

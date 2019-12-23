@@ -18,6 +18,8 @@ import com.creative.share.apps.ebranch.adapters.SlidingImage_Adapter;
 import com.creative.share.apps.ebranch.databinding.ActivityProductDetialsBinding;
 import com.creative.share.apps.ebranch.interfaces.Listeners;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
+import com.creative.share.apps.ebranch.models.Add_Order_Model;
+import com.creative.share.apps.ebranch.models.OrderModel;
 import com.creative.share.apps.ebranch.models.Single_Market_Model;
 import com.creative.share.apps.ebranch.models.Single_Product_Model;
 import com.creative.share.apps.ebranch.models.Slider_Model;
@@ -51,6 +53,8 @@ private SlidingImage_Adapter slidingImage__adapter;
 private String product_id;
 private int amount=1;
 private int totalamount;
+private Single_Product_Model single_product_model;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         Paper.init(newBase);
@@ -107,7 +111,92 @@ private int totalamount;
         lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
         binding.setLang(lang);
         binding.setBackListener(this);
+        binding.imageDecrease.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(amount>1){
+                    binding.tvAmount.setText((amount-1)+"");
+                    amount-=1;
+                }
 
+            }
+        });
+        binding.imageIncrease.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(amount<totalamount){
+                    binding.tvAmount.setText((amount+1)+"");
+                    amount+=1;
+                }
+            }
+        });
+        binding.btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Add_Order_Model add_order_model=preferences.getUserOrder(ProductDetialsActivity.this);
+                if(add_order_model!=null){
+                    Log.e("data",single_product_model.getMarket_id()+" "+add_order_model.getMarket_id());
+                    if((add_order_model.getMarket_id()+"").equals(single_product_model.getMarket_id())){
+                    List<Add_Order_Model.Order_details> order_details=add_order_model.getOrder_details();
+                    Add_Order_Model.Order_details order_details1 = null;
+                    int pos = 0;
+                  for(int i=0;i<order_details.size();i++){
+                      if(single_product_model.getId()==order_details.get(i).getProduct_id()){
+                          order_details1=order_details.get(i);
+                          pos=i;
+                      }
+                  }
+                  if(order_details1!=null){
+                      order_details1.setAmount(amount+order_details.get(pos).getAmount());
+                      Log.e("to",add_order_model.getTotal_cost()+(Double.parseDouble(single_product_model.getPrice())*amount)+""+((amount+order_details.get(pos).getAmount())*Double.parseDouble(single_product_model.getPrice())));
+                      order_details1.setTotal_price(add_order_model.getTotal_cost()+(Double.parseDouble(single_product_model.getPrice())*amount));
+                      order_details.remove(pos);
+                      order_details.add(pos,order_details1);
+
+                  }
+                  else {
+                      order_details1=new Add_Order_Model.Order_details();
+                      order_details1.setAmount(amount);
+                      order_details1.setTotal_price(Double.parseDouble(single_product_model.getPrice())*amount);
+                      order_details1.setProduct_id(single_product_model.getId());
+                      order_details1.setAr_desc(single_product_model.getAr_des());
+                      order_details1.setEn_des(single_product_model.getEn_des());
+                      order_details1.setAr_title(single_product_model.getAr_title());
+                      order_details1.setEn_title(single_product_model.getEn_title());
+                      order_details.add(order_details1);
+
+                  }
+                  add_order_model.setOrder_details(order_details);
+                        Common.CreateDialogAlert(ProductDetialsActivity.this,getResources().getString(R.string.suc));
+
+                    }
+                    else {
+                        Common.CreateDialogAlert(ProductDetialsActivity.this,getResources().getString(R.string.order_pref));
+                    }
+                }
+                else {
+                   add_order_model=new Add_Order_Model();
+                    List<Add_Order_Model.Order_details> order_details=new ArrayList<>();
+                    add_order_model.setMarket_id(Integer.parseInt(single_product_model.getMarket_id()));
+                    Add_Order_Model.Order_details order_details1=new Add_Order_Model.Order_details();
+                    order_details1.setProduct_id(single_product_model.getId());
+                    order_details1.setTotal_price(Double.parseDouble(single_product_model.getPrice())*amount);
+                    order_details1.setAmount(amount);
+                    order_details1.setAr_desc(single_product_model.getAr_des());
+                    order_details1.setEn_des(single_product_model.getEn_des());
+                    order_details1.setAr_title(single_product_model.getAr_title());
+                    order_details1.setEn_title(single_product_model.getEn_title());
+                    order_details.add(order_details1);
+                    add_order_model.setOrder_details(order_details);
+                    Common.CreateDialogAlert(ProductDetialsActivity.this,getResources().getString(R.string.suc));
+
+
+                }
+                preferences.create_update_order(ProductDetialsActivity.this,add_order_model);
+
+
+            }
+        });
     }
 
 
@@ -123,25 +212,7 @@ private int totalamount;
         NUM_PAGES = dataArrayList.size();
         slidingImage__adapter = new SlidingImage_Adapter(this, dataArrayList);
         binding.pager.setAdapter(slidingImage__adapter);
-        binding.imageDecrease.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-if(amount>1){
-    binding.tvAmount.setText((amount-1)+"");
-    amount-=1;
-}
 
-            }
-        });
-        binding.imageIncrease.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(amount<totalamount){
-                    binding.tvAmount.setText((amount+1)+"");
-                    amount+=1;
-                }
-            }
-        });
 
     }
 
@@ -152,6 +223,7 @@ if(amount>1){
     }
     public void getSingleproduct() {
         //  binding.progBar.setVisibility(View.VISIBLE);
+        Log.e("pr",product_id);
         ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.show();
@@ -192,6 +264,7 @@ dialog.dismiss();
 
     private void updateddata(Single_Product_Model body) {
         binding.setProductmodel(body);
+        single_product_model=body;
         totalamount=body.getAmount();
 
     }

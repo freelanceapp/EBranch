@@ -34,11 +34,13 @@ import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragme
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_Search;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_Views;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_department;
+import com.creative.share.apps.ebranch.activities_fragments.activity_markets.MarketActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_orders.OrdersActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_profile.profileActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.activities.SignInActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_terms.TermsActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_cart.CartActivity;
+import com.creative.share.apps.ebranch.activities_fragments.activitymarketprofile.MarketProfileActivity;
 import com.creative.share.apps.ebranch.databinding.DialogLanguageBinding;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
 import com.creative.share.apps.ebranch.models.Markets_Model;
@@ -418,7 +420,9 @@ CreateLanguageDialog();
             });
             mMap.setOnInfoWindowClickListener(marker -> {
                 Single_Market_Model adModel = (Single_Market_Model) marker.getTag();
-
+                Intent intent=new Intent(HomeActivity.this, MarketProfileActivity.class);
+                intent.putExtra("marketid",adModel.getId()+"");
+                startActivity(intent);
 
             });
 

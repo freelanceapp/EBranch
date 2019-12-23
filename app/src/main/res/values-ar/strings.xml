@@ -73,6 +73,7 @@
     <string name="location">Location</string>
     <string name="no_name">لا يوجد اسم</string>
     <string name="search">بحث</string>
+    <string name="order_pref">لا يمكن ان تطلب من متجرين فى نفس الوقت</string>
     <string name="name">الإسم</string>
     <string name="email">البريد الالكتروني</string>
     <string name="edit_profile">تعديل الملف الشخصي</string>
