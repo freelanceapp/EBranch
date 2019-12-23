@@ -44,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@{marketmodel.full_name}"
+            android:text='@{marketmodel.full_name!=null?marketmodel.full_name:marketmodel.name}'
             android:textColor="@color/white"
             android:textSize="16sp" />
 

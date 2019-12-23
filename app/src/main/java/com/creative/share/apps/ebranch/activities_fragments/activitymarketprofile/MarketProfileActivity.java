@@ -86,6 +86,7 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
     private void getdatafromintent() {
         if (getIntent().getStringExtra("marketid") != null) {
             marketid = getIntent().getStringExtra("marketid");
+
         }
     }
 

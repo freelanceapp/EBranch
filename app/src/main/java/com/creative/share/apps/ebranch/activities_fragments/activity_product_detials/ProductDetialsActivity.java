@@ -148,8 +148,8 @@ private Single_Product_Model single_product_model;
                   }
                   if(order_details1!=null){
                       order_details1.setAmount(amount+order_details.get(pos).getAmount());
-                      Log.e("to",add_order_model.getTotal_cost()+(Double.parseDouble(single_product_model.getPrice())*amount)+""+((amount+order_details.get(pos).getAmount())*Double.parseDouble(single_product_model.getPrice())));
-                      order_details1.setTotal_price(add_order_model.getTotal_cost()+(Double.parseDouble(single_product_model.getPrice())*amount));
+                     // Log.e("to",add_order_model.getTotal_cost()+(Double.parseDouble(single_product_model.getPrice())*amount)+""+((amount+order_details.get(pos).getAmount())*Double.parseDouble(single_product_model.getPrice())));
+                      order_details1.setTotal_price(order_details1.getTotal_price()+(Double.parseDouble(single_product_model.getPrice())*amount));
                       order_details.remove(pos);
                       order_details.add(pos,order_details1);
 

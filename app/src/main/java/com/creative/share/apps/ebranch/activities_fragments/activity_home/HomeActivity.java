@@ -81,6 +81,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Preferences preferences;
     private UserModel userModel;
     private AHBottomNavigation ahBottomNav;
+
     private CircleImageView image;
     private TextView tvName, tvEmail;
     private DrawerLayout drawer;
@@ -263,7 +264,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         ahBottomNav.setForceTint(true);
         ahBottomNav.setAccentColor(ContextCompat.getColor(this, R.color.colorAccent));
         ahBottomNav.setInactiveColor(ContextCompat.getColor(this, R.color.gray5));
-
+        ahBottomNav.setUseElevation(false);
         ahBottomNav.addItem(item1);
         ahBottomNav.addItem(item2);
         ahBottomNav.addItem(item3);
@@ -431,20 +432,23 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.setBuildingsEnabled(false);
             mMap.setIndoorEnabled(true);
             mMap.setInfoWindowAdapter(new WindowInfo());
-            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(Marker marker) {
-                    marker.showInfoWindow();
 
-                    return false;
-                }
-            });
+            fragment.setListener(() -> nestedScrollView.requestDisallowInterceptTouchEvent(true));
+
             mMap.setOnInfoWindowClickListener(marker -> {
                 Single_Market_Model adModel = (Single_Market_Model) marker.getTag();
-                Intent intent = new Intent(HomeActivity.this, MarketProfileActivity.class);
-                intent.putExtra("marketid", adModel.getId() + "");
-                startActivity(intent);
 
+                if (adModel != null) {
+                    if (marker.isInfoWindowShown()) {
+                        Intent intent = new Intent(HomeActivity.this, MarketProfileActivity.class);
+                        intent.putExtra("marketid", adModel.getId() + "");
+                        startActivity(intent);
+                    } else {
+
+                        marker.showInfoWindow();
+
+                    }
+                }
             });
 
 

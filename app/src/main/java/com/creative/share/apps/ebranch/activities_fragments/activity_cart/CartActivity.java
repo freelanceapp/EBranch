@@ -58,7 +58,7 @@ getorders();
             for(int i=0;i<order_details.size();i++){
                 total+=order_details.get(i).getTotal_price();
             }
-            binding.tvTotal.setText(total+"");
+            binding.tvTotal.setText(getResources().getString(R.string.total)+total+"");
         }
         else {
             binding.llNoStore.setVisibility(View.VISIBLE);
