@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class UserModel implements Serializable {
 
- private int id;
-         private String user_type;
+    private int id;
+    private String user_type;
     private String name;
     private String phone_code;
     private String phone;

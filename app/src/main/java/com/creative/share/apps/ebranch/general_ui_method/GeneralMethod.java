@@ -1,7 +1,6 @@
 package com.creative.share.apps.ebranch.general_ui_method;
 
 import android.net.Uri;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.EditText;
@@ -9,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.databinding.BindingAdapter;
-
 
 import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.tags.Tags;
@@ -26,6 +24,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class GeneralMethod {
 
+
+
     @BindingAdapter("error")
     public static void errorValidation(View view, String error) {
         if (view instanceof EditText) {
@@ -36,6 +36,30 @@ public class GeneralMethod {
             tv.setError(error);
 
 
+        }
+    }
+
+    @BindingAdapter("image")
+    public static void displayImage(View view,String endPoint)
+    {
+        if (endPoint!=null&&!endPoint.isEmpty())
+        {
+            if (view instanceof CircleImageView)
+            {
+                CircleImageView circleImageView = (CircleImageView) view;
+
+                Picasso.with(view.getContext()).load(Uri.parse(Tags.IMAGE_URL)).fit().into(circleImageView);
+            }else if (view instanceof RoundedImageView)
+            {
+                RoundedImageView roundedImageView = (RoundedImageView) view;
+                Picasso.with(view.getContext()).load(Uri.parse(Tags.IMAGE_URL)).fit().into(roundedImageView);
+
+            }else if (view instanceof ImageView)
+            {
+                ImageView imageView = (ImageView) view;
+                Picasso.with(view.getContext()).load(Uri.parse(Tags.IMAGE_URL)).fit().into(imageView);
+
+            }
         }
     }
 
@@ -70,10 +94,10 @@ public class GeneralMethod {
     @BindingAdapter({"date"})
     public static void displayDate (TextView textView,long date)
     {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE dd/MMM",Locale.ENGLISH);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE dd/MMM", Locale.ENGLISH);
         String m_date = dateFormat.format(new Date(date*1000));
 
-            textView.setText(String.format("%s",m_date));
+        textView.setText(String.format("%s",m_date));
 
     }
 
@@ -88,6 +112,8 @@ public class GeneralMethod {
                 .setInterpolator(new LinearInterpolator());
         builder.start();
     }
+
+
 
 
 

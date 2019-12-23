@@ -57,6 +57,10 @@ public interface Listeners {
     }
 
 
+    interface UpdateProfileListener
+    {
+        void updateProfile();
+    }
 
 
 }
