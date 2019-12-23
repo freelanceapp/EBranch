@@ -72,5 +72,6 @@
     <string name="select_location_on_map">Select location on map</string>
     <string name="location">Location</string>
     <string name="no_name">No Name</string>
+    <string name="search">Search</string>
 
 </resources>

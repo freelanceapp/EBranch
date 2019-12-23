@@ -12,6 +12,7 @@ import com.creative.share.apps.ebranch.models.PlaceGeocodeData;
 import com.creative.share.apps.ebranch.models.PlaceMapDetailsData;
 import com.creative.share.apps.ebranch.models.Products_Model;
 import com.creative.share.apps.ebranch.models.Single_Market_Model;
+import com.creative.share.apps.ebranch.models.Single_Product_Model;
 import com.creative.share.apps.ebranch.models.UserModel;
 
 import okhttp3.ResponseBody;
@@ -95,6 +96,12 @@ public interface Service {
     @POST("api/single-market")
     Call<Single_Market_Model> getsinglemarket(
             @Field("market_id") String market_id
+
+    );
+    @FormUrlEncoded
+    @POST("api/single-product")
+    Call<Single_Product_Model> getsingleproduct(
+            @Field("product_id") String product_id
 
     );
     @FormUrlEncoded

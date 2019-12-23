@@ -102,7 +102,9 @@ private int newest=0,best=0,low=0;
         filter_models=new ArrayList<>();
         products=new ArrayList<>();
      setfiltermodels();
+
      filterAdapter=new FilterAdapter(filter_models,this);
+     Log.e("data",filter_models.size()+"");
      binding.spCountryfrom.setAdapter(filterAdapter);
         binding.toolbar.setTitle("");
         products=new ArrayList<>();
@@ -116,11 +118,11 @@ private int newest=0,best=0,low=0;
         manager = new GridLayoutManager(this,2);
         binding.recView.setLayoutManager(manager);
         binding.recView.setAdapter(products_adapter);
+        binding.recView.setNestedScrollingEnabled(true);
         binding.recView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
                 if (dy > 0) {
                     int totalItems = products_adapter.getItemCount();
                     int lastVisiblePos = manager.findLastCompletelyVisibleItemPosition();
@@ -308,8 +310,9 @@ getproducts();
         }
     }
 
-    public void displayproduct() {
+    public void displayproduct(String s) {
         Intent intent = new Intent(DepartmentDetialsActivity.this, ProductDetialsActivity.class);
+        intent.putExtra("productid",s);
         startActivity(intent);
     }
 

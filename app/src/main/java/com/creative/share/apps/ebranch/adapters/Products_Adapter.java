@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.creative.share.apps.ebranch.R;
+import com.creative.share.apps.ebranch.activities_fragments.activity_departmnet_detials.DepartmentDetialsActivity;
 import com.creative.share.apps.ebranch.databinding.LoadMoreBinding;
 import com.creative.share.apps.ebranch.databinding.ProductsHomeRowBinding;
 import com.creative.share.apps.ebranch.models.Products_Model;
@@ -28,7 +29,7 @@ public class Products_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private Context context;
     private LayoutInflater inflater;
     private String lang;
-
+private DepartmentDetialsActivity departmentDetialsActivity;
     public Products_Adapter(List<Products_Model.Data> orderlist, Context context) {
         this.orderlist = orderlist;
         this.context = context;
@@ -62,7 +63,15 @@ public class Products_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 ((EventHolder) holder).binding.setLang(lang);
 ((EventHolder) holder).binding.setProductsmodel(orderlist.get(position));
-
+holder.itemView.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        if(context instanceof DepartmentDetialsActivity){
+            departmentDetialsActivity=(DepartmentDetialsActivity)context;
+            departmentDetialsActivity.displayproduct(orderlist.get(holder.getLayoutPosition()).getId()+"");
+        }
+    }
+});
         }else
             {
                 LoadHolder loadHolder = (LoadHolder) holder;
