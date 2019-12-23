@@ -80,5 +80,7 @@
     <string name="open">open</string>
     <string name="close">close</string>
     <string name="total">Total : </string>
+    <string name="home_delivery">Home delivery</string>
+    <string name="receiving_from_branches">Receiving from branches</string>
 
 </resources>

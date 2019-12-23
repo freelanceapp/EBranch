@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.adapters.Cart_Adapter;
 import com.creative.share.apps.ebranch.databinding.ActivityCartBinding;
+import com.creative.share.apps.ebranch.interfaces.Listeners;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
 import com.creative.share.apps.ebranch.models.Add_Order_Model;
 import com.creative.share.apps.ebranch.models.UserModel;
@@ -23,7 +24,7 @@ import java.util.Locale;
 
 import io.paperdb.Paper;
 
-public class CartActivity extends AppCompatActivity {
+public class CartActivity extends AppCompatActivity implements Listeners.BackListener {
     private ActivityCartBinding binding;
 
     private Preferences preferences;
@@ -78,6 +79,7 @@ cart_adapter=new Cart_Adapter(order_details,this);
         Paper.init(this);
         lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
         binding.setLang(lang);
+        binding.setBackListener(this);
         binding.recCart.setLayoutManager(new GridLayoutManager(this,1));
         binding.recCart.setAdapter(cart_adapter);
 
@@ -103,5 +105,10 @@ cart_adapter=new Cart_Adapter(order_details,this);
         }
         cart_adapter.notifyDataSetChanged();
 
+    }
+
+    @Override
+    public void back() {
+        finish();
     }
 }

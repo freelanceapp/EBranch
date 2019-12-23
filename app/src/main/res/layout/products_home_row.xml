@@ -67,7 +67,7 @@
                         android:gravity="center"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:textColor="@color/gray3"
+                        android:textColor="@color/gray4"
 
                         android:text="@{(productsmodel.price)+@string/real}"
                         android:textSize="14sp"
@@ -92,7 +92,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text='@{lang.equals("ar")?productsmodel.main_cat.ar_title:productsmodel.main_cat.en_title}'
-                    android:textColor="@color/gray3"
+                    android:textColor="@color/gray4"
                     android:textSize="14sp" />
             </LinearLayout>
     </androidx.cardview.widget.CardView>

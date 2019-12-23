@@ -345,4 +345,12 @@ Log.e("dy",dy+"");
         intent.putExtra("cat_id",id+"");
         startActivity(intent);
     }
+
+        public void displayproduct(String s) {
+            Intent intent = new Intent(MarketProfileActivity.this, ProductDetialsActivity.class);
+            Log.e("p",s);
+            intent.putExtra("productid",s);
+            startActivity(intent);
+
+    }
 }

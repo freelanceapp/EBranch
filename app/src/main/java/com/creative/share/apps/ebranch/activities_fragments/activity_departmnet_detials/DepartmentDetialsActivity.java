@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.activities_fragments.activity_product_detials.ProductDetialsActivity;
 import com.creative.share.apps.ebranch.adapters.FilterAdapter;
+import com.creative.share.apps.ebranch.adapters.Filter_Rec_Adapter;
 import com.creative.share.apps.ebranch.adapters.Products_Adapter;
 import com.creative.share.apps.ebranch.databinding.ActivityDepartmentDetialsBinding;
 import com.creative.share.apps.ebranch.databinding.ActivityMarketProfileBinding;
@@ -57,7 +58,7 @@ public class DepartmentDetialsActivity extends AppCompatActivity implements List
     private UserModel userModel;
 private List<Filter_model> filter_models;
 private FilterAdapter filterAdapter;
-
+private Filter_Rec_Adapter filter_rec_adapter;
     private String lang;
     private String marketid;
     private GridLayoutManager manager;
@@ -104,8 +105,9 @@ private int newest=0,best=0,low=0;
      setfiltermodels();
 
      filterAdapter=new FilterAdapter(filter_models,this);
+     filter_rec_adapter=new Filter_Rec_Adapter(filter_models,this);
      Log.e("data",filter_models.size()+"");
-     binding.spCountryfrom.setAdapter(filterAdapter);
+    // binding.spCountryfrom.setAdapter(filterAdapter);
         binding.toolbar.setTitle("");
         products=new ArrayList<>();
         Paper.init(this);
@@ -119,6 +121,8 @@ private int newest=0,best=0,low=0;
         binding.recView.setLayoutManager(manager);
         binding.recView.setAdapter(products_adapter);
         binding.recView.setNestedScrollingEnabled(true);
+        binding.recfilter.setLayoutManager(new GridLayoutManager(this,1));
+        binding.recfilter.setAdapter(filter_rec_adapter);
         binding.recView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -139,7 +143,7 @@ private int newest=0,best=0,low=0;
                 }
             }
         });
-        binding.spCountryfrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+      /*  binding.spCountryfrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
               if(i==0){
@@ -178,7 +182,20 @@ getproducts();
             }
             return false;
         });
-
+*/
+      binding.imFilter.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              if(binding.expandLayout.isExpanded()){
+                  binding.expandLayout.collapse(true);
+                  binding.recView.setVisibility(View.VISIBLE);
+              }
+              else {
+                  binding.expandLayout.expand(true);
+                  binding.recView.setVisibility(View.GONE);
+              }
+          }
+      });
     }
 
     private void setfiltermodels() {
@@ -324,4 +341,26 @@ getproducts();
     }
 
 
+    public void Selectitem(int layoutPosition) {
+        if(layoutPosition==0){
+            newest=1;
+            best=0;
+            low=0;
+
+        }
+        else if(layoutPosition==1){
+            newest=0;
+            best=1;
+            low=0;
+        }
+        else if(layoutPosition==2){
+            newest=0;
+            best=0;
+            low=1;
+        }
+        binding.recView.setVisibility(View.VISIBLE);
+
+        binding.expandLayout.collapse(true);
+        getproducts();
+    }
 }

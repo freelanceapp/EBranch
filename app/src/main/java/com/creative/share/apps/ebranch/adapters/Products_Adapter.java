@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.activities_fragments.activity_departmnet_detials.DepartmentDetialsActivity;
+import com.creative.share.apps.ebranch.activities_fragments.activitymarketprofile.MarketProfileActivity;
 import com.creative.share.apps.ebranch.databinding.LoadMoreBinding;
 import com.creative.share.apps.ebranch.databinding.ProductsHomeRowBinding;
 import com.creative.share.apps.ebranch.models.Products_Model;
@@ -30,6 +31,7 @@ public class Products_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private LayoutInflater inflater;
     private String lang;
 private DepartmentDetialsActivity departmentDetialsActivity;
+private MarketProfileActivity marketProfileActivity;
     public Products_Adapter(List<Products_Model.Data> orderlist, Context context) {
         this.orderlist = orderlist;
         this.context = context;
@@ -69,6 +71,10 @@ holder.itemView.setOnClickListener(new View.OnClickListener() {
         if(context instanceof DepartmentDetialsActivity){
             departmentDetialsActivity=(DepartmentDetialsActivity)context;
             departmentDetialsActivity.displayproduct(orderlist.get(holder.getLayoutPosition()).getId()+"");
+        }
+        else if(context instanceof  MarketProfileActivity){
+            marketProfileActivity=(MarketProfileActivity)context;
+            marketProfileActivity.displayproduct(orderlist.get(holder.getLayoutPosition()).getId()+"");
         }
     }
 });

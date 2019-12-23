@@ -413,9 +413,12 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void updateImageUI() {
+        Log.e("data",Tags.IMAGE_URL+userModel.getLogo()+"_");
         if (userModel.getLogo()!=null&&!userModel.getLogo().isEmpty()&&!userModel.getLogo().equals("0"))
         {
-            Picasso.with(this).load(Uri.parse(Tags.IMAGE_URL)).fit().into(image);
+           // Picasso.with(this).load(Uri.parse(Tags.IMAGE_URL)).fit().into(image);
+
+            Picasso.with(this).load(Uri.parse(Tags.IMAGE_URL+userModel.getLogo())).fit().into(image);
 
         }
         tvName.setText(userModel.getFull_name());

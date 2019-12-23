@@ -80,5 +80,7 @@
     <string name="total">المجموع : </string>
     <string name="open">فتح</string>
     <string name="close">غلق</string>
+    <string name="home_delivery">Home delivery</string>
+    <string name="receiving_from_branches">Receiving from branches</string>
 
 </resources>
