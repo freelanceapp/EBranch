@@ -13,14 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import com.creative.share.apps.ebranch.R;
-import com.creative.share.apps.ebranch.activities_fragments.activitymarketprofile.MarketProfileActivity;
 import com.creative.share.apps.ebranch.adapters.SlidingImage_Adapter;
 import com.creative.share.apps.ebranch.databinding.ActivityProductDetialsBinding;
 import com.creative.share.apps.ebranch.interfaces.Listeners;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
 import com.creative.share.apps.ebranch.models.Add_Order_Model;
-import com.creative.share.apps.ebranch.models.OrderModel;
-import com.creative.share.apps.ebranch.models.Single_Market_Model;
 import com.creative.share.apps.ebranch.models.Single_Product_Model;
 import com.creative.share.apps.ebranch.models.Slider_Model;
 import com.creative.share.apps.ebranch.models.UserModel;
@@ -30,7 +27,6 @@ import com.creative.share.apps.ebranch.share.Common;
 import com.creative.share.apps.ebranch.tags.Tags;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -137,36 +133,36 @@ private Single_Product_Model single_product_model;
                 if(add_order_model!=null){
                     Log.e("data",single_product_model.getMarket_id()+" "+add_order_model.getMarket_id());
                     if((add_order_model.getMarket_id()+"").equals(single_product_model.getMarket_id())){
-                    List<Add_Order_Model.Order_details> order_details=add_order_model.getOrder_details();
-                    Add_Order_Model.Order_details order_details1 = null;
+                    List<Add_Order_Model.Products> order_details=add_order_model.getProducts();
+                    Add_Order_Model.Products products1 = null;
                     int pos = 0;
                   for(int i=0;i<order_details.size();i++){
                       if(single_product_model.getId()==order_details.get(i).getProduct_id()){
-                          order_details1=order_details.get(i);
+                          products1 =order_details.get(i);
                           pos=i;
                       }
                   }
-                  if(order_details1!=null){
-                      order_details1.setAmount(amount+order_details.get(pos).getAmount());
+                  if(products1 !=null){
+                      products1.setAmount(amount+order_details.get(pos).getAmount());
                      // Log.e("to",add_order_model.getTotal_cost()+(Double.parseDouble(single_product_model.getPrice())*amount)+""+((amount+order_details.get(pos).getAmount())*Double.parseDouble(single_product_model.getPrice())));
-                      order_details1.setTotal_price(order_details1.getTotal_price()+(Double.parseDouble(single_product_model.getPrice())*amount));
+                      products1.setTotal_price(products1.getTotal_price()+(Double.parseDouble(single_product_model.getPrice())*amount));
                       order_details.remove(pos);
-                      order_details.add(pos,order_details1);
+                      order_details.add(pos, products1);
 
                   }
                   else {
-                      order_details1=new Add_Order_Model.Order_details();
-                      order_details1.setAmount(amount);
-                      order_details1.setTotal_price(Double.parseDouble(single_product_model.getPrice())*amount);
-                      order_details1.setProduct_id(single_product_model.getId());
-                      order_details1.setAr_desc(single_product_model.getAr_des());
-                      order_details1.setEn_des(single_product_model.getEn_des());
-                      order_details1.setAr_title(single_product_model.getAr_title());
-                      order_details1.setEn_title(single_product_model.getEn_title());
-                      order_details.add(order_details1);
+                      products1 =new Add_Order_Model.Products();
+                      products1.setAmount(amount);
+                      products1.setTotal_price(Double.parseDouble(single_product_model.getPrice())*amount);
+                      products1.setProduct_id(single_product_model.getId());
+                      products1.setAr_desc(single_product_model.getAr_des());
+                      products1.setEn_des(single_product_model.getEn_des());
+                      products1.setAr_title(single_product_model.getAr_title());
+                      products1.setEn_title(single_product_model.getEn_title());
+                      order_details.add(products1);
 
                   }
-                  add_order_model.setOrder_details(order_details);
+                  add_order_model.setProducts(order_details);
                         Common.CreateDialogAlert(ProductDetialsActivity.this,getResources().getString(R.string.suc));
 
                     }
@@ -176,18 +172,18 @@ private Single_Product_Model single_product_model;
                 }
                 else {
                    add_order_model=new Add_Order_Model();
-                    List<Add_Order_Model.Order_details> order_details=new ArrayList<>();
+                    List<Add_Order_Model.Products> order_details=new ArrayList<>();
                     add_order_model.setMarket_id(Integer.parseInt(single_product_model.getMarket_id()));
-                    Add_Order_Model.Order_details order_details1=new Add_Order_Model.Order_details();
-                    order_details1.setProduct_id(single_product_model.getId());
-                    order_details1.setTotal_price(Double.parseDouble(single_product_model.getPrice())*amount);
-                    order_details1.setAmount(amount);
-                    order_details1.setAr_desc(single_product_model.getAr_des());
-                    order_details1.setEn_des(single_product_model.getEn_des());
-                    order_details1.setAr_title(single_product_model.getAr_title());
-                    order_details1.setEn_title(single_product_model.getEn_title());
-                    order_details.add(order_details1);
-                    add_order_model.setOrder_details(order_details);
+                    Add_Order_Model.Products products1 =new Add_Order_Model.Products();
+                    products1.setProduct_id(single_product_model.getId());
+                    products1.setTotal_price(Double.parseDouble(single_product_model.getPrice())*amount);
+                    products1.setAmount(amount);
+                    products1.setAr_desc(single_product_model.getAr_des());
+                    products1.setEn_des(single_product_model.getEn_des());
+                    products1.setAr_title(single_product_model.getAr_title());
+                    products1.setEn_title(single_product_model.getEn_title());
+                    order_details.add(products1);
+                    add_order_model.setProducts(order_details);
                     Common.CreateDialogAlert(ProductDetialsActivity.this,getResources().getString(R.string.suc));
 
 

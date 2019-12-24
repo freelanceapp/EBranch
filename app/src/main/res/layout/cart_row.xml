@@ -3,7 +3,7 @@
     <data>
         <variable
             name="model"
-            type="com.creative.share.apps.ebranch.models.Add_Order_Model.Order_details" />
+            type="com.creative.share.apps.ebranch.models.Add_Order_Model.Products" />
         <variable
             name="lang"
             type="String" />

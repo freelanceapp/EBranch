@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,12 +30,14 @@ import androidx.fragment.app.FragmentManager;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.creative.share.apps.ebranch.R;
+import com.creative.share.apps.ebranch.activities_fragments.activity_about.AboutActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_cart.CartActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.FragmentMapTouchListener;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_ContactUs;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_Search;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_Views;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_department;
+import com.creative.share.apps.ebranch.activities_fragments.activity_notification.NotificationsActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_orders.OrdersActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_profile.profileActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.activities.SignInActivity;
@@ -54,7 +57,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -87,7 +94,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private ImageView imagemenu, im_cart;
-    private LinearLayout ll_profile, ll_terms, ll_orders, ll_lang, ll_logout;
+    private LinearLayout ll_profile, ll_terms,ll_about, ll_orders, ll_lang,ll_notif, ll_logout;
     private ConstraintLayout nestedScrollView;
     private String current_lang;
     private float zoom = 15.6f;
@@ -117,7 +124,10 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (savedInstanceState == null) {
             displayFragmentDepartment();
         }
+if(userModel!=null){
+    updateToken();
 
+}
 
     }
 
@@ -137,6 +147,9 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         ll_profile = findViewById(R.id.ll_profile);
         ll_terms = findViewById(R.id.ll_terms);
+        ll_about = findViewById(R.id.ll_about);
+        ll_notif = findViewById(R.id.ll_notifi);
+
         ll_orders = findViewById(R.id.ll_orders);
         ll_lang = findViewById(R.id.ll_lang);
         ll_logout = findViewById(R.id.ll_logout);
@@ -211,6 +224,14 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             }
         });
+        ll_notif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer.closeDrawer(GravityCompat.START);
+                Intent intent = new Intent(HomeActivity.this, NotificationsActivity.class);
+startActivity(intent);
+            }
+        });
      /*   ll_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -225,6 +246,15 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View view) {
                 drawer.closeDrawer(GravityCompat.START);
                 Intent intent = new Intent(HomeActivity.this, TermsActivity.class);
+                startActivity(intent);
+
+            }
+        });
+        ll_about.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer.closeDrawer(GravityCompat.START);
+                Intent intent = new Intent(HomeActivity.this, AboutActivity.class);
                 startActivity(intent);
 
             }
@@ -726,4 +756,51 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     }
+    private void updateToken() {
+        FirebaseInstanceId.getInstance()
+                .getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (task.isSuccessful()) {
+                            //String token = task.getResult().getToken();
+                            Log.e("s",token);
+                            Api.getService(Tags.base_url)
+                                    .updateToken(userModel.getId(), token,1)
+                                    .enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                                            if (response.isSuccessful()) {
+                                                try {
+                                                    Log.e("Success", "token updated");
+                                                } catch (Exception e) {
+                                                    //  e.printStackTrace();
+                                                }
+                                            }
+                                            else {
+                                                try {
+                                                    Log.e("error",response.code()+"_"+response.errorBody().string());
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+
+
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            try {
+                                                Log.e("Error", t.getMessage());
+                                            } catch (Exception e) {
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                });
+    }
+
+
 }

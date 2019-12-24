@@ -136,7 +136,7 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
         binding.progBarSlider.setVisibility(View.GONE);
         binding.recOffer.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         binding.recDepartment.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-        products_adapter = new Products_Adapter(products, this);
+        products_adapter = new Products_Adapter(products, this,null);
         binding.recBestseler.setItemViewCacheSize(25);
         binding.progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
         manager = new GridLayoutManager(this, 2);

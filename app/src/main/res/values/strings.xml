@@ -82,5 +82,7 @@
     <string name="total">Total : </string>
     <string name="home_delivery">Home delivery</string>
     <string name="receiving_from_branches">Receiving from branches</string>
+    <string name="about">About App</string>
+    <string name="no_notifications_to_display">No Notifications To Display</string>
 
 </resources>

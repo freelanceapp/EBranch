@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -24,6 +25,8 @@ import androidx.databinding.DataBindingUtil;
 
 
 import com.creative.share.apps.ebranch.R;
+import com.creative.share.apps.ebranch.activities_fragments.activity_cart.CartActivity;
+import com.creative.share.apps.ebranch.activities_fragments.activity_orders.OrdersActivity;
 import com.creative.share.apps.ebranch.databinding.DialogAlertBinding;
 import com.creative.share.apps.ebranch.databinding.DialogNotSignBinding;
 
@@ -93,6 +96,30 @@ public class Common {
         dialog.show();
     }
 
+    public static void CreateDialogAlert2(Context context,String msg) {
+        final AlertDialog dialog = new AlertDialog.Builder(context)
+                .create();
+
+        DialogAlertBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_alert, null, false);
+
+        binding.tvMsg.setText(msg);
+        binding.btnCancel.setOnClickListener(new View.OnClickListener() {
+                                                 @Override
+                                                 public void onClick(View v) {
+
+                                                     dialog.dismiss();
+                                                     Intent intent = new Intent(context, OrdersActivity.class);
+                                                     context.startActivity(intent);
+                                                 }
+                                             }
+
+        );
+        //   dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_congratulation_animation;
+        // dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_window_bg);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setView(binding.getRoot());
+        dialog.show();
+    }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public static String getImagePath(Context context, Uri uri) {

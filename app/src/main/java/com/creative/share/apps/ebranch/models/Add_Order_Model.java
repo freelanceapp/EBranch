@@ -14,7 +14,7 @@ public class Add_Order_Model implements Serializable {
     private double latitude;
     private String address;
     private double total_cost;
-    private List<Order_details> order_details;
+    private List<Products> products;
 
     public int getUser_id() {
         return user_id;
@@ -80,15 +80,15 @@ public class Add_Order_Model implements Serializable {
         this.total_cost = total_cost;
     }
 
-    public List<Order_details> getOrder_details() {
-        return order_details;
+    public List<Products> getProducts() {
+        return products;
     }
 
-    public void setOrder_details(List<Order_details> order_details) {
-        this.order_details = order_details;
+    public void setProducts(List<Products> products) {
+        this.products = products;
     }
 
-    public static class Order_details implements Serializable {
+    public static class Products implements Serializable {
       private int product_id;
               private int amount;
               private double total_price;

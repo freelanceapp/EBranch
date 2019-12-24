@@ -67,7 +67,7 @@ private Filter_Rec_Adapter filter_rec_adapter;
     private boolean isLoading = false;
     private Filter_model filter_model1,filter_model2,filter_model3;
     private int current_page2 = 1;
-private String name="0";
+private String name="no";
 private int newest=0,best=0,low=0;
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -116,7 +116,7 @@ private int newest=0,best=0,low=0;
         lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
         binding.setLang(lang);
         binding.setBackListener(this);
-        products_adapter=new Products_Adapter(products,this);
+        products_adapter=new Products_Adapter(products,this,null);
         binding.progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
         manager = new GridLayoutManager(this,2);
         binding.recView.setLayoutManager(manager);
@@ -170,7 +170,7 @@ getproducts();
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
-        });
+        });*/
         binding.edtSearch.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 name = binding.edtSearch.getText().toString();
@@ -183,7 +183,7 @@ getproducts();
             }
             return false;
         });
-*/
+
       binding.imFilter.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {

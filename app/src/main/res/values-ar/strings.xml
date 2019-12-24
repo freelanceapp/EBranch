@@ -80,7 +80,9 @@
     <string name="total">المجموع : </string>
     <string name="open">فتح</string>
     <string name="close">غلق</string>
-    <string name="home_delivery">Home delivery</string>
-    <string name="receiving_from_branches">Receiving from branches</string>
+    <string name="home_delivery">توصيل للمنزل</string>
+    <string name="receiving_from_branches">توصيل من الفروع</string>
+    <string name="about">عن التطبيق </string>
+    <string name="no_notifications_to_display">لا يوجد اشعارات</string>
 
 </resources>

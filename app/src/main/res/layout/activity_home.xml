@@ -323,7 +323,96 @@
                         android:layout_width="match_parent"
                         android:layout_height="1px"
                         android:background="@color/white" />
+                    <LinearLayout
+                        android:id="@+id/ll_about"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:orientation="horizontal"
+                        android:background="@color/colorPrimarySecond"
 
+                        >
+
+
+                        <ImageView
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center_vertical"
+                            android:clickable="false"
+                            android:longClickable="false"
+                            android:padding="5dp"
+                            android:src="@drawable/ic_document"
+                            android:tint="@color/white"
+
+                            />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:clickable="false"
+                            android:gravity="start|center"
+                            android:longClickable="false"
+                            android:singleLine="true"
+                            android:text="@string/about"
+                            android:textColor="@color/white"
+                            android:textSize="15sp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+
+                            />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/white" />
+                    <LinearLayout
+                        android:id="@+id/ll_notifi"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:orientation="horizontal"
+                        android:background="@color/colorPrimarySecond"
+
+                        >
+
+
+                        <ImageView
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center_vertical"
+                            android:clickable="false"
+                            android:longClickable="false"
+                            android:padding="5dp"
+                            android:src="@drawable/ic_nav_notification"
+                            android:tint="@color/white"
+
+                            />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:clickable="false"
+                            android:gravity="start|center"
+                            android:longClickable="false"
+                            android:singleLine="true"
+                            android:text="@string/notifications"
+                            android:textColor="@color/white"
+                            android:textSize="15sp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+
+                            />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:background="@color/white" />
                     <LinearLayout
                         android:id="@+id/ll_lang"
                         android:layout_width="match_parent"

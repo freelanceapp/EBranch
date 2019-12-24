@@ -26,6 +26,7 @@
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:padding="8dp"
+            android:background="@color/gray0"
 
             >
             <LinearLayout

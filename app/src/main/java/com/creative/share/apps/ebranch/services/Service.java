@@ -1,11 +1,13 @@
 package com.creative.share.apps.ebranch.services;
 
 
+import com.creative.share.apps.ebranch.models.Add_Order_Model;
 import com.creative.share.apps.ebranch.models.App_Data_Model;
 import com.creative.share.apps.ebranch.models.Catogries_Market_Model;
 import com.creative.share.apps.ebranch.models.Catogries_Model;
 import com.creative.share.apps.ebranch.models.Cities_Model;
 import com.creative.share.apps.ebranch.models.Markets_Model;
+import com.creative.share.apps.ebranch.models.NotificationDataModel;
 import com.creative.share.apps.ebranch.models.OrderDataModel;
 import com.creative.share.apps.ebranch.models.OrderModel;
 import com.creative.share.apps.ebranch.models.PlaceGeocodeData;
@@ -19,6 +21,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -87,7 +90,11 @@ public interface Service {
     Call<App_Data_Model> getterms(@Field("type") int type
 
     );
+    @FormUrlEncoded
+    @POST("api/about-us")
+    Call<App_Data_Model> getabout(@Field("type") int type
 
+    );
     @GET("api/mainCategories")
     Call<Catogries_Model> getDepartment(
 
@@ -187,5 +194,21 @@ public interface Service {
     Call<UserModel> editClientProfileWithoutImage(@Part("user_id") RequestBody user_id,
                                                   @Part("full_name") RequestBody name,
                                                   @Part("email") RequestBody email
+    );
+    @POST("api/order/add")
+    Call<ResponseBody> accept_orders(@Body Add_Order_Model add_order_model);
+    @FormUrlEncoded
+    @POST("api/phone-tokens")
+    Call<ResponseBody> updateToken(
+            @Field("user_id") int user_id,
+            @Field("phone_token") String phone_token,
+
+            @Field("software_type") int software_type
+    );
+    @FormUrlEncoded
+    @POST("api/my-notifications")
+    Call<NotificationDataModel> getnotification(
+            @Field("page") int page,
+            @Field("user_id") String user_id
     );
 }
