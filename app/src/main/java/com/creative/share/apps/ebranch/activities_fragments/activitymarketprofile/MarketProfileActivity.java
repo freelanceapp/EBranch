@@ -340,9 +340,12 @@ Log.e("dy",dy+"");
         }
     }
 
-    public void DisplayDepartdetials(int id) {
+    public void DisplayDepartdetials(Single_Market_Model.Categories id) {
         Intent intent = new Intent(MarketProfileActivity.this, DepartmentDetialsActivity.class);
-        intent.putExtra("cat_id",id+"");
+        intent.putExtra("cat_id",id.getId()+"");
+
+        intent.putExtra("markt_id",marketid);
+
         startActivity(intent);
     }
 

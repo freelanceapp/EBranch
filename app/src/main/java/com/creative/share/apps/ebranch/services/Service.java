@@ -142,6 +142,7 @@ public interface Service {
     @FormUrlEncoded
     @POST("api/products-filter")
     Call<Products_Model> getproductbyfilter(@Field("cat_id") String cat_id,
+                                            @Field("market_id")String market_id,
                                             @Field("name") String name,
                                             @Field("newest") int newest,
                                             @Field("best_sales") int best_sales,

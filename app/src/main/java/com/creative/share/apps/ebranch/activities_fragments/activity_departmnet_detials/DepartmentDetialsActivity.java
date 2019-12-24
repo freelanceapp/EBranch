@@ -60,7 +60,7 @@ private List<Filter_model> filter_models;
 private FilterAdapter filterAdapter;
 private Filter_Rec_Adapter filter_rec_adapter;
     private String lang;
-    private String marketid;
+    private String cat_id,markt_id;
     private GridLayoutManager manager;
     private Products_Adapter products_adapter;
     private ArrayList<Products_Model.Data> products;
@@ -91,7 +91,8 @@ private int newest=0,best=0,low=0;
 
     private void getdatafromintent() {
         if (getIntent().getStringExtra("cat_id") != null) {
-            marketid = getIntent().getStringExtra("cat_id");
+            cat_id = getIntent().getStringExtra("cat_id");
+            markt_id=getIntent().getStringExtra("markt_id");
         }
     }
 
@@ -222,7 +223,7 @@ getproducts();
 
 
             Api.getService(Tags.base_url)
-                    .getproductbyfilter(marketid,name,newest,best,low,1)
+                    .getproductbyfilter(cat_id,markt_id,name,newest,best,low,1)
                     .enqueue(new Callback<Products_Model>() {
                         @Override
                         public void onResponse(Call<Products_Model> call, Response<Products_Model> response) {
@@ -284,7 +285,7 @@ getproducts();
 
 
             Api.getService(Tags.base_url)
-                    .getproductbyfilter(marketid,name,newest,best,low,page)
+                    .getproductbyfilter(cat_id,markt_id,name,newest,best,low,page)
                     .enqueue(new Callback<Products_Model>() {
                         @Override
                         public void onResponse(Call<Products_Model> call, Response<Products_Model> response) {

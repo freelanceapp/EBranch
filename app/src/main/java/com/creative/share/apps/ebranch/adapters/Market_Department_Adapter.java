@@ -63,7 +63,7 @@ public class Market_Department_Adapter extends RecyclerView.Adapter<RecyclerView
 eventHolder.itemView.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
-activity.DisplayDepartdetials(orderlist.get(eventHolder.getLayoutPosition()).getId());
+activity.DisplayDepartdetials(orderlist.get(eventHolder.getLayoutPosition()));
     }
 });
     }
