@@ -763,8 +763,8 @@ startActivity(intent);
                     @Override
                     public void onComplete(@NonNull Task<InstanceIdResult> task) {
                         if (task.isSuccessful()) {
-                            //String token = task.getResult().getToken();
-                            Log.e("s",token);
+                            String token = task.getResult().getToken();
+                            //Log.e("s",token);
                             Api.getService(Tags.base_url)
                                     .updateToken(userModel.getId(), token,1)
                                     .enqueue(new Callback<ResponseBody>() {
