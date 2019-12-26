@@ -153,7 +153,7 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
         binding.recOffer.setItemViewCacheSize(25);
         offer_adapter=new Offer_Adapter(offerproducts,this);
         binding.recOffer.setAdapter(offer_adapter);
-        binding.arrow2.setOnClickListener(new View.OnClickListener() {
+        binding.arrow3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.e("data",manager2.findFirstVisibleItemPosition()+"");
@@ -169,7 +169,7 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
 
             }
         });
-        binding.arrow3.setOnClickListener(new View.OnClickListener() {
+        binding.arrow2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 binding.arrow2.setVisibility(View.VISIBLE);
