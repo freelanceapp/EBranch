@@ -285,7 +285,7 @@ Log.e("dy",dy+"");
                                       Log.e("data",response.body().getData().size()+"");
 
                                     binding.llNoOffer.setVisibility(View.GONE);
-                                    binding.arrow2.setVisibility(View.GONE);
+                                    binding.arrow3.setVisibility(View.GONE);
                                     manager2.scrollToPositionWithOffset(0, offerproducts.size());
                                     offer_adapter.notifyDataSetChanged();
                                     //   total_page = response.body().getMeta().getLast_page();
