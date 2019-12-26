@@ -279,7 +279,7 @@ if(body.getData()!=null){
                         public void onResponse(Call<UserModel> call, Response<UserModel> response) {
                             dialog.dismiss();
                             if (response.isSuccessful() && response.body() != null) {
-                                activity.displayFragmentCodeVerification(response.body());
+                                activity.displayFragmentCodeVerification(response.body(),2);
 
                             } else {
                                 if (response.code() == 422) {

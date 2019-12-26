@@ -1,5 +1,6 @@
 package com.creative.share.apps.ebranch.activities_fragments.activity_orders.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -28,12 +29,14 @@ import com.creative.share.apps.ebranch.models.OrderModel;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
 import com.creative.share.apps.ebranch.remote.Api;
+import com.creative.share.apps.ebranch.share.Common;
 import com.creative.share.apps.ebranch.tags.Tags;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -211,5 +214,77 @@ public class Fragment_Current_Order extends Fragment {
 
         startActivity(intent);
      //   activity.finish();
+    }
+
+    public void delteorder(int id, int layoutPosition) {
+        try {
+
+
+        ProgressDialog dialog = Common.createProgressDialog(activity,getString(R.string.wait));
+        dialog.setCancelable(false);
+        dialog.show();
+Api.getService(Tags.base_url).CancelOrder(id).enqueue(new Callback<ResponseBody>() {
+    @Override
+    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+        dialog.dismiss();
+        if(response.isSuccessful()){
+            orderModelList.remove(layoutPosition);
+            adapter.notifyItemRemoved(layoutPosition);
+        }
+        else {
+            if (response.code() == 422) {
+                Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                //  Log.e("error",response.code()+"_"+response.errorBody()+response.message()+password+phone+phone_code);
+                try {
+
+                    Log.e("error",response.code()+"_"+response.errorBody().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if (response.code() == 500) {
+                try {
+
+                    Log.e("error",response.code()+"_"+response.errorBody().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(activity, "Server Error", Toast.LENGTH_SHORT).show();
+
+            }
+            else {
+                try {
+
+                    Log.e("error",response.code()+"_"+response.errorBody().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    public void onFailure(Call<ResponseBody> call, Throwable t) {
+        try {
+            dialog.dismiss();
+            if (t.getMessage()!=null)
+            {
+                Log.e("error",t.getMessage());
+                if (t.getMessage().toLowerCase().contains("failed to connect")||t.getMessage().toLowerCase().contains("unable to resolve host"))
+                {
+                    Toast.makeText(activity,R.string.something, Toast.LENGTH_SHORT).show();
+                }else
+                {
+                    Toast.makeText(activity,t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        }catch (Exception e){}
+    }
+});}
+        catch (Exception e){
+
+        }
     }
 }

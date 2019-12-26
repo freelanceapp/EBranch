@@ -84,11 +84,91 @@ public class Fragment_ForgetPassword extends Fragment implements  Listeners.Forg
 
         if (forgetModel.isDataValid(activity))
         {
+            forget(forgetModel);
+        }
+    }
+    private void forget(ForgetModel forgetModel)
+    {
+        ProgressDialog dialog = Common.createProgressDialog(activity,getString(R.string.wait));
+        dialog.setCancelable(false);
+        dialog.show();
+        try {
+
+            Api.getService(Tags.base_url)
+                    .forget(forgetModel.getEmail())
+                    .enqueue(new Callback<UserModel>() {
+                        @Override
+                        public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                            dialog.dismiss();
+
+                            if (response.isSuccessful())
+                            {
+                              //  Log.e("data",response.body().getPassword_token());
+                                CreateAlertDialog(response.body());
+
+                            }
+                            else
+                            {
+                                try {
+
+                                    Log.e("error",response.code()+"_"+response.errorBody().string());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                    Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+
+
+
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<UserModel> call, Throwable t) {
+                            try {
+                                dialog.dismiss();
+                                if (t.getMessage()!=null)
+                                {
+                                    Log.e("error",t.getMessage());
+                                    if (t.getMessage().toLowerCase().contains("failed to connect")||t.getMessage().toLowerCase().contains("unable to resolve host"))
+                                    {
+                                        Toast.makeText(activity,R.string.something, Toast.LENGTH_SHORT).show();
+                                    }else
+                                    {
+                                        Toast.makeText(activity,t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                            }catch (Exception e){}
+                        }
+                    });
+        }catch (Exception e){
+            dialog.dismiss();
+
         }
     }
 
 
 
+    private void CreateAlertDialog(UserModel userModel)
+    {
+        final AlertDialog dialog = new AlertDialog.Builder(activity)
+                .create();
+
+        DialogAlertBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.dialog_alert, null, false);
+
+        binding.tvMsg.setText(getString(R.string.you_will_receive_4_digit));
+
+        binding.btnCancel.setOnClickListener(view -> {
+            dialog.dismiss();
+            activity.displayFragmentCodeVerification(userModel,1);
+
+
+        });
+
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setView(binding.getRoot());
+        dialog.show();
+    }
 
 
 

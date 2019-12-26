@@ -22,6 +22,7 @@ import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.activities_fragments.activity_departmnet_detials.DepartmentDetialsActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_product_detials.ProductDetialsActivity;
 import com.creative.share.apps.ebranch.adapters.Market_Department_Adapter;
+import com.creative.share.apps.ebranch.adapters.Offer_Adapter;
 import com.creative.share.apps.ebranch.adapters.Products_Adapter;
 import com.creative.share.apps.ebranch.databinding.ActivityMarketProfileBinding;
 import com.creative.share.apps.ebranch.interfaces.Listeners;
@@ -57,8 +58,10 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
     private String lang;
     private String marketid;
     private Products_Adapter products_adapter;
+    private Offer_Adapter offer_adapter;
     private List<Products_Model.Data> products;
-    private LinearLayoutManager manager;
+    private List<Products_Model.Data> offerproducts;
+    private LinearLayoutManager manager,manager2;
     private boolean isLoading = false;
     private int current_page2 = 1;
 
@@ -78,6 +81,7 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
         initView();
         getSingleMarket();
         getproducts();
+        getproductsoffer();
 //change_slide_image();
 
 
@@ -117,6 +121,7 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
         binding.toolbar.setTitle("");
         categoriesList = new ArrayList<>();
         products=new ArrayList<>();
+        offerproducts=new ArrayList<>();
         Paper.init(this);
 
         lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
@@ -133,8 +138,10 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
             binding.tvDepart.setBackgroundDrawable(getResources().getDrawable(R.drawable.text_shape2));
             binding.tvBestseller.setBackgroundDrawable(getResources().getDrawable(R.drawable.text_shape2));
         }
+
         binding.progBarSlider.setVisibility(View.GONE);
-        binding.recOffer.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        manager2=new LinearLayoutManager(this,RecyclerView.HORIZONTAL,false);
+        binding.recOffer.setLayoutManager(manager2);
         binding.recDepartment.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         products_adapter = new Products_Adapter(products, this,null);
         binding.recBestseler.setItemViewCacheSize(25);
@@ -143,6 +150,38 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
         binding.recBestseler.setLayoutManager(manager);
         binding.recBestseler.setNestedScrollingEnabled(true);
         binding.recBestseler.setAdapter(products_adapter);
+        binding.recOffer.setItemViewCacheSize(25);
+        offer_adapter=new Offer_Adapter(offerproducts,this);
+        binding.recOffer.setAdapter(offer_adapter);
+        binding.arrow2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("data",manager2.findFirstVisibleItemPosition()+"");
+
+                if(manager2.findFirstVisibleItemPosition()>0){
+                  // binding.recOffer.scrollToPosition(manager2.findFirstVisibleItemPosition()-1);
+                    int scrol=manager2.findFirstVisibleItemPosition()-1;
+                    manager2.scrollToPositionWithOffset(scrol, offerproducts.size());
+                    if(manager2.findFirstVisibleItemPosition()==0){
+                       binding.arrow2.setVisibility(View.GONE);
+                   }
+                }
+
+            }
+        });
+        binding.arrow3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.arrow2.setVisibility(View.VISIBLE);
+                if(manager2.findLastVisibleItemPosition()<offerproducts.size()-1){
+                    manager2.scrollToPositionWithOffset(manager2.findFirstVisibleItemPosition() + 1, offerproducts.size());
+                    if(manager2.findLastVisibleItemPosition()==offerproducts.size()-1){
+                        binding.arrow3.setVisibility(View.GONE);
+
+                    }
+                }
+            }
+        });
         binding.recBestseler.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -223,6 +262,75 @@ Log.e("dy",dy+"");
             categoriesList.clear();
             categoriesList.addAll(body.getCategories());
             market_department_adapter.notifyDataSetChanged();
+        }
+    }
+    private void getproductsoffer() {
+        offerproducts.clear();
+        offer_adapter.notifyDataSetChanged();
+      //  binding.progBar.setVisibility(View.VISIBLE);
+
+        try {
+
+
+            Api.getService(Tags.base_url)
+                    .getofferproductbymarket(marketid)
+                    .enqueue(new Callback<Products_Model>() {
+                        @Override
+                        public void onResponse(Call<Products_Model> call, Response<Products_Model> response) {
+                            if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                                offerproducts.clear();
+                                offerproducts.addAll(response.body().getData());
+                                if (response.body().getData().size() > 0) {
+                                    // rec_sent.setVisibility(View.VISIBLE);
+                                      Log.e("data",response.body().getData().size()+"");
+
+                                    binding.llNoOffer.setVisibility(View.GONE);
+                                    binding.arrow2.setVisibility(View.GONE);
+                                    manager2.scrollToPositionWithOffset(0, offerproducts.size());
+                                    offer_adapter.notifyDataSetChanged();
+                                    //   total_page = response.body().getMeta().getLast_page();
+
+                                } else {
+                                    offer_adapter.notifyDataSetChanged();
+
+                                    binding.llNoOffer.setVisibility(View.VISIBLE);
+                                    binding.arrow2.setVisibility(View.GONE);
+                                    binding.arrow3.setVisibility(View.GONE);
+
+                                }
+                            } else {
+                                offer_adapter.notifyDataSetChanged();
+
+                                binding.llNoOffer.setVisibility(View.VISIBLE);
+                                binding.arrow2.setVisibility(View.GONE);
+                                binding.arrow3.setVisibility(View.GONE);
+                                //Toast.makeText(this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                try {
+                                    Log.e("Error_code", response.code() + "_" + response.errorBody().string());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Products_Model> call, Throwable t) {
+                            try {
+
+                                binding.llNoOffer.setVisibility(View.VISIBLE);
+                                binding.arrow2.setVisibility(View.GONE);
+                                binding.arrow3.setVisibility(View.GONE);
+                                Toast.makeText(MarketProfileActivity.this, getResources().getString(R.string.something), Toast.LENGTH_LONG).show();
+
+
+                                Log.e("error", t.getMessage());
+                            } catch (Exception e) {
+                            }
+                        }
+                    });
+        } catch (Exception e) {
+            binding.llNoOffer.setVisibility(View.VISIBLE);
+
         }
     }
 

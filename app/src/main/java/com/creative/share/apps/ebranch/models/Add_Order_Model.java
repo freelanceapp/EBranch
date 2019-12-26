@@ -15,7 +15,7 @@ public class Add_Order_Model implements Serializable {
     private String address;
     private double total_cost;
     private List<Products> products;
-
+private String coupon_serial;
     public int getUser_id() {
         return user_id;
     }
@@ -78,6 +78,14 @@ public class Add_Order_Model implements Serializable {
 
     public void setTotal_cost(double total_cost) {
         this.total_cost = total_cost;
+    }
+
+    public String getCoupon_serial() {
+        return coupon_serial;
+    }
+
+    public void setCoupon_serial(String coupon_serial) {
+        this.coupon_serial = coupon_serial;
     }
 
     public List<Products> getProducts() {

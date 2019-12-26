@@ -714,7 +714,7 @@ startActivity(intent);
                 TextView tvAddress = view.findViewById(R.id.tvAddress);
                 ImageView image = view.findViewById(R.id.image);
 
-                ProgressBar progBar = view.findViewById(R.id.progBar);
+              //  ProgressBar progBar = view.findViewById(R.id.progBar);
 
                 try {
 
@@ -730,18 +730,7 @@ startActivity(intent);
                     tvAddress.setText(adModel.getAddress());
 
 
-                    Picasso.with(HomeActivity.this).load(Uri.parse(Tags.base_url + adModel.getLogo())).fit().into(image, new com.squareup.picasso.Callback() {
-                        @Override
-                        public void onSuccess() {
-                            progBar.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onError() {
-                            progBar.setVisibility(View.GONE);
-
-                        }
-                    });
+                    Picasso.with(HomeActivity.this).load(Uri.parse(Tags.base_url + adModel.getLogo())).placeholder(R.drawable.logo).fit().into(image);
 
                 } catch (Exception e) {
                     if (e != null && e.getMessage() != null) {

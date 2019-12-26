@@ -15,6 +15,7 @@ import com.creative.share.apps.ebranch.activities_fragments.activity_map.MapActi
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments.Fragment_Code_Verification;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments.Fragment_ForgetPassword;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments.Fragment_Language;
+import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments.Fragment_Newpass;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments.Fragment_Sign_In;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments.Fragment_Sign_Up;
 import com.creative.share.apps.ebranch.databinding.ActivitySignInBinding;
@@ -42,6 +43,7 @@ public class SignInActivity extends AppCompatActivity {
     private Fragment_ForgetPassword fragment_forgetpass;
     private Fragment_Code_Verification fragment_code_verification;
     private SelectedLocation selectedLocation;
+    private Fragment_Newpass fragment_newpass;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -117,10 +119,17 @@ public class SignInActivity extends AppCompatActivity {
         fragmentManager.beginTransaction().add(R.id.fragment_sign_in_container, fragment_forgetpass, "fragment_forgetpass").addToBackStack("fragment_forgetpass").commit();
 
     }
-    public void displayFragmentCodeVerification(UserModel userModel) {
+    public void displayFragmentCodeVerification(UserModel userModel,int type) {
         fragment_count ++;
-        fragment_code_verification = Fragment_Code_Verification.newInstance(userModel);
+        fragment_code_verification = Fragment_Code_Verification.newInstance(userModel,type);
         fragmentManager.beginTransaction().add(R.id.fragment_sign_in_container, fragment_code_verification, "fragment_code_verification").addToBackStack("fragment_code_verification").commit();
+
+    }
+    public void displayFragmentNewpass(UserModel userModel) {
+        fragment_count ++;
+        fragment_newpass = Fragment_Newpass.newInstance(userModel);
+
+        fragmentManager.beginTransaction().add(R.id.fragment_sign_in_container, fragment_newpass, "fragment_newpass").addToBackStack("fragment_newpass").commit();
 
     }
     public void RefreshActivity(String selected_language) {

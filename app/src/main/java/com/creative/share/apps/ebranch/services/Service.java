@@ -145,7 +145,10 @@ public interface Service {
     Call<Products_Model> getproductbymarket(@Field("market_id") String market_id,
                                             @Field("page") int page
     );
-
+    @FormUrlEncoded
+    @POST("api/offersByMarket")
+    Call<Products_Model> getofferproductbymarket(@Field("market_id") String market_id
+    );
     @FormUrlEncoded
     @POST("api/products-filter")
     Call<Products_Model> getproductbyfilter(@Field("cat_id") String cat_id,
@@ -172,7 +175,10 @@ public interface Service {
     Call<OrderDataModel> getfinshiorders(@Field("user_id") int user_id,
                                          @Field("page") int page
     );
-
+    @FormUrlEncoded
+    @POST("api/order/cancel")
+    Call<ResponseBody> CancelOrder(@Field("order_id") int order_id
+    );
     @FormUrlEncoded
     @POST("api/single-order")
     Call<OrderModel> getorderdetials(
@@ -210,5 +216,27 @@ public interface Service {
     Call<NotificationDataModel> getnotification(
             @Field("page") int page,
             @Field("user_id") String user_id
+    );
+    @FormUrlEncoded
+    @POST("api/client/password/forget")
+    Call<UserModel> forget(@Field("email") String email
+    );
+
+    @FormUrlEncoded
+    @POST("api/client/passwordCode/confirm")
+    Call<ResponseBody> confirmCodepass(@Field("user_id") int user_id,
+                                       @Field("code") String code
+    );
+    @FormUrlEncoded
+    @POST("api/client/password/reset")
+    Call<UserModel> edit_pass(@Field("user_id") String user_id,
+                              @Field("password") String password
+            );
+    @FormUrlEncoded
+    @POST("api/checkDiscountCoupon")
+    Call<ResponseBody> Foundcopun(@Field("user_id") String user_id,
+                              @Field("coupon_serial") String coupon_serial,
+                                  @Field("market_id") String market_id
+
     );
 }

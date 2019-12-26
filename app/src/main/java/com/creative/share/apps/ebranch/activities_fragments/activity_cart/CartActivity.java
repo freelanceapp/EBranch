@@ -15,8 +15,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.creative.share.apps.ebranch.R;
+import com.creative.share.apps.ebranch.activities_fragments.activity_copoun.CopounActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_map.MapActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_orders.OrdersActivity;
+import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.activities.SignInActivity;
 import com.creative.share.apps.ebranch.adapters.Cart_Adapter;
 import com.creative.share.apps.ebranch.databinding.ActivityCartBinding;
 import com.creative.share.apps.ebranch.interfaces.Listeners;
@@ -51,6 +53,7 @@ private Cart_Adapter cart_adapter;
 private double totalcost;
     private Add_Order_Model add_order_model;
     private SelectedLocation selectedLocation;
+    private String copun="";
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -81,6 +84,8 @@ getorders();
             binding.radio.setVisibility(View.GONE);
             binding.tvTotal.setVisibility(View.GONE);
             binding.btCom.setVisibility(View.GONE);
+            binding.tvcopon.setVisibility(View.GONE);
+
         }
     }
 
@@ -117,7 +122,12 @@ binding.btCom.setOnClickListener(new View.OnClickListener() {
         }
     }
 });
-
+binding.tvcopon.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        copun();
+    }
+});
     }
 
     private void checkdata() {
@@ -149,6 +159,8 @@ binding.btCom.setOnClickListener(new View.OnClickListener() {
             binding.radio.setVisibility(View.GONE);
             binding.tvTotal.setVisibility(View.GONE);
             binding.btCom.setVisibility(View.GONE);
+            binding.tvcopon.setVisibility(View.GONE);
+
         }
 
         cart_adapter.notifyDataSetChanged();
@@ -197,7 +209,16 @@ products1.setTotal_price((products1.getTotal_price()/ products1.getAmount())*(pr
                 add_order_model.setAddress(selectedLocation.getAddress());
                 add_order_model.setLatitude(selectedLocation.getLat());
                 add_order_model.setLongitude(selectedLocation.getLng());
+                add_order_model.setCoupon_serial(copun);
+
 accept_order();
+            }
+        }
+        else  if (requestCode == 2 && resultCode == RESULT_OK && data != null) {
+            if (data.hasExtra("copun")) {
+                copun = data.getStringExtra("copun");
+
+
             }
         }
 
@@ -254,7 +275,16 @@ showorders();
         binding.radio.setVisibility(View.GONE);
         binding.tvTotal.setVisibility(View.GONE);
         binding.btCom.setVisibility(View.GONE);
+        binding.tvcopon.setVisibility(View.GONE);
       Common.CreateDialogAlert2(this,getResources().getString(R.string.suc));
     }
 
+
+    public void copun() {
+        Intent intent = new Intent(CartActivity.this, CopounActivity.class);
+        add_order_model=preferences.getUserOrder(this);
+        intent.putExtra("marketid",add_order_model.getMarket_id()+"");
+
+        startActivityForResult(intent, 2);
+    }
 }

@@ -1,5 +1,6 @@
 package com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.fragments;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.HomeActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.activities.SignInActivity;
+import com.creative.share.apps.ebranch.databinding.DialogAlertBinding;
 import com.creative.share.apps.ebranch.databinding.FragmentCodeVerificationBinding;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
@@ -44,6 +46,7 @@ public class Fragment_Code_Verification extends Fragment {
     private UserModel userModel;
     private CountDownTimer countDownTimer;
     private Preferences preferences;
+    private int type;
 
     @Nullable
     @Override
@@ -54,9 +57,10 @@ public class Fragment_Code_Verification extends Fragment {
         return view;
     }
 
-    public static Fragment_Code_Verification newInstance(UserModel userModel) {
+    public static Fragment_Code_Verification newInstance(UserModel userModel, int type) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(TAG, userModel);
+        bundle.putInt(TAG2,type);
         Fragment_Code_Verification fragment_code_verification = new Fragment_Code_Verification();
         fragment_code_verification.setArguments(bundle);
         return fragment_code_verification;
@@ -66,6 +70,8 @@ public class Fragment_Code_Verification extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             userModel = (UserModel) bundle.getSerializable(TAG);
+            type=bundle.getInt(TAG2);
+
         }
 
         activity = (SignInActivity) getActivity();
@@ -80,8 +86,8 @@ public class Fragment_Code_Verification extends Fragment {
         binding.btnResend.setOnClickListener(v -> {
 
             if (canResend) {
-                reSendSMSCode();
-            }
+                if(type==2){
+                    reSendSMSCode();}            }
         });
 
 
@@ -93,8 +99,12 @@ public class Fragment_Code_Verification extends Fragment {
         String code = binding.edtCode.getText().toString().trim();
         if (!TextUtils.isEmpty(code)) {
             Common.CloseKeyBoard(activity, binding.edtCode);
-            ValidateCode(code);
+            if(type==2){
+                ValidateCode(code);}
 
+            else {
+                ValidateCodepass(code);
+            }
         } else {
             binding.edtCode.setError(getString(R.string.field_req));
         }
@@ -185,8 +195,13 @@ public class Fragment_Code_Verification extends Fragment {
 
             @Override
             public void onFinish() {
-                canResend = true;
-                binding.btnResend.setText(getString(R.string.resend));
+                if(type==2){
+                    canResend = true;
+                    binding.btnResend.setText(getString(R.string.resend));}
+                else {
+                    activity.Back();
+                }
+
             }
         }.start();
     }
@@ -236,7 +251,94 @@ public class Fragment_Code_Verification extends Fragment {
                 });
     }
 
+    private void ValidateCodepass(String code)
+    {
+        try {
+            ProgressDialog dialog = Common.createProgressDialog(activity,getString(R.string.wait));
+            dialog.setCancelable(false);
+            dialog.show();
+            Api.getService(Tags.base_url)
+                    .confirmCodepass(userModel.getId(),code)
+                    .enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            dialog.dismiss();
+                            if (response.isSuccessful()&&response.body()!=null)
+                            {
+                                CreateAlertDialog(userModel);
 
+                            }else
+                            {
+
+                                try {
+
+                                    Log.e("error",response.code()+"_"+response.errorBody().string());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                                if (response.code() == 422) {
+                                    Toast.makeText(activity, R.string.failed, Toast.LENGTH_SHORT).show();
+                                } else if (response.code() == 500) {
+                                    Toast.makeText(activity, "Server Error", Toast.LENGTH_SHORT).show();
+
+
+                                }else if (response.code()==401)
+                                {
+                                    Toast.makeText(activity, R.string.inc_code, Toast.LENGTH_SHORT).show();
+
+                                }else
+                                {
+                                    Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+
+
+                                }
+
+
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            try {
+                                dialog.dismiss();
+                                if (t.getMessage()!=null)
+                                {
+                                    Log.e("error",t.getMessage());
+                                    if (t.getMessage().toLowerCase().contains("failed to connect")||t.getMessage().toLowerCase().contains("unable to resolve host"))
+                                    {
+                                        Toast.makeText(activity,R.string.something, Toast.LENGTH_SHORT).show();
+                                    }else
+                                    {
+                                        Toast.makeText(activity,t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                            }catch (Exception e){}
+                        }
+                    });
+        }catch (Exception e){}
+    }
+    private void CreateAlertDialog(UserModel userModel)
+    {
+        final AlertDialog dialog = new AlertDialog.Builder(activity)
+                .create();
+
+        DialogAlertBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.dialog_alert, null, false);
+
+        binding.tvMsg.setText(getString(R.string.suc));
+
+        binding.btnCancel.setOnClickListener(view -> {
+            dialog.dismiss();
+            activity.displayFragmentNewpass(userModel);
+
+
+        });
+
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setView(binding.getRoot());
+        dialog.show();
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -244,4 +346,5 @@ public class Fragment_Code_Verification extends Fragment {
             countDownTimer.cancel();
         }
     }
+
 }

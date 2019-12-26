@@ -70,7 +70,7 @@
     <string name="product_name">اسم المنتج</string>
     <string name="order_detilas">تفاصيل الطلب</string>
     <string name="select_location_on_map">حدد موقعك على الخريطة</string>
-    <string name="location">Location</string>
+    <string name="location">موقعك</string>
     <string name="no_name">لا يوجد اسم</string>
     <string name="search">بحث</string>
     <string name="order_pref">لا يمكن ان تطلب من متجرين فى نفس الوقت</string>
@@ -84,5 +84,13 @@
     <string name="receiving_from_branches">توصيل من الفروع</string>
     <string name="about">عن التطبيق </string>
     <string name="no_notifications_to_display">لا يوجد اشعارات</string>
-
+    <string name="user_not_active">المستخدم غيري نشط</string>
+    <string name="not_active_phone">لم يتم التحقق من رقم الجوال</string>
+    <string name="reset_password">تغير كلمة المرور</string>
+    <string name="add_coupon">استخدام كود خصم</string>
+    <string name="use_copoun">استخدم الكوبون</string>
+    <string name="Copun_stoped">هذا الكوبون تم توقيفه من قبل الادمن</string>
+    <string name="Copun_used">هذا الكوبون تم استخدامه من قبل المستخدم</string>
+    <string name="copoun_notfound">لا يوجد هذا الكوبون</string>
+    <string name="cart">السله</string>
 </resources>

@@ -84,5 +84,13 @@
     <string name="receiving_from_branches">Receiving from branches</string>
     <string name="about">About App</string>
     <string name="no_notifications_to_display">No Notifications To Display</string>
-
+    <string name="user_not_active">User not active</string>
+    <string name="not_active_phone">Not activate phone number</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="add_coupon">Add Coupon</string>
+    <string name="use_copoun">Use Copoun</string>
+    <string name="Copun_stoped">Coupon Has stopped from admin</string>
+    <string name="Copun_used">Coupon Has already Used by this user</string>
+    <string name="copoun_notfound">Copoun Not Found</string>
+    <string name="cart">cart</string>
 </resources>

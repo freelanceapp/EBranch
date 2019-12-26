@@ -79,6 +79,18 @@ holder.itemView.setOnClickListener(new View.OnClickListener() {
         }
     }
 });
+if(model.getStatus()!=0){
+    ((MyHolder) holder).binding.fl.setVisibility(View.GONE);
+}
+            ((MyHolder) holder).binding.fl.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(fragment instanceof  Fragment_Current_Order){
+                        fragment_current_order=(Fragment_Current_Order)fragment;
+                        fragment_current_order.delteorder(list.get(holder.getLayoutPosition()).getId(),holder.getLayoutPosition());
+                    }
+                }
+            });
             myHolder.binding.setLang(lang);
             myHolder.binding.setModel(model);
 
