@@ -140,7 +140,9 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
         }
 
         binding.progBarSlider.setVisibility(View.GONE);
-        manager2=new LinearLayoutManager(this,RecyclerView.HORIZONTAL,false);
+        manager2=new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false);
+        binding.recOffer.setNestedScrollingEnabled(false);
+
         binding.recOffer.setLayoutManager(manager2);
         binding.recDepartment.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         products_adapter = new Products_Adapter(products, this,null);
@@ -151,6 +153,7 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
         binding.recBestseler.setNestedScrollingEnabled(true);
         binding.recBestseler.setAdapter(products_adapter);
         binding.recOffer.setItemViewCacheSize(25);
+        binding.recOffer.setHasFixedSize(true);
         offer_adapter=new Offer_Adapter(offerproducts,this);
         binding.recOffer.setAdapter(offer_adapter);
         binding.arrow3.setOnClickListener(new View.OnClickListener() {
