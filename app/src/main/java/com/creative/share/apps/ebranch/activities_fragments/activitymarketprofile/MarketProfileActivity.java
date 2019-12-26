@@ -161,9 +161,8 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
 
                 if(manager2.findFirstVisibleItemPosition()>0){
                   // binding.recOffer.scrollToPosition(manager2.findFirstVisibleItemPosition()-1);
-                    int scrol=manager2.findFirstVisibleItemPosition()-1;
-                    manager2.scrollToPositionWithOffset(scrol, 0);
-                    if(manager2.findFirstVisibleItemPosition()==0){
+                    binding.recOffer.smoothScrollToPosition(manager2.findFirstVisibleItemPosition() - 1);
+                    if(manager2.findFirstVisibleItemPosition()<1){
                        binding.arrow3.setVisibility(View.GONE);
                    }
                 }
@@ -180,8 +179,8 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
             public void onClick(View v) {
                 binding.arrow3.setVisibility(View.VISIBLE);
                 if(manager2.findLastVisibleItemPosition()<offerproducts.size()){
-                    manager2.scrollToPositionWithOffset(manager2.findLastVisibleItemPosition() + 1, offerproducts.size()-1);
-                    if(manager2.findLastVisibleItemPosition()==offerproducts.size()-1){
+                    binding.recOffer.smoothScrollToPosition(manager2.findLastVisibleItemPosition() + 1);
+                    if(manager2.findLastVisibleItemPosition()>=offerproducts.size()-1){
                         binding.arrow2.setVisibility(View.GONE);
 
                     }
@@ -292,8 +291,9 @@ Log.e("dy",dy+"");
 
                                     binding.llNoOffer.setVisibility(View.GONE);
                                     binding.arrow3.setVisibility(View.GONE);
-                                    manager2.scrollToPositionWithOffset(0, 0);
                                     offer_adapter.notifyDataSetChanged();
+
+                                    binding.recOffer.smoothScrollToPosition(0);
                                     //   total_page = response.body().getMeta().getLast_page();
 
                                 } else {
