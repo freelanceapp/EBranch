@@ -157,14 +157,20 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
             @Override
             public void onClick(View v) {
                 Log.e("data",manager2.findFirstVisibleItemPosition()+"");
+                binding.arrow2.setVisibility(View.VISIBLE);
 
                 if(manager2.findFirstVisibleItemPosition()>0){
                   // binding.recOffer.scrollToPosition(manager2.findFirstVisibleItemPosition()-1);
                     int scrol=manager2.findFirstVisibleItemPosition()-1;
-                    manager2.scrollToPositionWithOffset(scrol, offerproducts.size());
+                    manager2.scrollToPositionWithOffset(scrol, 0);
                     if(manager2.findFirstVisibleItemPosition()==0){
-                       binding.arrow2.setVisibility(View.GONE);
+                       binding.arrow3.setVisibility(View.GONE);
                    }
+                }
+                else {
+                    binding.recOffer.smoothScrollToPosition(0);
+                    binding.arrow3.setVisibility(View.GONE);
+
                 }
 
             }
@@ -172,11 +178,11 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
         binding.arrow2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                binding.arrow2.setVisibility(View.VISIBLE);
-                if(manager2.findLastVisibleItemPosition()<offerproducts.size()-1){
-                    manager2.scrollToPositionWithOffset(manager2.findFirstVisibleItemPosition() + 1, offerproducts.size());
+                binding.arrow3.setVisibility(View.VISIBLE);
+                if(manager2.findLastVisibleItemPosition()<offerproducts.size()){
+                    manager2.scrollToPositionWithOffset(manager2.findLastVisibleItemPosition() + 1, offerproducts.size()-1);
                     if(manager2.findLastVisibleItemPosition()==offerproducts.size()-1){
-                        binding.arrow3.setVisibility(View.GONE);
+                        binding.arrow2.setVisibility(View.GONE);
 
                     }
                 }
@@ -286,7 +292,7 @@ Log.e("dy",dy+"");
 
                                     binding.llNoOffer.setVisibility(View.GONE);
                                     binding.arrow3.setVisibility(View.GONE);
-                                    manager2.scrollToPositionWithOffset(0, offerproducts.size());
+                                    manager2.scrollToPositionWithOffset(0, 0);
                                     offer_adapter.notifyDataSetChanged();
                                     //   total_page = response.body().getMeta().getLast_page();
 
