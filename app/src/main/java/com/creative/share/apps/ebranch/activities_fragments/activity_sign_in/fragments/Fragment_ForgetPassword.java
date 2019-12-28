@@ -101,22 +101,23 @@ public class Fragment_ForgetPassword extends Fragment implements  Listeners.Forg
                         public void onResponse(Call<UserModel> call, Response<UserModel> response) {
                             dialog.dismiss();
 
-                            if (response.isSuccessful())
-                            {
-                              //  Log.e("data",response.body().getPassword_token());
+                            if (response.isSuccessful()) {
+                                //  Log.e("data",response.body().getPassword_token());
                                 CreateAlertDialog(response.body());
 
-                            }
-                            else
-                            {
+                            } else {
                                 try {
 
-                                    Log.e("error",response.code()+"_"+response.errorBody().string());
+                                    Log.e("error", response.code() + "_" + response.errorBody().string());
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
-                                    Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                if (response.code() == 422) {
+                                    Toast.makeText(activity, getString(R.string.inv_email), Toast.LENGTH_SHORT).show();
 
+                                } else{
+                                    Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
 
 
                             }

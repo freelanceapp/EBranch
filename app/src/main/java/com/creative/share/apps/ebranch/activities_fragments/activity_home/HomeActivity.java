@@ -40,6 +40,7 @@ import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragme
 import com.creative.share.apps.ebranch.activities_fragments.activity_notification.NotificationsActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_orders.OrdersActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_profile.profileActivity;
+import com.creative.share.apps.ebranch.activities_fragments.activity_room.ChatRoomActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.activities.SignInActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_terms.TermsActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activitymarketprofile.MarketProfileActivity;
@@ -94,7 +95,7 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private ImageView imagemenu, im_cart;
-    private LinearLayout ll_profile, ll_terms,ll_about, ll_orders, ll_lang,ll_notif, ll_logout;
+    private LinearLayout ll_profile, ll_terms,ll_about, ll_orders, ll_lang,ll_notif,ll_chat, ll_logout;
     private ConstraintLayout nestedScrollView;
     private String current_lang;
     private float zoom = 15.6f;
@@ -152,6 +153,8 @@ if(userModel!=null){
 
         ll_orders = findViewById(R.id.ll_orders);
         ll_lang = findViewById(R.id.ll_lang);
+        ll_chat = findViewById(R.id.ll_chat);
+
         ll_logout = findViewById(R.id.ll_logout);
 
         image = findViewById(R.id.image);
@@ -184,35 +187,19 @@ if(userModel!=null){
                 CreateLanguageDialog();
             }
         });
+        ll_chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawer.closeDrawer(GravityCompat.START);
+                Intent intent = new Intent(HomeActivity.this, ChatRoomActivity.class);
+                startActivity(intent);
+            }
+        });
         ll_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Logout();
             }
-        });
-        setUpBottomNavigation();
-        ahBottomNav.setOnTabSelectedListener((position, wasSelected) -> {
-            switch (position) {
-                case 0:
-
-                    displayFragmentSearch();
-                    break;
-                case 1:
-
-                    displayFragmentDepartment();
-
-
-                    break;
-                case 2:
-                    displayFragmentViews();
-
-                    break;
-                case 3:
-                    displayFragmentContactUS();
-                    break;
-
-            }
-            return false;
         });
 
         ll_profile.setOnClickListener(new View.OnClickListener() {
@@ -274,6 +261,30 @@ startActivity(intent);
                 drawer.openDrawer(GravityCompat.START);
             }
         });*/
+        setUpBottomNavigation();
+        ahBottomNav.setOnTabSelectedListener((position, wasSelected) -> {
+            switch (position) {
+                case 0:
+
+                    displayFragmentSearch();
+                    break;
+                case 1:
+
+                    displayFragmentDepartment();
+
+
+                    break;
+                case 2:
+                    displayFragmentViews();
+
+                    break;
+                case 3:
+                    displayFragmentContactUS();
+                    break;
+
+            }
+            return false;
+        });
 
         if (userModel!=null)
         {

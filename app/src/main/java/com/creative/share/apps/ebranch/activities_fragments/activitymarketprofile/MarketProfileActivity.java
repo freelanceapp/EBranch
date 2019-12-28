@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.activities_fragments.activity_departmnet_detials.DepartmentDetialsActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_product_detials.ProductDetialsActivity;
+import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.activities.SignInActivity;
 import com.creative.share.apps.ebranch.adapters.Market_Department_Adapter;
 import com.creative.share.apps.ebranch.adapters.Offer_Adapter;
 import com.creative.share.apps.ebranch.adapters.Products_Adapter;
@@ -293,10 +294,9 @@ Log.e("dy",dy+"");
                                       Log.e("data",response.body().getData().size()+"");
 
                                     binding.llNoOffer.setVisibility(View.GONE);
-                                    binding.arrow3.setVisibility(View.GONE);
                                     offer_adapter.notifyDataSetChanged();
-
-                                    binding.recOffer.smoothScrollToPosition(0);
+updateui();
+                                //    binding.recOffer.smoothScrollToPosition(0);
                                     //   total_page = response.body().getMeta().getLast_page();
 
                                 } else {
@@ -341,6 +341,21 @@ Log.e("dy",dy+"");
             binding.llNoOffer.setVisibility(View.VISIBLE);
 
         }
+    }
+
+    private void updateui() {
+
+        new Handler().postDelayed(() -> {
+
+          //  binding.recOffer.smoothScrollToPosition(0);
+            manager2.setSmoothScrollbarEnabled(true);
+
+            binding.recOffer.smoothScrollToPosition(manager2.findLastVisibleItemPosition()-1);
+            manager2.scrollToPosition(0);
+            binding.arrow3.setVisibility(View.GONE);
+            Log.e("datas",manager2.findLastVisibleItemPosition()+"");
+        }, 10);
+
     }
 
     private void getproducts() {

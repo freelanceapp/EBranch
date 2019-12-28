@@ -48,7 +48,7 @@ private MarketProfileActivity marketProfileActivity;
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
 
-        OfferHomeRowBinding binding = DataBindingUtil.inflate(inflater, R.layout.offer_home_row, parent, false);
+        ProductsHomeRowBinding binding = DataBindingUtil.inflate(inflater, R.layout.products_home_row, parent, false);
         return new EventHolder(binding);
 
 
@@ -80,9 +80,9 @@ private MarketProfileActivity marketProfileActivity;
     }
 
     public class EventHolder extends RecyclerView.ViewHolder {
-        public OfferHomeRowBinding binding;
+        public ProductsHomeRowBinding  binding;
 
-        public EventHolder(@NonNull OfferHomeRowBinding binding) {
+        public EventHolder(@NonNull ProductsHomeRowBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
 

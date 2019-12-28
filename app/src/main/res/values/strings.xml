@@ -93,4 +93,8 @@
     <string name="Copun_used">Coupon Has already Used by this user</string>
     <string name="copoun_notfound">Copoun Not Found</string>
     <string name="cart">cart</string>
+    <string name="no_conversation">No conversation</string>
+    <string name="chat">Chat</string>
+    <string name="type_amessage">Type Amessage</string>
+
 </resources>

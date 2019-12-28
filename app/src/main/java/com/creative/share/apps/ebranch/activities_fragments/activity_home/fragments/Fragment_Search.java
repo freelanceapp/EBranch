@@ -81,7 +81,16 @@ search_markets_adapter=new Search_Markets_Adapter(dataList,activity);
         binding.recView.setLayoutManager(manager);
         binding.recView.setAdapter(search_markets_adapter);
         binding.setLang(current_lang);
+binding.iconSearch.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        query = binding.edtSearch.getText().toString();
+        if (!TextUtils.isEmpty(query)) {
 
+            Common.CloseKeyBoard(activity,binding.edtSearch);
+            getmarkets(query);}
+    }
+});
         binding.edtSearch.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 query = binding.edtSearch.getText().toString();

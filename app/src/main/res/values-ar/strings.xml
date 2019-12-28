@@ -93,4 +93,8 @@
     <string name="Copun_used">هذا الكوبون تم استخدامه من قبل المستخدم</string>
     <string name="copoun_notfound">لا يوجد هذا الكوبون</string>
     <string name="cart">السله</string>
+    <string name="no_conversation">لا توجد محادثات</string>
+    <string name="chat">المحادثات</string>
+    <string name="type_amessage">اكتب الرساله</string>
+
 </resources>
