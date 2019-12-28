@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.HomeActivity;
+import com.creative.share.apps.ebranch.activities_fragments.activity_room.ChatRoomActivity;
 import com.creative.share.apps.ebranch.databinding.UserSearchRowBinding;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.models.UserRoomModelData;
@@ -28,7 +29,7 @@ public class Room_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private Context context;
     private LayoutInflater inflater;
     private String lang;
-    private HomeActivity activity;
+    private ChatRoomActivity activity;
 private int i=-1;
 private Fragment fragment;
 private UserModel userModel;
@@ -39,8 +40,7 @@ private Preferences preferences;
         inflater = LayoutInflater.from(context);
         Paper.init(context);
         lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
-        this.activity = (HomeActivity) context;
-        this.fragment=fragment;
+        this.activity = (ChatRoomActivity) context;
         preferences=Preferences.newInstance();
         userModel=preferences.getUserData(activity);
     }
