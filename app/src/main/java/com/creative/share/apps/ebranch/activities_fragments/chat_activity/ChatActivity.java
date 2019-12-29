@@ -34,6 +34,9 @@ import com.creative.share.apps.ebranch.remote.Api;
 import com.creative.share.apps.ebranch.share.Common;
 import com.creative.share.apps.ebranch.tags.Tags;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -75,6 +78,8 @@ public class ChatActivity extends AppCompatActivity implements Listeners.BackLis
     }
 
     private void initView() {
+        EventBus.getDefault().register(this);
+
         messagedatalist = new ArrayList<>();
 
         preferences = Preferences.newInstance();
@@ -159,8 +164,8 @@ public class ChatActivity extends AppCompatActivity implements Listeners.BackLis
                         public void onResponse(Call<MessageDataModel> call, Response<MessageDataModel> response) {
                             binding.progBar.setVisibility(View.GONE);
                             if (response.isSuccessful() && response.body() != null) {
-                                //chatUserModel = new ChatUserModel(response.body().getRoom().getOther_user_name(), response.body().getRoom().getOther_user_avatar(), response.body().getRoom().getSecond_user_id(), response.body().getRoom().getId(),response.body().getRoom().getOther_user_phone_code(),response.body().getRoom().getOther_user_phone());
-                               // preferences.create_update_ChatUserData(ChatActivity.this,chatUserModel);
+                                chatUserModel = new ChatUserModel(response.body().getRoom().getOther_user_name(), response.body().getRoom().getOther_user_avatar(), response.body().getRoom().getSecond_user_id(), response.body().getRoom().getId(),response.body().getRoom().getOther_user_phone_code(),response.body().getRoom().getOther_user_phone());
+                                preferences.create_update_ChatUserData(ChatActivity.this,chatUserModel);
 
                                 messagedatalist.clear();
                                 messagedatalist.addAll(response.body().getMessages().getData());
@@ -345,5 +350,20 @@ public class ChatActivity extends AppCompatActivity implements Listeners.BackLis
     public void back() {
         finish();
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void listenToNewMessage(MessageModel messageModel)
+    {
+        messagedatalist.add(messageModel);
+        scrollToLastPosition();
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this))
+        {
+            EventBus.getDefault().unregister(this);
+        }
+        preferences.clearChatUserData(this);
+    }
 }
