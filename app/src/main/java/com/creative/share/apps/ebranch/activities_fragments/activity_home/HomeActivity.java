@@ -745,8 +745,8 @@ startActivity(intent);
 
                 try {
 
-                    if (adModel.getName() != null && !adModel.getName().isEmpty()) {
-                        tvTitle.setText(adModel.getName());
+                    if (adModel.getFull_name() != null && !adModel.getFull_name().isEmpty()) {
+                        tvTitle.setText(adModel.getFull_name());
 
                     } else {
                         tvTitle.setText(getString(R.string.no_name));
