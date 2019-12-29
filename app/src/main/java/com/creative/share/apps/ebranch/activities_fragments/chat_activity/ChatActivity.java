@@ -34,6 +34,7 @@ import com.creative.share.apps.ebranch.remote.Api;
 import com.creative.share.apps.ebranch.share.Common;
 import com.creative.share.apps.ebranch.tags.Tags;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -136,7 +137,7 @@ public class ChatActivity extends AppCompatActivity implements Listeners.BackLis
         if (intent != null) {
 
             chatUserModel = (ChatUserModel) intent.getSerializableExtra("chat_user_data");
-
+binding.setName(chatUserModel.getName());
 
         }
     }

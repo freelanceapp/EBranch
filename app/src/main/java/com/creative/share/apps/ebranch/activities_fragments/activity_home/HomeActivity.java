@@ -44,9 +44,12 @@ import com.creative.share.apps.ebranch.activities_fragments.activity_room.ChatRo
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.activities.SignInActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_terms.TermsActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activitymarketprofile.MarketProfileActivity;
+import com.creative.share.apps.ebranch.activities_fragments.chat_activity.ChatActivity;
 import com.creative.share.apps.ebranch.databinding.DialogLanguageBinding;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
+import com.creative.share.apps.ebranch.models.ChatUserModel;
 import com.creative.share.apps.ebranch.models.Markets_Model;
+import com.creative.share.apps.ebranch.models.MessageModel;
 import com.creative.share.apps.ebranch.models.Single_Market_Model;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
@@ -64,6 +67,10 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.squareup.picasso.Picasso;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -131,8 +138,17 @@ if(userModel!=null){
 }
 
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void listenToNewMessage(MessageModel messageModel) {
+        ChatUserModel chatUserModel = new ChatUserModel(messageModel.getFrom_user_name(),messageModel.getFrom_user_avatar(),messageModel.getFrom_user_id(),messageModel.getRoom_id(),messageModel.getFrom_user_phone_code(),messageModel.getFrom_user_phone());
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra("chat_user_data",chatUserModel);
+        startActivityForResult(intent,1000);
 
+    }
     private void initView() {
+        EventBus.getDefault().register(this);
+
         Paper.init(this);
         current_lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
         maDataList = new ArrayList<>();
@@ -802,5 +818,12 @@ startActivity(intent);
                 });
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this))
+        {
+            EventBus.getDefault().unregister(this);
+        }
+    }
 }

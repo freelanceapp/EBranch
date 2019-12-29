@@ -514,7 +514,7 @@ updateui();
                             dialog.dismiss();
                             if (response.isSuccessful()&&response.body()!=null)
                             {
-                                ChatUserModel chatUserModel = new ChatUserModel(single_market_model.getName(),single_market_model.getLogo(),single_market_model.getId(),response.body().getRoom_id(),"",single_market_model.getPhone());
+                                ChatUserModel chatUserModel = new ChatUserModel(single_market_model.getFull_name(),single_market_model.getLogo(),single_market_model.getId(),response.body().getRoom_id(),"",single_market_model.getPhone());
                                 Intent intent = new Intent(MarketProfileActivity.this, ChatActivity.class);
                                 intent.putExtra("chat_user_data",chatUserModel);
                                 startActivity(intent);

@@ -50,7 +50,7 @@ public class FireBaseMessaging extends FirebaseMessagingService {
 
         for (String key:map.keySet())
         {
-            Log.e("key",key+"    value "+map.get(key));
+            Log.e("keys",key+"    value "+map.get(key));
         }
 
         if (getSession().equals(Tags.session_login))
@@ -59,21 +59,11 @@ public class FireBaseMessaging extends FirebaseMessagingService {
             {
                 int to_id = Integer.parseInt(map.get("to_user_id"));
 
-                Log.e("dddd",getCurrentUser_id()+"__");
                 if (getCurrentUser_id()==to_id)
                 {
                     manageNotification(map);
                 }
-            }else
-                {
-                    int to_id = Integer.parseInt(map.get("adv_owner"));
-
-                    Log.e("dddd",getCurrentUser_id()+"__");
-                    if (getCurrentUser_id()==to_id)
-                    {
-                        manageNotification(map);
-                    }
-                }
+            }
         }
 
 
@@ -146,19 +136,74 @@ public class FireBaseMessaging extends FirebaseMessagingService {
                 if (chat_user_id==from_user_id)
                 {
                     EventBus.getDefault().post(messageModel);
+                }else
+                {
+                    LoadChatImage(messageModel,sound_Path,1);
                 }
+
+
 
 
             }else
-                {
-                    EventBus.getDefault().post(messageModel);
+            {
+
+                EventBus.getDefault().post(messageModel);
+                LoadChatImage(messageModel,sound_Path,1);
 
 
-                }
+            }
 
         }
 
     }
+    private void LoadChatImage(MessageModel messageModel, String sound_path,int type) {
+
+
+        Target target = new Target() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+
+                if (type==1)
+                {
+                    sendChatNotification_VersionNew(messageModel,sound_path,bitmap);
+
+                }else
+                {
+                    sendChatNotification_VersionOld(messageModel,sound_path,bitmap);
+
+                }
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+
+
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.logo);
+
+                if (type==1)
+                {
+                    sendChatNotification_VersionNew(messageModel,sound_path,bitmap);
+
+                }else
+                {
+                    sendChatNotification_VersionOld(messageModel,sound_path,bitmap);
+
+                }
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        };
+
+        new Handler(Looper.getMainLooper()).postDelayed(() -> Picasso.with(FireBaseMessaging.this).load(Uri.parse(Tags.IMAGE_URL+messageModel.getFrom_user_avatar())).into(target),100);
+
+    }
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -172,7 +217,6 @@ public class FireBaseMessaging extends FirebaseMessagingService {
 
         if (not_type!=null&&not_type.equals("chat"))
         {
-            String file_link="";
             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
             String current_class =activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
 
@@ -182,10 +226,6 @@ public class FireBaseMessaging extends FirebaseMessagingService {
             int to_user_id = Integer.parseInt(map.get("to_user_id"));
             int type = Integer.parseInt(map.get("type"));
 
-            if (type==2)
-            {
-                file_link = map.get("file_link");
-            }
 
             int date = Integer.parseInt(map.get("date"));
             int isRead = Integer.parseInt(map.get("is_read"));
@@ -213,14 +253,22 @@ public class FireBaseMessaging extends FirebaseMessagingService {
 
                 int chat_user_id = getChatUser_id();
 
-
+                if (chat_user_id==from_user_id)
+                {
                     EventBus.getDefault().post(messageModel);
+                }else
+                {
+                    LoadChatImage(messageModel,sound_Path,0);
+                }
+
 
 
 
             }else
             {
+
                 EventBus.getDefault().post(messageModel);
+                LoadChatImage(messageModel,sound_Path,0);
 
 
             }

@@ -160,4 +160,12 @@ public class Preferences {
         String userDataGson = preferences.getString("chat_user_data","");
         return new Gson().fromJson(userDataGson, ChatUserModel.class);
     }
+
+    public void clearChatUserData(Context context)
+    {
+        SharedPreferences preferences = context.getSharedPreferences("chatUserPref",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.apply();
+    }
 }
