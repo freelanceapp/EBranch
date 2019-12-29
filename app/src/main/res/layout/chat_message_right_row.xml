@@ -5,12 +5,10 @@
     <data>
 
 
-        <variable
-            name="lang"
-            type="String" />
+
         <variable
             name="messagemodel"
-            type="com.creative.share.apps.ebranch.models.MessageModel.SingleMessageModel" />
+            type="com.creative.share.apps.ebranch.models.MessageModel" />
     </data><RelativeLayout
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"

@@ -144,6 +144,7 @@ android:background="@color/white"
                             android:paddingBottom="2dp">
 
                             <androidx.constraintlayout.widget.ConstraintLayout
+                              android:id="@+id/cons_chat"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:background="@drawable/linear_shape"

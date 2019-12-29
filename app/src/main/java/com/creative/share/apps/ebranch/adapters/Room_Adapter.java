@@ -1,114 +1,112 @@
 package com.creative.share.apps.ebranch.adapters;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.creative.share.apps.ebranch.R;
-import com.creative.share.apps.ebranch.activities_fragments.activity_home.HomeActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_room.ChatRoomActivity;
+import com.creative.share.apps.ebranch.databinding.LoadMoreBinding;
+
 import com.creative.share.apps.ebranch.databinding.UserSearchRowBinding;
-import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.models.UserRoomModelData;
-import com.creative.share.apps.ebranch.preferences.Preferences;
 
 import java.util.List;
-import java.util.Locale;
-
-import io.paperdb.Paper;
 
 public class Room_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private final int ITEM_DATA = 1;
+    private final int ITEM_LOAD = 2;
 
-    private List<UserRoomModelData.UserRoomModel> userRoomModels;
+    private List<UserRoomModelData.UserRoomModel> userRoomModelList;
     private Context context;
-    private LayoutInflater inflater;
-    private String lang;
-    private ChatRoomActivity activity;
-private int i=-1;
-private Fragment fragment;
-private UserModel userModel;
-private Preferences preferences;
-    public Room_Adapter(List<UserRoomModelData.UserRoomModel> userRoomModels, Context context) {
-        this.userRoomModels = userRoomModels;
+private ChatRoomActivity chatRoomActivity;
+    public Room_Adapter(Context context, List<UserRoomModelData.UserRoomModel> userRoomModelList) {
+
+        this.userRoomModelList = userRoomModelList;
         this.context = context;
-        inflater = LayoutInflater.from(context);
-        Paper.init(context);
-        lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
-        this.activity = (ChatRoomActivity) context;
-        preferences=Preferences.newInstance();
-        userModel=preferences.getUserData(activity);
+        chatRoomActivity=(ChatRoomActivity)context;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-
-        UserSearchRowBinding binding = DataBindingUtil.inflate(inflater, R.layout.user_search_row, parent, false);
-        return new EventHolder(binding);
-
+        if (viewType == ITEM_DATA) {
+            UserSearchRowBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.user_search_row,parent,false);
+            return new MyHolder(binding);
+        } else {
+            LoadMoreBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.load_more,parent,false);
+            return new LoadMoreHolder(binding);
+        }
 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
 
-        EventHolder eventHolder = (EventHolder) holder;
-        if(userRoomModels.get(position).getReceiver_id()==userModel.getId()){
-            userRoomModels.get(position).setReceiver_photo(userRoomModels.get(position).getSender_photo());
-            userRoomModels.get(position).setReceiver_id(userRoomModels.get(position).getSender_id());
-            userRoomModels.get(position).setReceiver_name(userRoomModels.get(position).getSender_name());
-            userRoomModels.get(position).setReceiver_mobile(userRoomModels.get(position).getSender_mobile());
+        if (holder instanceof MyHolder) {
 
-            userRoomModels.get(position).setSender_id(userModel.getId());
-          //  userRoomModels.get(position).setSender_avatar(userModel.getUser_photo());
-            userRoomModels.get(position).setSender_name(userModel.getName());
-            userRoomModels.get(position).setSender_mobile(userModel.getPhone());
+            UserRoomModelData.UserRoomModel userRoomModel = userRoomModelList.get(position);
+            final MyHolder myHolder = (MyHolder) holder;
+            myHolder.binding.setUserroommodel(userRoomModel);
+           // myHolder.binding.tvDate.setText(Time_Ago.getTimeAgo(userRoomModel.getLast_message_date(),context));
 
-            userRoomModels.get(position).setLast_message(userRoomModels.get(position).getLast_message());
 
+            myHolder.itemView.setOnClickListener(v -> {
+                UserRoomModelData.UserRoomModel userRoomModel1 = userRoomModelList.get(myHolder.getAdapterPosition());
+               // fragment.setItemData(userRoomModel1,myHolder.getAdapterPosition());
+                chatRoomActivity.setItemData(userRoomModel1,holder.getLayoutPosition());
+            });
+        } else {
+            LoadMoreHolder loadMoreHolder = (LoadMoreHolder) holder;
+            loadMoreHolder.binding.progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+
+            loadMoreHolder.binding.progBar.setIndeterminate(true);
         }
-eventHolder.binding.setUserroommodel(userRoomModels.get(position));
-eventHolder.itemView.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
-        i=position;
-        notifyDataSetChanged();
-       // activity.gotomessage(userRoomModels.get(eventHolder.getLayoutPosition()).getReceiver_id());
-      /*  if(fragment instanceof Fragment_Chat) {
-            fragment_messages=(Fragment_Chat)fragment;
-            fragment_messages.gotomessage(userRoomModels.get(eventHolder.getLayoutPosition()).getReceiver_id(), userRoomModels.get(eventHolder.getLayoutPosition()).getReceiver_name(), userRoomModels.get(eventHolder.getLayoutPosition()).getReceiver_mobile());
-        }*/
-}
-});
-
-
-}
-
-
-
+    }
 
 
     @Override
     public int getItemCount() {
-        return userRoomModels.size();
+        return userRoomModelList.size();
     }
 
-    public class EventHolder extends RecyclerView.ViewHolder {
-        public UserSearchRowBinding binding;
-
-        public EventHolder(@NonNull UserSearchRowBinding binding) {
+    public class MyHolder extends RecyclerView.ViewHolder {
+        private UserSearchRowBinding binding;
+        public MyHolder(UserSearchRowBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
 
         }
+
+
     }
 
+    public class LoadMoreHolder extends RecyclerView.ViewHolder {
 
+        private LoadMoreBinding binding;
+        public LoadMoreHolder(LoadMoreBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        UserRoomModelData.UserRoomModel userRoomModel = userRoomModelList.get(position);
+        if (userRoomModel == null) {
+            return ITEM_LOAD;
+        } else {
+            return ITEM_DATA;
+
+        }
+
+
+    }
 }

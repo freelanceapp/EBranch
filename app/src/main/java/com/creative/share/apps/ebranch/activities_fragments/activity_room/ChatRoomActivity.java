@@ -10,10 +10,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.activities_fragments.chat_activity.ChatActivity;
@@ -23,6 +26,7 @@ import com.creative.share.apps.ebranch.databinding.ActivityChatBinding;
 import com.creative.share.apps.ebranch.databinding.ActivityChatRoomBinding;
 import com.creative.share.apps.ebranch.interfaces.Listeners;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
+import com.creative.share.apps.ebranch.models.ChatUserModel;
 import com.creative.share.apps.ebranch.models.MessageModel;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.models.UserRoomModelData;
@@ -31,6 +35,7 @@ import com.creative.share.apps.ebranch.remote.Api;
 import com.creative.share.apps.ebranch.share.Common;
 import com.creative.share.apps.ebranch.tags.Tags;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -44,11 +49,12 @@ public class ChatRoomActivity extends AppCompatActivity implements Listeners.Bac
     private ActivityChatRoomBinding binding;
     private String lang;
     private Preferences preferences;
-    private LinearLayoutManager manager;
     private UserModel userModel;
-    private List<UserRoomModelData.UserRoomModel> userRoomModels;
+    private List<UserRoomModelData.UserRoomModel> userRoomModelList;
     private Room_Adapter room_adapter;
-
+    private LinearLayoutManager manager;
+    private boolean isLoading = false;
+    private int current_page = 1;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -75,64 +81,192 @@ public class ChatRoomActivity extends AppCompatActivity implements Listeners.Bac
         binding.progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
        binding.setBackListener(this);
        binding.setLang(lang);
-        userRoomModels=new ArrayList<>();
-        room_adapter=new Room_Adapter(userRoomModels,this);
+        userRoomModelList=new ArrayList<>();
+        room_adapter=new Room_Adapter(this,userRoomModelList);
         manager = new LinearLayoutManager(this);
         binding.recView.setLayoutManager(manager);
         binding.recView.setItemViewCacheSize(25);
         binding.recView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         binding.recView.setDrawingCacheEnabled(true);
         binding.recView.setAdapter(room_adapter);
+        binding.recView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy>0)
+                {
+                    int total_items = room_adapter.getItemCount();
+                    int lastItemPos = ((GridLayoutManager)recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
 
+                    if (total_items>=6&&(lastItemPos==total_items-2)&&!isLoading)
+                    {
+                        isLoading = true;
+                        userRoomModelList.add(null);
+                        room_adapter.notifyItemInserted(userRoomModelList.size()-1);
+                        int page = current_page+1;
+                        loadMore(page);
+                    }
+
+                }
+            }
+        });
+        getRooms();
 
 
     }
-    public void getRooms() {
-        /*
-        Api.getService(Tags.base_url)
-                .getRooms(userModel.getUser().getId()+"")
-                .enqueue(new Callback<UserRoomModelData>() {
-                    @Override
-                    public void onResponse(Call<UserRoomModelData> call, Response<UserRoomModelData> response) {
-                        binding.progBar.setVisibility(View.GONE);
-                        if (response.isSuccessful()&&response.body()!=null&&response.body().getData()!=null)
-                        {
-                            if (response.body().getData().size()>0)
-                            {
-                                userRoomModels.clear();
-                                userRoomModels.addAll(response.body().getData());
-                                binding.tvNoConversation.setVisibility(View.GONE);
-                                room_adapter.notifyDataSetChanged();
+    public void getRooms()
+    {
+        userModel = preferences.getUserData(this);
 
+        try {
+            Api.getService(Tags.base_url)
+                    .getRooms(userModel.getId(),1)
+                    .enqueue(new Callback<UserRoomModelData>() {
+                        @Override
+                        public void onResponse(Call<UserRoomModelData> call, Response<UserRoomModelData> response) {
+                            binding.progBar.setVisibility(View.GONE);
+                            if (response.isSuccessful()&&response.body()!=null&&response.body().getData()!=null)
+                            {
+                                userRoomModelList.clear();
+                                userRoomModelList.addAll(response.body().getData());
+                                if (userRoomModelList.size()>0)
+                                {
+                                    room_adapter.notifyDataSetChanged();
+                                    binding.tvNoConversation.setVisibility(View.GONE);
+                                }else
+                                {
+                                    binding.tvNoConversation.setVisibility(View.VISIBLE);
+
+                                }
                             }else
                             {
-                                binding.tvNoConversation.setVisibility(View.VISIBLE);
-                            }
+                                if (response.code() == 500) {
+                                    Toast.makeText(ChatRoomActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
 
+
+                                }else
+                                {
+                                    Toast.makeText(ChatRoomActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+
+                                    try {
+
+                                        Log.e("error",response.code()+"_"+response.errorBody().string());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
                         }
 
-                    }
+                        @Override
+                        public void onFailure(Call<UserRoomModelData> call, Throwable t) {
+                            try {
+                                binding.progBar.setVisibility(View.GONE);
+                                if (t.getMessage()!=null)
+                                {
+                                    Log.e("error",t.getMessage());
+                                    if (t.getMessage().toLowerCase().contains("failed to connect")||t.getMessage().toLowerCase().contains("unable to resolve host"))
+                                    {
+                                        Toast.makeText(ChatRoomActivity.this,R.string.something, Toast.LENGTH_SHORT).show();
+                                    }else
+                                    {
+                                        Toast.makeText(ChatRoomActivity.this,t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
 
-                    @Override
-                    public void onFailure(Call<UserRoomModelData> call, Throwable t) {
-                        try {
+                            }catch (Exception e){
 
-                            binding.progBar.setVisibility(View.GONE);
-                            Toast.makeText(activity, getString(R.string.something), Toast.LENGTH_SHORT).show();
-                            Log.e("Error",t.getMessage());
-                        }catch (Exception e){}
-                    }
-                });*/
+                            }
+                        }
+                    });
+        }catch (Exception e){
+            Log.e("eeee",e.getMessage()+"__");
+            binding.progBar.setVisibility(View.GONE);
+        }
     }
 
-    public void gotomessage(int receiver_id, String receiver_name, String receiver_mobile) {
-        Intent intent=new Intent(this, ChatActivity.class);
-        intent.putExtra("data",receiver_id+"");
-        intent.putExtra("name",receiver_name);
-        intent.putExtra("phone",receiver_mobile);
 
-        startActivity(intent);
+
+    private void loadMore(int page)
+    {
+        try {
+
+            Api.getService(Tags.base_url)
+                    .getRooms(userModel.getId(),page)
+                    .enqueue(new Callback<UserRoomModelData>() {
+                        @Override
+                        public void onResponse(Call<UserRoomModelData> call, Response<UserRoomModelData> response) {
+                            userRoomModelList.remove(userRoomModelList.size()-1);
+                            room_adapter.notifyItemRemoved(userRoomModelList.size()-1);
+                            isLoading = false;
+
+                            if (response.isSuccessful()&&response.body()!=null&&response.body().getData()!=null)
+                            {
+                                userRoomModelList.addAll(response.body().getData());
+                                room_adapter.notifyDataSetChanged();
+                                current_page = response.body().getCurrent_page();
+                            }else
+                            {
+                                if (response.code() == 500) {
+                                    Toast.makeText(ChatRoomActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+
+
+                                }else
+                                {
+                                    Toast.makeText(ChatRoomActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+
+                                    try {
+
+                                        Log.e("error",response.code()+"_"+response.errorBody().string());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<UserRoomModelData> call, Throwable t) {
+                            try {
+                                if (userRoomModelList.get(userRoomModelList.size()-1)==null)
+                                {
+                                    userRoomModelList.remove(userRoomModelList.size()-1);
+                                    room_adapter.notifyItemRemoved(userRoomModelList.size()-1);
+                                    isLoading = false;
+                                }
+
+
+                                if (t.getMessage()!=null)
+                                {
+                                    Log.e("error",t.getMessage());
+                                    if (t.getMessage().toLowerCase().contains("failed to connect")||t.getMessage().toLowerCase().contains("unable to resolve host"))
+                                    {
+                                        Toast.makeText(ChatRoomActivity.this,R.string.something, Toast.LENGTH_SHORT).show();
+                                    }else
+                                    {
+                                        Toast.makeText(ChatRoomActivity.this,t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                            }catch (Exception e){}
+                        }
+                    });
+        }catch (Exception e){
+            binding.progBar.setVisibility(View.GONE);
+        }
     }
+    public void setItemData(UserRoomModelData.UserRoomModel userRoomModel, int adapterPosition) {
+
+        userRoomModel.setMy_message_unread_count(0);
+        userRoomModelList.set(adapterPosition,userRoomModel);
+        room_adapter.notifyItemChanged(adapterPosition);
+
+        ChatUserModel chatUserModel = new ChatUserModel(userRoomModel.getOther_user_name(),userRoomModel.getOther_user_avatar(),userRoomModel.getSecond_user_id(),userRoomModel.getId(),userRoomModel.getOther_user_phone_code(),userRoomModel.getOther_user_phone());
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra("chat_user_data",chatUserModel);
+        startActivityForResult(intent,1000);
+    }
+
 
     @Override
     public void back() {

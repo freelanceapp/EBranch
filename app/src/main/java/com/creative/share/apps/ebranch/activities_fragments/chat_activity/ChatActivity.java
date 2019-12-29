@@ -2,24 +2,31 @@ package com.creative.share.apps.ebranch.activities_fragments.chat_activity;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.adapters.Chat_Adapter;
 import com.creative.share.apps.ebranch.databinding.ActivityChatBinding;
 import com.creative.share.apps.ebranch.interfaces.Listeners;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
-import com.creative.share.apps.ebranch.models.AllMessageModel;
+import com.creative.share.apps.ebranch.models.MessageDataModel;
+import com.creative.share.apps.ebranch.models.ChatUserModel;
 import com.creative.share.apps.ebranch.models.MessageModel;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
@@ -29,6 +36,7 @@ import com.creative.share.apps.ebranch.tags.Tags;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -41,12 +49,13 @@ public class ChatActivity extends AppCompatActivity implements Listeners.BackLis
     private ActivityChatBinding binding;
     private String lang;
     private Chat_Adapter chat_adapter;
-    private List<MessageModel.SingleMessageModel> messagedatalist;
+    private List<MessageModel> messagedatalist;
     private LinearLayoutManager manager;
     private Preferences preferences;
     private UserModel userModel;
-    private String reciver_id = "0",reciver_name;
-
+    private ChatUserModel chatUserModel;
+    private int current_page = 1;
+    private boolean isLoading = false;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -59,13 +68,13 @@ public class ChatActivity extends AppCompatActivity implements Listeners.BackLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_chat);
+        getDataFromIntent();
         initView();
-        getmessge();
+        getChatMessages();
 
     }
 
     private void initView() {
-       getdataintent();
         messagedatalist = new ArrayList<>();
 
         preferences = Preferences.newInstance();
@@ -73,19 +82,38 @@ public class ChatActivity extends AppCompatActivity implements Listeners.BackLis
         Paper.init(this);
         lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
         binding.setLang(lang);
-        binding.setName(reciver_name);
         binding.setBackListener(this);
         manager = new LinearLayoutManager(this);
 
         binding.progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
         binding.recView.setLayoutManager(manager);
-        chat_adapter = new Chat_Adapter(messagedatalist, userModel.getId(), this);
+        chat_adapter = new Chat_Adapter(messagedatalist, userModel.getId(),chatUserModel.getImage(), this);
         binding.recView.setItemViewCacheSize(25);
         binding.recView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         binding.recView.setDrawingCacheEnabled(true);
         binding.progBar.setVisibility(View.GONE);
         // binding.llMsgContainer.setVisibility(View.GONE);
         binding.recView.setAdapter(chat_adapter);
+        binding.recView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy < 0) {
+                    int lastItemPos = manager.findLastCompletelyVisibleItemPosition();
+                    int total_items = chat_adapter.getItemCount();
+
+                    if (lastItemPos == (total_items - 2) && !isLoading) {
+                        isLoading = true;
+                        messagedatalist.add(0, null);
+                        chat_adapter.notifyItemInserted(0);
+                        int next_page = current_page + 1;
+                        loadMore(next_page);
+
+
+                    }
+                }
+            }
+        });
         binding.imageSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,14 +124,16 @@ public class ChatActivity extends AppCompatActivity implements Listeners.BackLis
 
     }
 
-    private void getdataintent() {
-        if (getIntent().getStringExtra("data") != null) {
-            reciver_id = getIntent().getStringExtra("data");
-        }
-        if (getIntent().getStringExtra("name") != null) {
-            reciver_name = getIntent().getStringExtra("name");
-        }
 
+    private void getDataFromIntent()
+    {
+        Intent intent = getIntent();
+        if (intent != null) {
+
+            chatUserModel = (ChatUserModel) intent.getSerializableExtra("chat_user_data");
+
+
+        }
     }
 
     private void checkdata() {
@@ -111,132 +141,203 @@ public class ChatActivity extends AppCompatActivity implements Listeners.BackLis
         if (!TextUtils.isEmpty(message)) {
             Common.CloseKeyBoard(this, binding.edtMsgContent);
             binding.edtMsgContent.setText("");
-            sendmessagetext(message);
+            sendMessage(message);
 
         } else {
             binding.edtMsgContent.setError(getResources().getString(R.string.field_req));
         }
     }
 
-    public void getmessge() {
-        //   Common.CloseKeyBoard(homeActivity, edt_name);
-        Log.e("lkk", reciver_id + " " + userModel.getId());
-        messagedatalist.clear();
-        chat_adapter.notifyDataSetChanged();
-        binding.progBar.setVisibility(View.VISIBLE);
-
-        // rec_sent.setVisibility(View.GONE);
-      /*  try {
+    private void getChatMessages() {
+        try {
 
 
             Api.getService(Tags.base_url)
-                    .getMessge(reciver_id, userModel.getId() + "")
-                    .enqueue(new Callback<AllMessageModel>() {
+                    .getRoomMessages(userModel.getId(), chatUserModel.getRoom_id(), 1)
+                    .enqueue(new Callback<MessageDataModel>() {
                         @Override
-                        public void onResponse(Call<AllMessageModel> call, Response<AllMessageModel> response) {
+                        public void onResponse(Call<MessageDataModel> call, Response<MessageDataModel> response) {
                             binding.progBar.setVisibility(View.GONE);
-                           //  binding.swipeRefresh.setRefreshing(false);
-                            if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                //chatUserModel = new ChatUserModel(response.body().getRoom().getOther_user_name(), response.body().getRoom().getOther_user_avatar(), response.body().getRoom().getSecond_user_id(), response.body().getRoom().getId(),response.body().getRoom().getOther_user_phone_code(),response.body().getRoom().getOther_user_phone());
+                               // preferences.create_update_ChatUserData(ChatActivity.this,chatUserModel);
+
                                 messagedatalist.clear();
-                                messagedatalist.addAll(response.body().getData());
-                                if (response.body().getData().size() > 0) {
-                                    // rec_sent.setVisibility(View.VISIBLE);
-                                    //  Log.e("data",response.body().getData().get(0).getAr_title());
+                                messagedatalist.addAll(response.body().getMessages().getData());
+                                chat_adapter.notifyDataSetChanged();
+                                scrollToLastPosition();
 
-                                    // binding.llMsgContainer.setVisibility(View.GONE);
-                                    chat_adapter.notifyDataSetChanged();
-                                    binding.recView.scrollToPosition(messagedatalist.size() - 1);
-
-                                    //   total_page = response.body().getMeta().getLast_page();
-
-                                } else {
-                                    chat_adapter.notifyDataSetChanged();
-
-                                    //   binding.llNoStore.setVisibility(View.VISIBLE);
-
-                                }
                             } else {
 
-                                chat_adapter.notifyDataSetChanged();
-
-                                //binding.llNoStore.setVisibility(View.VISIBLE);
-                                //Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                                 try {
-                                    Log.e("Error_code", response.code() + "_" + response.errorBody().string());
+
+                                    Log.e("error", response.code() + "_" + response.errorBody().string());
                                 } catch (IOException e) {
                                     e.printStackTrace();
+                                }
+
+                                if (response.code() == 500) {
+                                    Toast.makeText(ChatActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+
+                                } else {
+                                    Toast.makeText(ChatActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+
+                                    try {
+
+                                        Log.e("error", response.code() + "_" + response.errorBody().string());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             }
                         }
 
                         @Override
-                        public void onFailure(Call<AllMessageModel> call, Throwable t) {
+                        public void onFailure(Call<MessageDataModel> call, Throwable t) {
                             try {
-                                //binding.swipeRefresh.setRefreshing(false);
+                                if (t.getMessage() != null) {
+                                    Log.e("error", t.getMessage());
+                                    if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                        Toast.makeText(ChatActivity.this, R.string.something, Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(ChatActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
 
-                                binding.progBar.setVisibility(View.GONE);
-                                //binding.llNoStore.setVisibility(View.VISIBLE);
-
-
-                                Toast.makeText(ChatActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
-                                Log.e("error", t.getMessage());
                             } catch (Exception e) {
                             }
                         }
                     });
         } catch (Exception e) {
-            binding.progBar.setVisibility(View.GONE);
-            //binding.llNoStore.setVisibility(View.VISIBLE);
 
-        }*/
+        }
+    }
+
+    private void loadMore(int next_page) {
+        try {
+
+            Api.getService(Tags.base_url)
+                    .getRoomMessages(userModel.getId(), chatUserModel.getRoom_id(), next_page)
+                    .enqueue(new Callback<MessageDataModel>() {
+                        @Override
+                        public void onResponse(Call<MessageDataModel> call, Response<MessageDataModel> response) {
+                            isLoading = false;
+                            messagedatalist.remove(0);
+                            chat_adapter.notifyItemRemoved(0);
+                            if (response.isSuccessful() && response.body() != null) {
+
+                                current_page = response.body().getMessages().getCurrent_page();
+                                messagedatalist.addAll(0, response.body().getMessages().getData());
+                                chat_adapter.notifyItemRangeInserted(0, response.body().getMessages().getData().size());
+
+
+                            } else {
+
+                                if (response.code() == 500) {
+                                    Toast.makeText(ChatActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+
+                                } else {
+                                    Toast.makeText(ChatActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+
+                                    try {
+
+                                        Log.e("error", response.code() + "_" + response.errorBody().string());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<MessageDataModel> call, Throwable t) {
+                            try {
+                                isLoading = false;
+
+                                if (messagedatalist.get(0) == null) {
+                                    messagedatalist.remove(0);
+                                    chat_adapter.notifyItemRemoved(0);
+                                }
+                                if (t.getMessage() != null) {
+                                    Log.e("error", t.getMessage());
+                                    if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                        Toast.makeText(ChatActivity.this, R.string.something, Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(ChatActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                            } catch (Exception e) {
+                            }
+                        }
+                    });
+        } catch (Exception e) {
+
+        }
     }
 
 
-    private void sendmessagetext(String message) {
-        final Dialog dialog = Common.createProgressDialog(ChatActivity.this, getString(R.string.wait));
-        dialog.setCancelable(false);
-        dialog.show();
 
-      /*  try {
+    private void sendMessage(String message)
+    {
+        try {
+
+            long date = Calendar.getInstance().getTimeInMillis()/1000;
+
             Api.getService(Tags.base_url)
-                    .sendmessagetext(userModel.getUser().getId() + "", reciver_id, message).enqueue(new Callback<MessageModel>() {
-                @Override
-                public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
-                    dialog.dismiss();
-                    if (response.isSuccessful()) {
+                    .sendChatMessage(chatUserModel.getRoom_id(), userModel.getId(), chatUserModel.getId(), 1, message, date)
+                    .enqueue(new Callback<MessageModel>() {
+                        @Override
+                        public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                Log.e("ddd",response.body().getMessage_type()+"__");
+                                messagedatalist.add(response.body());
+                                chat_adapter.notifyDataSetChanged();
+                                scrollToLastPosition();
+                            } else {
 
-                        Log.e("llll", response.toString());
+                                try {
 
-                        messagedatalist.add(response.body().getData());
-                        chat_adapter.notifyDataSetChanged();
-                        binding.recView.scrollToPosition(messagedatalist.size() - 1);
-                    } else {
-                        try {
+                                    Log.e("error", response.code() + "_" + response.errorBody().string());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                if (response.code() == 500) {
+                                    Toast.makeText(ChatActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
 
-                            Toast.makeText(ChatActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
-                            Log.e("Error", response.toString() + " " + response.code() + "" + response.message() + "" + response.errorBody() + response.raw() + response.body() + response.headers() + " " + response.errorBody().toString());
-                        } catch (Exception e) {
+                                } else {
+                                    Toast.makeText(ChatActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
 
 
+                                }
+                            }
                         }
-                    }
-                }
 
-                @Override
-                public void onFailure(Call<MessageModel> call, Throwable t) {
-                    dialog.dismiss();
-                    try {
-                        Toast.makeText(ChatActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
-                        Log.e("Error", t.getMessage());
-                    } catch (Exception e) {
+                        @Override
+                        public void onFailure(Call<MessageModel> call, Throwable t) {
+                            try {
+                                if (t.getMessage() != null) {
+                                    Log.e("error", t.getMessage());
+                                    if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                        Toast.makeText(ChatActivity.this, R.string.something, Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(ChatActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
 
-                    }
-                }
-            });
+                            } catch (Exception e) {
+                            }
+                        }
+                    });
         } catch (Exception e) {
-            dialog.dismiss();
-            Log.e("error", e.getMessage().toString());
-        }*/
+
+        }
+    }
+    private void scrollToLastPosition()
+    {
+
+        new Handler()
+                .postDelayed(() -> binding.recView.scrollToPosition(messagedatalist.size()-1),10);
     }
 
 

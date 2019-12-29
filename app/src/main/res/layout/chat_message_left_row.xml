@@ -5,12 +5,14 @@
     <data>
 
 
+
+
         <variable
-            name="lang"
+            name="endpoint"
             type="String" />
         <variable
             name="messagemodel"
-            type="com.creative.share.apps.ebranch.models.MessageModel.SingleMessageModel" />
+            type="com.creative.share.apps.ebranch.models.MessageModel" />
     </data><RelativeLayout
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -35,7 +37,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="top"
-            android:src="@drawable/ic_user"
+            image="@{endpoint}"
             />
         <LinearLayout
             android:layout_width="wrap_content"
@@ -71,6 +73,7 @@
                 android:textSize="13sp"
                 android:visibility="gone"
                 android:layout_marginBottom="5dp"
+                date="@{messagemodel.date}"
                 />
         </LinearLayout>
     </LinearLayout>

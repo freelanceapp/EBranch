@@ -1,6 +1,7 @@
 package com.creative.share.apps.ebranch.activities_fragments.activitymarketprofile;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -22,17 +23,21 @@ import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.activities_fragments.activity_departmnet_detials.DepartmentDetialsActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_product_detials.ProductDetialsActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.activities.SignInActivity;
+import com.creative.share.apps.ebranch.activities_fragments.chat_activity.ChatActivity;
 import com.creative.share.apps.ebranch.adapters.Market_Department_Adapter;
 import com.creative.share.apps.ebranch.adapters.Offer_Adapter;
 import com.creative.share.apps.ebranch.adapters.Products_Adapter;
 import com.creative.share.apps.ebranch.databinding.ActivityMarketProfileBinding;
 import com.creative.share.apps.ebranch.interfaces.Listeners;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
+import com.creative.share.apps.ebranch.models.ChatUserModel;
 import com.creative.share.apps.ebranch.models.Products_Model;
+import com.creative.share.apps.ebranch.models.RoomIdModel;
 import com.creative.share.apps.ebranch.models.Single_Market_Model;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
 import com.creative.share.apps.ebranch.remote.Api;
+import com.creative.share.apps.ebranch.share.Common;
 import com.creative.share.apps.ebranch.tags.Tags;
 
 import java.io.IOException;
@@ -65,7 +70,7 @@ public class MarketProfileActivity extends AppCompatActivity implements Listener
     private LinearLayoutManager manager,manager2;
     private boolean isLoading = false;
     private int current_page2 = 1;
-
+private Single_Market_Model single_market_model;
     @Override
     protected void attachBaseContext(Context newBase) {
         Paper.init(newBase);
@@ -213,7 +218,12 @@ Log.e("dy",dy+"");
         });
         market_department_adapter = new Market_Department_Adapter(categoriesList, this);
         binding.recDepartment.setAdapter(market_department_adapter);
-
+binding.consChat.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        getChatRoomId();
+    }
+});
 
     }
 
@@ -267,6 +277,7 @@ Log.e("dy",dy+"");
 
     private void updateddata(Single_Market_Model body) {
         binding.setMarketmodel(body);
+        this.single_market_model=body;
         if (body.getCategories() != null) {
             categoriesList.clear();
             categoriesList.addAll(body.getCategories());
@@ -488,4 +499,69 @@ updateui();
             startActivity(intent);
 
     }
+    private void getChatRoomId() {
+
+        ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+        dialog.setCancelable(false);
+        dialog.show();
+        try {
+
+            Api.getService(Tags.base_url)
+                    .getRoomId(userModel.getId(),single_market_model.getId())
+                    .enqueue(new Callback<RoomIdModel>() {
+                        @Override
+                        public void onResponse(Call<RoomIdModel> call, Response<RoomIdModel> response) {
+                            dialog.dismiss();
+                            if (response.isSuccessful()&&response.body()!=null)
+                            {
+                                ChatUserModel chatUserModel = new ChatUserModel(single_market_model.getName(),single_market_model.getLogo(),single_market_model.getId(),response.body().getRoom_id(),"",single_market_model.getPhone());
+                                Intent intent = new Intent(MarketProfileActivity.this, ChatActivity.class);
+                                intent.putExtra("chat_user_data",chatUserModel);
+                                startActivity(intent);
+                            }else
+                            {
+                                if (response.code() == 500) {
+                                    Toast.makeText(MarketProfileActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+
+
+                                }else
+                                {
+                                    Toast.makeText(MarketProfileActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+
+                                    try {
+
+                                        Log.e("error",response.code()+"_"+response.errorBody().string());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<RoomIdModel> call, Throwable t) {
+                            try {
+                                dialog.dismiss();
+                                if (t.getMessage()!=null)
+                                {
+                                    Log.e("error",t.getMessage());
+                                    if (t.getMessage().toLowerCase().contains("failed to connect")||t.getMessage().toLowerCase().contains("unable to resolve host"))
+                                    {
+                                        Toast.makeText(MarketProfileActivity.this,R.string.something, Toast.LENGTH_SHORT).show();
+                                    }else
+                                    {
+                                        Toast.makeText(MarketProfileActivity.this,t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                            }catch (Exception e){}
+                        }
+                    });
+        }catch (Exception e){
+            dialog.dismiss();
+
+        }
+
+    }
+
 }

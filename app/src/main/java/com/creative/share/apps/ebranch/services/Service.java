@@ -7,15 +7,19 @@ import com.creative.share.apps.ebranch.models.Catogries_Market_Model;
 import com.creative.share.apps.ebranch.models.Catogries_Model;
 import com.creative.share.apps.ebranch.models.Cities_Model;
 import com.creative.share.apps.ebranch.models.Markets_Model;
+import com.creative.share.apps.ebranch.models.MessageDataModel;
+import com.creative.share.apps.ebranch.models.MessageModel;
 import com.creative.share.apps.ebranch.models.NotificationDataModel;
 import com.creative.share.apps.ebranch.models.OrderDataModel;
 import com.creative.share.apps.ebranch.models.OrderModel;
 import com.creative.share.apps.ebranch.models.PlaceGeocodeData;
 import com.creative.share.apps.ebranch.models.PlaceMapDetailsData;
 import com.creative.share.apps.ebranch.models.Products_Model;
+import com.creative.share.apps.ebranch.models.RoomIdModel;
 import com.creative.share.apps.ebranch.models.Single_Market_Model;
 import com.creative.share.apps.ebranch.models.Single_Product_Model;
 import com.creative.share.apps.ebranch.models.UserModel;
+import com.creative.share.apps.ebranch.models.UserRoomModelData;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -237,6 +241,37 @@ public interface Service {
     Call<ResponseBody> Foundcopun(@Field("user_id") String user_id,
                               @Field("coupon_serial") String coupon_serial,
                                   @Field("market_id") String market_id
+
+    );
+    @FormUrlEncoded
+    @POST("api/my-chat-rooms")
+    Call<UserRoomModelData> getRooms(@Field("user_id") int user_id,
+                                     @Field("page") int page
+    );
+    @FormUrlEncoded
+    @POST("api/single-chat-room")
+    Call<MessageDataModel> getRoomMessages(@Field("user_id") int user_id,
+                                           @Field("room_id") int room_id,
+                                           @Field("page") int page
+    );
+
+
+    @FormUrlEncoded
+    @POST("api/message/send")
+    Call<MessageModel> sendChatMessage(@Field("room_id") int room_id,
+                                       @Field("from_user_id") int from_user_id,
+                                       @Field("to_user_id") int to_user_id,
+                                       @Field("message_type") int message_type,
+                                       @Field("message") String message,
+                                       @Field("date") long date
+
+
+    );
+    @FormUrlEncoded
+    @POST("api/chatRoom/get")
+    Call<RoomIdModel> getRoomId(@Field("from_user_id") int from_user_id,
+                                @Field("to_user_id") int to_user_id
+
 
     );
 }
