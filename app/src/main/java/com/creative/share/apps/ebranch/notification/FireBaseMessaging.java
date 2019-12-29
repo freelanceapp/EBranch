@@ -112,10 +112,7 @@ public class FireBaseMessaging extends FirebaseMessagingService {
             int to_user_id = Integer.parseInt(map.get("to_user_id"));
             int type = Integer.parseInt(map.get("type"));
 
-            if (type==2)
-            {
-                file_link = map.get("file_link");
-            }
+
 
             int date = Integer.parseInt(map.get("date"));
             int isRead = Integer.parseInt(map.get("is_read"));
@@ -133,11 +130,10 @@ public class FireBaseMessaging extends FirebaseMessagingService {
             String to_user_avatar = map.get("to_user_avatar");
             String to_user_phone_code = map.get("to_user_phone_code");
 
-            String file = map.get(file_link);
 
 
 
-            MessageModel messageModel = new MessageModel(msg_id,room_id,from_user_id,to_user_id,type,message,file,date,isRead,from_user_name,from_user_email,from_user_phone_code,from_user_phone,from_user_avatar,to_user_name,to_user_email,to_user_phone_code,to_user_phone,to_user_avatar);
+            MessageModel messageModel = new MessageModel(msg_id,room_id,from_user_id,to_user_id,type,message,date,isRead,from_user_name,from_user_email,from_user_phone_code,from_user_phone,from_user_avatar,to_user_name,to_user_email,to_user_phone_code,to_user_phone,to_user_avatar);
 
 
 
@@ -207,11 +203,10 @@ public class FireBaseMessaging extends FirebaseMessagingService {
             String to_user_avatar = map.get("to_user_avatar");
             String to_user_phone_code = map.get("to_user_phone_code");
 
-            String file = map.get(file_link);
 
 
 
-            MessageModel messageModel = new MessageModel(msg_id,room_id,from_user_id,to_user_id,type,message,file,date,isRead,from_user_name,from_user_email,from_user_phone_code,from_user_phone,from_user_avatar,to_user_name,to_user_email,to_user_phone_code,to_user_phone,to_user_avatar);
+            MessageModel messageModel = new MessageModel(msg_id,room_id,from_user_id,to_user_id,type,message,date,isRead,from_user_name,from_user_email,from_user_phone_code,from_user_phone,from_user_avatar,to_user_name,to_user_email,to_user_phone_code,to_user_phone,to_user_avatar);
 
             if (current_class.equals("com.creative.share.apps.heragelawal.activities_fragments.activity_chat.ChatActivity"))
             {

@@ -23,14 +23,13 @@ private int id;
     private String to_user_phone_code;
     private String to_user_phone;
     private String to_user_avatar;
-    public MessageModel(int id, int room_id, int from_user_id, int to_user_id, int message_type, String message, String file_link, int date, int is_read, String from_user_name, String from_user_email, String from_user_phone_code, String from_user_phone, String from_user_avatar, String to_user_name, String to_user_email, String to_user_phone_code, String to_user_phone, String to_user_avatar) {
+    public MessageModel(int id, int room_id, int from_user_id, int to_user_id, int message_type, String message, int date, int is_read, String from_user_name, String from_user_email, String from_user_phone_code, String from_user_phone, String from_user_avatar, String to_user_name, String to_user_email, String to_user_phone_code, String to_user_phone, String to_user_avatar) {
         this.id = id;
         this.room_id = room_id;
         this.from_user_id = from_user_id;
         this.to_user_id = to_user_id;
         this.message_type = message_type;
         this.message = message;
-        this.file_link = file_link;
         this.date = date;
         this.is_read = is_read;
         this.from_user_name = from_user_name;
