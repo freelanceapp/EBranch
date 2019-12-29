@@ -106,7 +106,6 @@
 
                 </androidx.recyclerview.widget.RecyclerView>
 
-
             <ProgressBar
                 android:id="@+id/progBar"
                 android:layout_width="35dp"
