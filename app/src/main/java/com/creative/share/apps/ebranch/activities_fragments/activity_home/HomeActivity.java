@@ -757,7 +757,7 @@ startActivity(intent);
                     tvAddress.setText(adModel.getAddress());
 
 
-                    Picasso.with(HomeActivity.this).load(Uri.parse(Tags.base_url + adModel.getLogo())).placeholder(R.drawable.logo).fit().into(image);
+                    Picasso.with(HomeActivity.this).load(Uri.parse(Tags.IMAGE_URL + adModel.getLogo())).placeholder(R.drawable.logo).fit().into(image);
 
                 } catch (Exception e) {
                     if (e != null && e.getMessage() != null) {
