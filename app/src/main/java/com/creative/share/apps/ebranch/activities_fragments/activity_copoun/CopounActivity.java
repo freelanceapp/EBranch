@@ -30,6 +30,7 @@ import com.creative.share.apps.ebranch.databinding.ActivityCouponBinding;
 import com.creative.share.apps.ebranch.databinding.ActivityMapBinding;
 import com.creative.share.apps.ebranch.interfaces.Listeners;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
+import com.creative.share.apps.ebranch.models.Copuon_Model;
 import com.creative.share.apps.ebranch.models.PlaceGeocodeData;
 import com.creative.share.apps.ebranch.models.PlaceMapDetailsData;
 import com.creative.share.apps.ebranch.models.SelectedLocation;
@@ -131,15 +132,16 @@ public class CopounActivity extends AppCompatActivity implements Listeners.BackL
             ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
             dialog.setCancelable(false);
             dialog.show();
-            Api.getService(Tags.base_url).Foundcopun(userModel.getId() + "", copun,marketid).enqueue(new Callback<ResponseBody>() {
+            Api.getService(Tags.base_url).Foundcopun(userModel.getId() + "", copun,marketid).enqueue(new Callback<Copuon_Model>() {
                 @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                public void onResponse(Call<Copuon_Model> call, Response<Copuon_Model> response) {
                     dialog.dismiss();
                     if (response.isSuccessful()) {
                         Intent intent = getIntent();
                         if (intent!=null)
                         {
-                            intent.putExtra("copun",copun);
+                            intent.putExtra("copun",response.body());
+
                             setResult(RESULT_OK,intent);
                         }
                         finish();
@@ -172,7 +174,7 @@ public class CopounActivity extends AppCompatActivity implements Listeners.BackL
                 }
 
                 @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                public void onFailure(Call<Copuon_Model> call, Throwable t) {
                     try {
                         dialog.dismiss();
                         Toast.makeText(CopounActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();

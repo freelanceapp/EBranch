@@ -2,13 +2,16 @@ package com.creative.share.apps.ebranch.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.creative.share.apps.ebranch.R;
+import com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments.Fragment_Search;
 import com.creative.share.apps.ebranch.activities_fragments.activity_markets.MarketActivity;
 import com.creative.share.apps.ebranch.databinding.MarketRowBinding;
 import com.creative.share.apps.ebranch.databinding.SearchMarketRowBinding;
@@ -28,12 +31,14 @@ public class Search_Markets_Adapter extends RecyclerView.Adapter<RecyclerView.Vi
     private LayoutInflater inflater;
     private String lang;
     private int i = 0;
-    public Search_Markets_Adapter(List<Single_Market_Model> orderlist, Context context) {
+    private Fragment_Search fragment_search;
+    public Search_Markets_Adapter(List<Single_Market_Model> orderlist, Context context, Fragment fragment) {
         this.orderlist = orderlist;
         this.context = context;
         inflater = LayoutInflater.from(context);
         Paper.init(context);
         lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
+fragment_search=(Fragment_Search)fragment;
 
     }
 
@@ -53,6 +58,12 @@ public class Search_Markets_Adapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         EventHolder eventHolder = (EventHolder) holder;
       eventHolder.binding.setMarketmodel(orderlist.get(position));
+      eventHolder.itemView.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              fragment_search.displaymarketprofile(orderlist.get(eventHolder.getLayoutPosition()));
+          }
+      });
     }
 
     @Override

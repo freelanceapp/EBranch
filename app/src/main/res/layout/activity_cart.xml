@@ -54,14 +54,25 @@
             />
     </androidx.appcompat.widget.Toolbar>
 
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:fillViewport="true"
 
+app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/toolbar"
+>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
     <FrameLayout
 android:id="@+id/f2"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:background="@color/gray0"
-        app:layout_constraintBottom_toTopOf="@+id/tv_total"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+
         android:layout_marginBottom="8dp"
         >
 
@@ -98,8 +109,7 @@ android:visibility="gone"
         android:id="@+id/tv_total"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/radio"
-        app:layout_constraintTop_toBottomOf="@+id/f2"
+
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:paddingStart="10dp"
@@ -115,8 +125,7 @@ android:visibility="gone"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/tv_total"
-        app:layout_constraintBottom_toTopOf="@+id/bt_com"
+
         android:checkedButton="@id/r_home"
        >
 
@@ -149,9 +158,7 @@ android:visibility="gone"
         android:id="@+id/tvcopon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/radio"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/bt_com"
+
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:layout_marginTop="8dp"
@@ -163,16 +170,15 @@ android:visibility="gone"
         android:layout_width="180dp"
         android:layout_height="45dp"
         android:text="@string/order"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvcopon"
+    android:layout_gravity="center"
 
         android:background="@drawable/btn_login"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="15dp"
         android:textColor="@color/white"
         />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+    </layout>

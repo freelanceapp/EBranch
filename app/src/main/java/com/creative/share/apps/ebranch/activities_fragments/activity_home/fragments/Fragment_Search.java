@@ -1,5 +1,6 @@
 package com.creative.share.apps.ebranch.activities_fragments.activity_home.fragments;
 
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -19,8 +20,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.activities_fragments.activity_home.HomeActivity;
+import com.creative.share.apps.ebranch.activities_fragments.activity_markets.MarketActivity;
+import com.creative.share.apps.ebranch.activities_fragments.activitymarketprofile.MarketProfileActivity;
 import com.creative.share.apps.ebranch.adapters.Search_Markets_Adapter;
 import com.creative.share.apps.ebranch.databinding.FragmentSearchBinding;
+import com.creative.share.apps.ebranch.models.Catogries_Market_Model;
 import com.creative.share.apps.ebranch.models.Markets_Model;
 import com.creative.share.apps.ebranch.models.Single_Market_Model;
 import com.creative.share.apps.ebranch.models.UserModel;
@@ -71,7 +75,7 @@ private Search_Markets_Adapter search_markets_adapter;
         Paper.init(activity);
         current_lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
         dataList=new ArrayList<>();
-search_markets_adapter=new Search_Markets_Adapter(dataList,activity);
+search_markets_adapter=new Search_Markets_Adapter(dataList,activity,this);
         binding.progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(activity, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
         binding.progBar.setVisibility(View.GONE);
         binding.recView.setItemViewCacheSize(25);
@@ -170,4 +174,9 @@ binding.iconSearch.setOnClickListener(new View.OnClickListener() {
         }
     }
 
+    public void displaymarketprofile(Single_Market_Model users) {
+        Intent intent=new Intent(activity, MarketProfileActivity.class);
+        intent.putExtra("marketid",users.getId()+"");
+        startActivity(intent);
+    }
 }

@@ -6,6 +6,7 @@ import com.creative.share.apps.ebranch.models.App_Data_Model;
 import com.creative.share.apps.ebranch.models.Catogries_Market_Model;
 import com.creative.share.apps.ebranch.models.Catogries_Model;
 import com.creative.share.apps.ebranch.models.Cities_Model;
+import com.creative.share.apps.ebranch.models.Copuon_Model;
 import com.creative.share.apps.ebranch.models.Markets_Model;
 import com.creative.share.apps.ebranch.models.MessageDataModel;
 import com.creative.share.apps.ebranch.models.MessageModel;
@@ -238,8 +239,8 @@ public interface Service {
             );
     @FormUrlEncoded
     @POST("api/checkDiscountCoupon")
-    Call<ResponseBody> Foundcopun(@Field("user_id") String user_id,
-                              @Field("coupon_serial") String coupon_serial,
+    Call<Copuon_Model> Foundcopun(@Field("user_id") String user_id,
+                                  @Field("coupon_serial") String coupon_serial,
                                   @Field("market_id") String market_id
 
     );

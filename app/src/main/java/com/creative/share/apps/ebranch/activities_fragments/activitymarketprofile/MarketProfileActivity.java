@@ -306,7 +306,12 @@ binding.consChat.setOnClickListener(new View.OnClickListener() {
 
                                     binding.llNoOffer.setVisibility(View.GONE);
                                     offer_adapter.notifyDataSetChanged();
-updateui();
+                                    if(offerproducts.size()>1){
+updateui();}
+                                    else {
+                                        binding.arrow2.setVisibility(View.GONE);
+                                        binding.arrow3.setVisibility(View.GONE);
+                                    }
                                 //    binding.recOffer.smoothScrollToPosition(0);
                                     //   total_page = response.body().getMeta().getLast_page();
 

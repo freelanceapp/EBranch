@@ -24,6 +24,7 @@ import com.creative.share.apps.ebranch.databinding.ActivityCartBinding;
 import com.creative.share.apps.ebranch.interfaces.Listeners;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
 import com.creative.share.apps.ebranch.models.Add_Order_Model;
+import com.creative.share.apps.ebranch.models.Copuon_Model;
 import com.creative.share.apps.ebranch.models.SelectedLocation;
 import com.creative.share.apps.ebranch.models.UserModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
@@ -53,7 +54,7 @@ private Cart_Adapter cart_adapter;
 private double totalcost;
     private Add_Order_Model add_order_model;
     private SelectedLocation selectedLocation;
-    private String copun="";
+    private Copuon_Model copun;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -90,12 +91,21 @@ getorders();
     }
 
     private void gettotal() {
+
         double total=0;
         for(int i=0;i<order_details.size();i++){
             total+=order_details.get(i).getTotal_price();
+
         }
-        totalcost=total;
-        binding.tvTotal.setText(getResources().getString(R.string.total)+total+"");
+        if(copun==null){
+        totalcost=total;}
+        else {
+            totalcost=total-((total*Integer.parseInt(copun.getValue()))/100);
+            Log.e("copun",copun.getName());
+
+        }
+
+        binding.tvTotal.setText(getResources().getString(R.string.total)+totalcost+"");
     }
 
     @SuppressLint("RestrictedApi")
@@ -209,16 +219,20 @@ products1.setTotal_price((products1.getTotal_price()/ products1.getAmount())*(pr
                 add_order_model.setAddress(selectedLocation.getAddress());
                 add_order_model.setLatitude(selectedLocation.getLat());
                 add_order_model.setLongitude(selectedLocation.getLng());
-                add_order_model.setCoupon_serial(copun);
+                if(copun!=null){
+                add_order_model.setCoupon_serial(copun.getId()+"");}
+                else {
+                    add_order_model.setCoupon_serial("");
+                }
 
 accept_order();
             }
         }
         else  if (requestCode == 2 && resultCode == RESULT_OK && data != null) {
             if (data.hasExtra("copun")) {
-                copun = data.getStringExtra("copun");
-
-
+                copun = (Copuon_Model) data.getSerializableExtra("copun");
+totalcost=totalcost-((totalcost*Integer.parseInt(copun.getValue()))/100);
+binding.tvTotal.setText(totalcost+"");
             }
         }
 

@@ -183,7 +183,17 @@ getproducts();
             }
             return false;
         });
+binding.iconSearch.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        name = binding.edtSearch.getText().toString();
+        if (!TextUtils.isEmpty(name)) {
 
+            Common.CloseKeyBoard(DepartmentDetialsActivity.this,binding.edtSearch);
+            getproducts();
+        }
+    }
+});
       binding.imFilter.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
@@ -362,6 +372,9 @@ getproducts();
         binding.recView.setVisibility(View.VISIBLE);
 
         binding.expandLayout.collapse(true);
+        if(binding.edtSearch.getText().toString().isEmpty()){
+            name="no";
+        }
         getproducts();
     }
 }
