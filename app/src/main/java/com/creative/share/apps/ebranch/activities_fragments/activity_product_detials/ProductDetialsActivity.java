@@ -146,6 +146,8 @@ private Single_Product_Model single_product_model;
                       products1.setAmount(amount+order_details.get(pos).getAmount());
                      // Log.e("to",add_order_model.getTotal_cost()+(Double.parseDouble(single_product_model.getPrice())*amount)+""+((amount+order_details.get(pos).getAmount())*Double.parseDouble(single_product_model.getPrice())));
                       products1.setTotal_price(products1.getTotal_price()+(Double.parseDouble(single_product_model.getPrice())*amount));
+                      products1.setImage(single_product_model.getImage());
+
                       order_details.remove(pos);
                       order_details.add(pos, products1);
 
@@ -159,6 +161,7 @@ private Single_Product_Model single_product_model;
                       products1.setEn_des(single_product_model.getEn_des());
                       products1.setAr_title(single_product_model.getAr_title());
                       products1.setEn_title(single_product_model.getEn_title());
+                      products1.setImage(single_product_model.getImage());
                       order_details.add(products1);
 
                   }
@@ -182,8 +185,10 @@ private Single_Product_Model single_product_model;
                     products1.setEn_des(single_product_model.getEn_des());
                     products1.setAr_title(single_product_model.getAr_title());
                     products1.setEn_title(single_product_model.getEn_title());
+                    products1.setImage(single_product_model.getImage());
                     order_details.add(products1);
                     add_order_model.setProducts(order_details);
+
                     Common.CreateDialogAlert(ProductDetialsActivity.this,getResources().getString(R.string.suc));
 
 

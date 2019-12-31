@@ -175,7 +175,7 @@ android:layout_marginLeft="8dp"
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:text='@{lang.equals("ar")?productmodel.ar_title:productmodel.en_title}'
                                 android:textColor="@color/black"
@@ -184,7 +184,9 @@ android:layout_marginLeft="8dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@+id/cons1"
                                 app:layout_constraintTop_toTopOf="parent"
-                                android:layout_marginStart="30dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="5dp"
                                 tools:ignore="RtlCompat" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>

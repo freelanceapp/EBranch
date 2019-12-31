@@ -220,7 +220,7 @@ products1.setTotal_price((products1.getTotal_price()/ products1.getAmount())*(pr
                 add_order_model.setLatitude(selectedLocation.getLat());
                 add_order_model.setLongitude(selectedLocation.getLng());
                 if(copun!=null){
-                add_order_model.setCoupon_serial(copun.getId()+"");}
+                add_order_model.setCoupon_serial(copun.getCoupon_serial()+"");}
                 else {
                     add_order_model.setCoupon_serial("");
                 }

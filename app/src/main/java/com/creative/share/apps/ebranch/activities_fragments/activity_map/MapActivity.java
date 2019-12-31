@@ -108,6 +108,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
             return false;
         });
+        binding.imsearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String query = binding.edtSearch.getText().toString();
+                if (!TextUtils.isEmpty(query)) {
+                    Common.CloseKeyBoard(MapActivity.this,binding.edtSearch);
+                    Search(query);
+                }
+            }
+        });
         binding.btnSelect.setOnClickListener(view -> {
             SelectedLocation selectedLocation = new SelectedLocation(lat,lng,address);
             Intent intent = getIntent();
