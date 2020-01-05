@@ -96,5 +96,6 @@
     <string name="no_conversation">لا توجد محادثات</string>
     <string name="chat">المحادثات</string>
     <string name="type_amessage">اكتب الرساله</string>
+    <string name="confirmation_password">تاكيد الرقم السرى </string>
 
 </resources>

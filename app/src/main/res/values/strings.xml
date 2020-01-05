@@ -96,5 +96,6 @@
     <string name="no_conversation">No conversation</string>
     <string name="chat">Chat</string>
     <string name="type_amessage">Type Amessage</string>
+    <string name="confirmation_password">Confirmation Password</string>
 
 </resources>

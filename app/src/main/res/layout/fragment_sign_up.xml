@@ -224,7 +224,7 @@
                             android:layout_height="37dp"
                             android:layout_gravity="center_vertical"
                             android:background="@color/white"
-                            android:hint="@string/user_password"
+                            android:hint="@string/confirmation_password"
                             android:inputType="textPassword"
                             android:singleLine="true"
                             android:textColor="@color/black"
