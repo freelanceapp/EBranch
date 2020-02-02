@@ -120,6 +120,30 @@ public class Common {
         dialog.setView(binding.getRoot());
         dialog.show();
     }
+    public static void CreateDialogAlert3(Context context,String msg) {
+        final AlertDialog dialog = new AlertDialog.Builder(context)
+                .create();
+
+        DialogAlertBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_alert, null, false);
+
+        binding.tvMsg.setText(msg);
+        binding.btnCancel.setOnClickListener(new View.OnClickListener() {
+                                                 @Override
+                                                 public void onClick(View v) {
+
+                                                     dialog.dismiss();
+                                                     Intent intent = new Intent(context, CartActivity.class);
+                                                     context.startActivity(intent);
+                                                 }
+                                             }
+
+        );
+        //   dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_congratulation_animation;
+        // dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_window_bg);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setView(binding.getRoot());
+        dialog.show();
+    }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public static String getImagePath(Context context, Uri uri) {

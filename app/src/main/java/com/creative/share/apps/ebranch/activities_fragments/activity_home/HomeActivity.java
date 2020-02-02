@@ -47,6 +47,7 @@ import com.creative.share.apps.ebranch.activities_fragments.activitymarketprofil
 import com.creative.share.apps.ebranch.activities_fragments.chat_activity.ChatActivity;
 import com.creative.share.apps.ebranch.databinding.DialogLanguageBinding;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
+import com.creative.share.apps.ebranch.models.Add_Order_Model;
 import com.creative.share.apps.ebranch.models.ChatUserModel;
 import com.creative.share.apps.ebranch.models.Markets_Model;
 import com.creative.share.apps.ebranch.models.MessageModel;
@@ -113,7 +114,8 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     private List<Single_Market_Model> maDataList;
     private ActionBarDrawerToggle toggle;
     private Toolbar toolbar;
-
+    private TextView textNotify;
+    private int amount=0;
     @Override
     protected void attachBaseContext(Context newBase) {
         Paper.init(newBase);
@@ -137,6 +139,31 @@ if(userModel!=null){
 
 }
 
+        gettotal();
+    }
+
+    public void gettotal() {
+        amount=0;
+        if(preferences.getUserOrder(this)!=null){
+            for (int i = 0; i < preferences.getUserOrder(this).getProducts().size(); i++) {
+                Add_Order_Model.Products add_order_model = preferences.getUserOrder(this).getProducts().get(i);
+                    amount += add_order_model.getAmount();
+
+            }}
+        addItemToCart();
+
+    }
+
+    private void addItemToCart() {
+        if(amount>0){
+
+            textNotify.setText(amount + "");
+            textNotify.setVisibility(View.VISIBLE);
+
+        }
+        else {
+            textNotify.setVisibility(View.GONE);
+        }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void listenToNewMessage(MessageModel messageModel) {
@@ -158,6 +185,8 @@ if(userModel!=null){
         ahBottomNav = findViewById(R.id.ah_bottom_nav);
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
+        textNotify=findViewById(R.id.textNotify);
+
         toolbar = findViewById(R.id.toolbar);
         toggle = new ActionBarDrawerToggle(this,drawer,toolbar,R.string.open,R.string.close);
         toggle.syncState();
@@ -548,6 +577,13 @@ startActivity(intent);
 
         // mMap.animateCamera(cameraUpdate);
 
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        gettotal();
 
     }
 
