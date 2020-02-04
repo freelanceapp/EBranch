@@ -99,8 +99,11 @@ public class Fragment_Current_Order extends Fragment {
     }
 
 
-    private void getOrder()
+    public void getOrder()
     {
+        orderModelList.clear();
+        //orderModelList.addAll(response.body().getData());
+        adapter.notifyDataSetChanged();
 
         Api.getService(Tags.base_url)
                 .getcurrentOrders(userModel.getId(), 1)

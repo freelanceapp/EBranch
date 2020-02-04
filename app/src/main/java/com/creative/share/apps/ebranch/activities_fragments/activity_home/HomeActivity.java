@@ -140,8 +140,23 @@ if(userModel!=null){
 }
 
         gettotal();
-    }
+        getdatafromintent();
 
+    }
+    private void getdatafromintent() {
+        if(getIntent().hasExtra("not")){
+
+            new Handler()
+                    .postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(userModel!=null){
+Intent intent=new Intent(HomeActivity.this,OrdersActivity.class);
+intent.putExtra("data",getIntent().getSerializableExtra("data"));
+startActivity(intent);}
+                        }
+                    },1000);        }
+    }
     public void gettotal() {
         amount=0;
         if(preferences.getUserOrder(this)!=null){

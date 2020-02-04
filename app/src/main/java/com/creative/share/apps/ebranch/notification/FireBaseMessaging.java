@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -23,9 +24,11 @@ import androidx.core.app.NotificationCompat;
 
 import com.creative.share.apps.ebranch.R;
 
+import com.creative.share.apps.ebranch.activities_fragments.activity_home.HomeActivity;
 import com.creative.share.apps.ebranch.activities_fragments.chat_activity.ChatActivity;
 import com.creative.share.apps.ebranch.models.ChatUserModel;
 import com.creative.share.apps.ebranch.models.MessageModel;
+import com.creative.share.apps.ebranch.models.OrderModel;
 import com.creative.share.apps.ebranch.preferences.Preferences;
 import com.creative.share.apps.ebranch.tags.Tags;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -36,6 +39,7 @@ import com.squareup.picasso.Target;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.Map;
+import java.util.Random;
 
 public class FireBaseMessaging extends FirebaseMessagingService {
 
@@ -64,10 +68,15 @@ public class FireBaseMessaging extends FirebaseMessagingService {
                     manageNotification(map);
                 }
             }
+            else {
+                manageNotification(map);
+
+            }
+        }
         }
 
 
-    }
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -126,9 +135,10 @@ public class FireBaseMessaging extends FirebaseMessagingService {
             MessageModel messageModel = new MessageModel(msg_id,room_id,from_user_id,to_user_id,type,message,date,isRead,from_user_name,from_user_email,from_user_phone_code,from_user_phone,from_user_avatar,to_user_name,to_user_email,to_user_phone_code,to_user_phone,to_user_avatar);
 
 
+            Log.e("mkjjj",current_class);
 
 
-            if (current_class.equals("com.creative.share.apps.heragelawal.activities_fragments.activity_chat.ChatActivity"))
+            if (current_class.equals("com.creative.share.apps.ebranch.activities_fragments.activity_chat.ChatActivity"))
             {
 
                 int chat_user_id = getChatUser_id();
@@ -155,6 +165,48 @@ public class FireBaseMessaging extends FirebaseMessagingService {
 
         }
 
+else   if(not_type.equals("order"))
+        {
+            ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+            String current_class =activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
+            int status=Integer.parseInt(map.get("status"));
+            int order_id=Integer.parseInt(map.get("id"));
+            String title = null;
+            title=getResources().getString(R.string.order_num)+" "+order_id;
+
+
+            OrderModel orderModel=new OrderModel(status);
+            String content=null;
+            if(status==1){
+                content=getResources().getString(R.string.market_accept_order)+ " "+order_id;
+            }
+            else if(status==2){
+                content=getResources().getString(R.string.market_refues_order)+ " "+order_id;
+
+            }
+            else if(status==5){
+                content=getResources().getString(R.string.driver_accept_order)+ " "+order_id;
+
+            }
+            else if(status==7||status==8){
+                content=getResources().getString(R.string.driver_cancel_order)+ " "+order_id;
+
+            }
+            else if(status==14){
+                content=getResources().getString(R.string.driver_recevie_order)+ " "+order_id;
+
+            }
+            else if(status==9){
+                content=getResources().getString(R.string.order_finsihed)+ " "+order_id;
+
+            }
+            if (current_class.equals("com.creative.share.apps.ebranch.activities_fragments.activity_orders.OrdersActivity")){
+                EventBus.getDefault().post(orderModel);
+
+
+            }
+            sendNotification_VersionNew(content,title,orderModel,sound_Path);
+        }
     }
     private void LoadChatImage(MessageModel messageModel, String sound_path,int type) {
 
@@ -180,7 +232,7 @@ public class FireBaseMessaging extends FirebaseMessagingService {
             public void onBitmapFailed(Drawable errorDrawable) {
 
 
-                Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.logo);
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ic_nav_notification);
 
                 if (type==1)
                 {
@@ -248,7 +300,7 @@ public class FireBaseMessaging extends FirebaseMessagingService {
 
             MessageModel messageModel = new MessageModel(msg_id,room_id,from_user_id,to_user_id,type,message,date,isRead,from_user_name,from_user_email,from_user_phone_code,from_user_phone,from_user_avatar,to_user_name,to_user_email,to_user_phone_code,to_user_phone,to_user_avatar);
 
-            if (current_class.equals("com.creative.share.apps.heragelawal.activities_fragments.activity_chat.ChatActivity"))
+            if (current_class.equals("com.creative.share.apps.ebranch.activities_fragments.activity_chat.ChatActivity"))
             {
 
                 int chat_user_id = getChatUser_id();
@@ -267,6 +319,7 @@ public class FireBaseMessaging extends FirebaseMessagingService {
             }else
             {
 
+
                 EventBus.getDefault().post(messageModel);
                 LoadChatImage(messageModel,sound_Path,0);
 
@@ -274,7 +327,48 @@ public class FireBaseMessaging extends FirebaseMessagingService {
             }
 
         }
+       else if(not_type!=null&&not_type.equals("order")) {
+            String content = null;
+            String title = null;
 
+            int status=Integer.parseInt(map.get("status"));
+            int order_id=Integer.parseInt(map.get("id"));
+            title=getResources().getString(R.string.order_num)+" "+order_id;
+            OrderModel orderModel=new OrderModel(status);
+if(status==1){
+    content=getResources().getString(R.string.market_accept_order)+ " "+order_id;
+}
+else if(status==2){
+    content=getResources().getString(R.string.market_refues_order)+ " "+order_id;
+
+}
+else if(status==5){
+    content=getResources().getString(R.string.driver_accept_order)+ " "+order_id;
+
+}
+else if(status==7||status==8){
+    content=getResources().getString(R.string.driver_cancel_order)+ " "+order_id;
+
+}
+else if(status==14){
+    content=getResources().getString(R.string.driver_recevie_order)+ " "+order_id;
+
+}
+else if(status==9){
+    content=getResources().getString(R.string.order_finsihed)+ " "+order_id;
+
+}
+
+            ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+            String current_class =activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
+Log.e("mkjjj",current_class);
+            if (current_class.equals("com.creative.share.apps.ebranch.activities_fragments.activity_orders.OrdersActivity")){
+                EventBus.getDefault().post(orderModel);
+
+
+            }
+                sendNotification_VersionOld(content,title,orderModel,sound_Path);
+        }
     }
 
 
@@ -388,5 +482,157 @@ public class FireBaseMessaging extends FirebaseMessagingService {
         return preferences.getSession(this);
     }
 
+    private void sendNotification_VersionOld(String content, String title, OrderModel orderModel, String sound_path) {
+        final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder.setSound(Uri.parse(sound_path), AudioManager.STREAM_NOTIFICATION);
+        builder.setSmallIcon(R.drawable.ic_nav_notification);
+        builder.setAutoCancel(true);
+         builder.setContentTitle(title);
 
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra("not",true);
+intent.putExtra("data",orderModel);
+        TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
+        taskStackBuilder.addNextIntent(intent);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+
+        builder.setContentText(content);
+
+
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (manager != null) {
+            manager.notify(12352, builder.build());
+
+        }
+        final Target target = new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+
+                NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                //    Log.e("mange","mang");
+                if (manager != null) {
+
+                    builder.setLargeIcon(bitmap);
+
+                    manager.notify(new Random().nextInt(200), builder.build());
+                    //  Log.e("mange","mang");
+
+                }
+
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        };
+        new Handler(Looper.getMainLooper())
+                .postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        Picasso.with(FireBaseMessaging.this).load(R.drawable.ic_nav_notification).into(target);
+
+
+
+                    }
+                }, 1);
+
+
+
+    }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void sendNotification_VersionNew(String content, String title, OrderModel orderModel, String sound_path) {
+
+        String CHANNEL_ID = "my_channel_02";
+        CharSequence CHANNEL_NAME = "my_channel_name";
+        int IMPORTANCE = NotificationManager.IMPORTANCE_HIGH;
+
+        final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        final NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, IMPORTANCE);
+        channel.setShowBadge(true);
+        channel.setSound(Uri.parse(sound_path), new AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .setUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT)
+                .setLegacyStreamType(AudioManager.STREAM_NOTIFICATION)
+                .build()
+        );
+        builder.setChannelId(CHANNEL_ID);
+        builder.setSound(Uri.parse(sound_path), AudioManager.STREAM_NOTIFICATION);
+        builder.setSmallIcon(R.drawable.ic_nav_notification);
+        builder.setAutoCancel(true);
+
+          builder.setContentTitle(title);
+
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ic_nav_notification);
+        builder.setLargeIcon(bitmap);
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.putExtra("not",true);
+        intent.putExtra("data",orderModel);
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
+        taskStackBuilder.addNextIntent(intent);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+
+        builder.setContentText(content);
+
+
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (manager != null) {
+            manager.createNotificationChannel(channel);
+            manager.notify(12352, builder.build());
+        }
+
+        final Target target = new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+                if (manager != null) {
+                    builder.setLargeIcon(bitmap);
+                    manager.createNotificationChannel(channel);
+                    manager.notify(new Random().nextInt(200), builder.build());
+                }
+
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        };
+
+
+        new Handler(Looper.getMainLooper())
+                .postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        Picasso.with(FireBaseMessaging.this).load(R.drawable.ic_nav_notification).into(target);
+
+                    }
+                }, 1);
+
+    }
+
+    private String getlang() {
+        return preferences.getLanguage(this);
+    }
 }

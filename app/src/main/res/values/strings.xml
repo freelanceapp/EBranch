@@ -97,5 +97,13 @@
     <string name="chat">Chat</string>
     <string name="type_amessage">Type Amessage</string>
     <string name="confirmation_password">Confirmation Password</string>
+    <string name="order_accepted">Order Accepted Num</string>
+    <string name="order_finsihed">Order Finished Num</string>
+    <string name="market_accept_order">Market Accept Order Num </string>
+    <string name="market_refues_order">Market Refues Order Num</string>
+    <string name="driver_accept_order">Driver Accept Order Num</string>
+    <string name="driver_recevie_order">Driver Reacive Order Num</string>
+    <string name="driver_cancel_order">Driver Cancel Order Num</string>
+    <string name="order_num">Order Num</string>
 
 </resources>

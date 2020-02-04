@@ -97,5 +97,13 @@
     <string name="chat">المحادثات</string>
     <string name="type_amessage">اكتب الرساله</string>
     <string name="confirmation_password">تاكيد الرقم السرى </string>
+    <string name="order_accepted">تم قبول طلبك رقم</string>
+    <string name="order_finsihed">تم انهاء الطلب رقم</string>
+    <string name="market_accept_order">المتجر قبل طلبك رقم </string>
+    <string name="market_refues_order">المتجر رفض طلبك رقم </string>
+    <string name="driver_accept_order">السواق قبل طلبك رقم</string>
+    <string name="driver_recevie_order">  السواق استلم طلبك رقم</string>
+    <string name="driver_cancel_order">السواق رفض طلبك رقم </string>
+    <string name="order_num">Order Num</string>
 
 </resources>

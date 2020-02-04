@@ -1,19 +1,27 @@
 package com.creative.share.apps.ebranch.activities_fragments.activity_orders;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.creative.share.apps.ebranch.R;
+import com.creative.share.apps.ebranch.activities_fragments.activity_home.HomeActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_orders.fragments.Fragment_Current_Order;
 import com.creative.share.apps.ebranch.activities_fragments.activity_orders.fragments.Fragment_Finshied_Order;
 import com.creative.share.apps.ebranch.adapters.ViewPagerAdapter;
 import com.creative.share.apps.ebranch.databinding.ActivityOrderBinding;
 import com.creative.share.apps.ebranch.interfaces.Listeners;
 import com.creative.share.apps.ebranch.language.LanguageHelper;
+import com.creative.share.apps.ebranch.models.OrderModel;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +46,91 @@ public class OrdersActivity extends AppCompatActivity implements Listeners.BackL
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_order);
         initView();
+        EventBus.getDefault().register(this);
+        getdatafromintent();
 
     }
+    private void getdatafromintent() {
+        if(getIntent().getSerializableExtra("data")!=null){
+            OrderModel orderModel= (OrderModel) getIntent().getSerializableExtra("data");
+            if(orderModel.getStatus()==9){
+                if(fragmentList!=null){
+                    Fragment_Finshied_Order fragment_finshied_order= (Fragment_Finshied_Order) fragmentList.get(1);
+                    new Handler()
+                            .postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    fragment_finshied_order.getOrder();
+                                    binding.pager.setCurrentItem(1);}
+                            },1);
+                }}
+            else {
+                if(fragmentList!=null){
+                    Fragment_Current_Order fragment_current_order= (Fragment_Current_Order) fragmentList.get(0);
+                    new Handler()
+                            .postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    fragment_current_order.getOrder();
+                                    binding.pager.setCurrentItem(0);}
+                            },1);
+                }
+            }
+                 }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void ListenNotificationChange(OrderModel order_model)
+    {
+if(order_model.getStatus()==9){
+    if(fragmentList!=null){
+    Fragment_Finshied_Order fragment_finshied_order= (Fragment_Finshied_Order) fragmentList.get(1);
+        new Handler()
+                    .postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            fragment_finshied_order.getOrder();
+                        binding.pager.setCurrentItem(1);}
+                    },1);
+}}
+else {
+    if(fragmentList!=null){
+        Fragment_Current_Order fragment_current_order= (Fragment_Current_Order) fragmentList.get(0);
+        new Handler()
+                .postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        fragment_current_order.getOrder();
+                        binding.pager.setCurrentItem(0);}
+                },1);
+    }
+}
+
+//        if (fragment_myorders!=null&&fragment_myorders.isAdded()&&fragment_myorders.isVisible())
+//        {
+//            new Handler()
+//                    .postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            fragment_myorders.getOrders();                        }
+//                    },1);
+//        }
+//        else {
+//            new Handler()
+//                    .postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if(fragment_myorders!=null){
+//                                fragment_myorders.getOrders();
+//                            }
+//
+//                            DisplayFragmentMyorders();
+//                        }
+//                    },1);
+//        }
 
 
+    }
     private void initView() {
 
         Paper.init(this);
@@ -84,6 +173,13 @@ binding.setBackListener(this);
         finish();
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this))
+        {
+            EventBus.getDefault().unregister(this);
+        }
+    }
 
 }

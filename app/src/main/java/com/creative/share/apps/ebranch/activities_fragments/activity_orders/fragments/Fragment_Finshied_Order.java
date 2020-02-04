@@ -96,9 +96,11 @@ public class Fragment_Finshied_Order extends Fragment {
     }
 
 
-    private void getOrder()
+    public void getOrder()
     {
-
+        orderModelList.clear();
+        //orderModelList.addAll(response.body().getData());
+        adapter.notifyDataSetChanged();
         Api.getService(Tags.base_url)
                 .getfinshiorders(userModel.getId(), 1)
                 .enqueue(new Callback<OrderDataModel>() {
