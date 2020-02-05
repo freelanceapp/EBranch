@@ -68,7 +68,8 @@ public class FireBaseMessaging extends FirebaseMessagingService {
                     manageNotification(map);
                 }
             }
-            else {
+            else if(map.get("id")!=null){
+
                 manageNotification(map);
 
             }
