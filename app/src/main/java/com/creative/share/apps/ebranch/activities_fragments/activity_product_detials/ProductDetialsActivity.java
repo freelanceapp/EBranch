@@ -189,7 +189,7 @@ private Single_Product_Model single_product_model;
                     order_details.add(products1);
                     add_order_model.setProducts(order_details);
 
-                    Common.CreateDialogAlert(ProductDetialsActivity.this,getResources().getString(R.string.suc));
+                    Common.CreateDialogAlert3(ProductDetialsActivity.this,getResources().getString(R.string.suc));
 
 
                 }
