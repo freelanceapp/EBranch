@@ -270,7 +270,8 @@
                     android:padding="15dp"
                    android:layout_marginTop="8dp"
                     android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"                    android:text="@string/are_you_forgot_password"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/are_you_forgot_password"
                     android:textColor="@color/black"
                     android:textSize="16sp"
 
