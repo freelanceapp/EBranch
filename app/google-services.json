@@ -532,6 +532,50 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:937967699473:android:30c58f28671a94e9b4d3b0",
+        "android_client_info": {
+          "package_name": "com.endpoint.elforat_delegate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "937967699473-kj310kff4n323mg1e7iciu4k2111ck9c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.endpoint.elforat_delegate",
+            "certificate_hash": "22105e5542084e166d9ea5b679b53a317cca4849"
+          }
+        },
+        {
+          "client_id": "937967699473-166trlhhveot8qs7be6jc3i4cg35nhjt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBVlu8LhDsRWCKY4A9XMlbHDYKCzmH8nA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "937967699473-166trlhhveot8qs7be6jc3i4cg35nhjt.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "937967699473-56cj4r35265844tigjlgasrqnvdct3a9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appzone.cruiseapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:937967699473:android:fcd31a5346a93945",
         "android_client_info": {
           "package_name": "com.semicolon.Halan"
