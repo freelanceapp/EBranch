@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import com.creative.share.apps.ebranch.R;
 import com.creative.share.apps.ebranch.activities_fragments.activity_map.MapActivity;
 import com.creative.share.apps.ebranch.activities_fragments.activity_sign_in.activities.SignInActivity;
+import com.creative.share.apps.ebranch.activities_fragments.activity_terms.TermsActivity;
 import com.creative.share.apps.ebranch.adapters.CityAdapter;
 import com.creative.share.apps.ebranch.databinding.FragmentSignUpBinding;
 import com.creative.share.apps.ebranch.interfaces.Listeners;
@@ -49,7 +50,7 @@ import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
 
-public class Fragment_Sign_Up extends Fragment implements Listeners.SignUpListener,Listeners.BackListener,Listeners.ShowCountryDialogListener, OnCountryPickerListener {
+public class Fragment_Sign_Up extends Fragment implements Listeners.SignUpListener, Listeners.BackListener, Listeners.ShowCountryDialogListener, OnCountryPickerListener {
     private SignInActivity activity;
     private String current_language;
     private FragmentSignUpBinding binding;
@@ -71,7 +72,7 @@ public class Fragment_Sign_Up extends Fragment implements Listeners.SignUpListen
     }
 
     private void initView() {
-        dataList=new ArrayList<>();
+        dataList = new ArrayList<>();
         signUpModel = new SignUpModel();
         activity = (SignInActivity) getActivity();
         Paper.init(activity);
@@ -83,20 +84,26 @@ public class Fragment_Sign_Up extends Fragment implements Listeners.SignUpListen
         binding.setSignUpListener(this);
         binding.setShowCountryListener(this);
         createCountryDialog();
-adapter=new CityAdapter(dataList,activity);
-binding.spinnerCity.setAdapter(adapter);
+        adapter = new CityAdapter(dataList, activity);
+        binding.spinnerCity.setAdapter(adapter);
         binding.tvLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               activity.selectlocation();
+                activity.selectlocation();
             }
         });
 
+        binding.checkboxTerms.setOnClickListener(view -> {
+            if (binding.checkboxTerms.isChecked()) {
+//                signUpModel.setAccept(true);
+                Intent intent = new Intent(activity, TermsActivity.class);
+                intent.putExtra("type", 1);
+                startActivity(intent);
+            } else {
+//                signUpModel.setAccept(false);
 
-
-
-
-
+            }
+        });
 
 
         getCities();
@@ -123,6 +130,7 @@ binding.spinnerCity.setAdapter(adapter);
         });
 
     }
+
     private void getCities() {
         try {
             ProgressDialog dialog = Common.createProgressDialog(activity, getString(R.string.wait));
@@ -135,10 +143,10 @@ binding.spinnerCity.setAdapter(adapter);
                         public void onResponse(Call<Cities_Model> call, Response<Cities_Model> response) {
                             dialog.dismiss();
                             if (response.isSuccessful() && response.body() != null) {
-                                if(response.body().getData()!=null){
-                                    updateCityAdapter(response.body());}
-                                else {
-                                    Log.e("error",response.code()+"_"+response.errorBody());
+                                if (response.body().getData() != null) {
+                                    updateCityAdapter(response.body());
+                                } else {
+                                    Log.e("error", response.code() + "_" + response.errorBody());
 
                                 }
 
@@ -146,7 +154,7 @@ binding.spinnerCity.setAdapter(adapter);
 
                                 try {
 
-                                    Log.e("error",response.code()+"_"+response.errorBody().string());
+                                    Log.e("error", response.code() + "_" + response.errorBody().string());
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
@@ -154,8 +162,7 @@ binding.spinnerCity.setAdapter(adapter);
                                     Toast.makeText(activity, "Server Error", Toast.LENGTH_SHORT).show();
 
 
-                                }else
-                                {
+                                } else {
                                     Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
 
 
@@ -187,22 +194,19 @@ binding.spinnerCity.setAdapter(adapter);
 
     private void updateCityAdapter(Cities_Model body) {
 
-        dataList.add(new Cities_Model.Data("إختر المدينه ","choose city"));
-if(body.getData()!=null){
-        dataList.addAll(body.getData());
-        adapter.notifyDataSetChanged();}
+        dataList.add(new Cities_Model.Data("إختر المدينه ", "choose city"));
+        if (body.getData() != null) {
+            dataList.addAll(body.getData());
+            adapter.notifyDataSetChanged();
+        }
     }
-
-
-
 
 
     public static Fragment_Sign_Up newInstance() {
         return new Fragment_Sign_Up();
     }
 
-    private void createCountryDialog()
-    {
+    private void createCountryDialog() {
         countryPicker = new CountryPicker.Builder()
                 .canSearch(true)
                 .listener(this)
@@ -212,20 +216,16 @@ if(body.getData()!=null){
 
         TelephonyManager telephonyManager = (TelephonyManager) activity.getSystemService(Context.TELEPHONY_SERVICE);
 
-        if (countryPicker.getCountryFromSIM()!=null)
-        {
+        if (countryPicker.getCountryFromSIM() != null) {
             updatePhoneCode(countryPicker.getCountryFromSIM());
-        }else if (telephonyManager!=null&&countryPicker.getCountryByISO(telephonyManager.getNetworkCountryIso())!=null)
-        {
+        } else if (telephonyManager != null && countryPicker.getCountryByISO(telephonyManager.getNetworkCountryIso()) != null) {
             updatePhoneCode(countryPicker.getCountryByISO(telephonyManager.getNetworkCountryIso()));
-        }else if (countryPicker.getCountryByLocale(Locale.getDefault())!=null)
-        {
+        } else if (countryPicker.getCountryByLocale(Locale.getDefault()) != null) {
             updatePhoneCode(countryPicker.getCountryByLocale(Locale.getDefault()));
-        }else
-        {
+        } else {
             String code = "+966";
             binding.tvCode.setText(code);
-            signUpModel.setPhone_code(code.replace("+","00"));
+            signUpModel.setPhone_code(code.replace("+", "00"));
 
         }
 
@@ -243,26 +243,24 @@ if(body.getData()!=null){
 
     }
 
-    private void updatePhoneCode(Country country)
-    {
+    private void updatePhoneCode(Country country) {
         binding.tvCode.setText(country.getDialCode());
-        signUpModel.setPhone_code(country.getDialCode().replace("+","00"));
+        signUpModel.setPhone_code(country.getDialCode().replace("+", "00"));
 
     }
 
     @Override
-    public void checkDataSignUp(String name, String phone_code, String phone,String email, String password,String confirmpassword) {
+    public void checkDataSignUp(String name, String phone_code, String phone, String email, String password, String confirmpassword) {
         if (phone.startsWith("0")) {
             phone = phone.replaceFirst("0", "");
         }
-        signUpModel = new SignUpModel(name,city_id,phone_code,phone,email,password,confirmpassword);
+        signUpModel = new SignUpModel(name, city_id, phone_code, phone, email, password, confirmpassword);
         signUpModel.setAddress(selectedLocation.getAddress());
-        signUpModel.setLatitude(selectedLocation.getLat()+"");
-        signUpModel.setLongitude(selectedLocation.getLng()+"");
+        signUpModel.setLatitude(selectedLocation.getLat() + "");
+        signUpModel.setLongitude(selectedLocation.getLng() + "");
         binding.setSignUpModel(signUpModel);
 
-        if (signUpModel.isDataValid(activity))
-        {
+        if (signUpModel.isDataValid(activity)) {
             signUp(signUpModel);
         }
     }
@@ -273,20 +271,20 @@ if(body.getData()!=null){
             dialog.setCancelable(false);
             dialog.show();
             Api.getService(Tags.base_url)
-                    .signUp(signUpModel.getName(),signUpModel.getCity_id(),signUpModel.getEmail(),signUpModel.getPassword(),signUpModel.getPhone(),signUpModel.getPhone_code(),"1")
+                    .signUp(signUpModel.getName(), signUpModel.getCity_id(), signUpModel.getEmail(), signUpModel.getPassword(), signUpModel.getPhone(), signUpModel.getPhone_code(), "1")
                     .enqueue(new Callback<UserModel>() {
                         @Override
                         public void onResponse(Call<UserModel> call, Response<UserModel> response) {
                             dialog.dismiss();
                             if (response.isSuccessful() && response.body() != null) {
-                                activity.displayFragmentCodeVerification(response.body(),2);
+                                activity.displayFragmentCodeVerification(response.body(), 2);
 
                             } else {
                                 if (response.code() == 422) {
-                                    Toast.makeText(activity,getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                                     try {
 
-                                        Log.e("error",response.code()+"_"+response.errorBody().string());
+                                        Log.e("error", response.code() + "_" + response.errorBody().string());
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
@@ -294,16 +292,15 @@ if(body.getData()!=null){
                                 } else if (response.code() == 500) {
                                     Toast.makeText(activity, "Server Error", Toast.LENGTH_SHORT).show();
 
-                                }else if (response.code() == 406) {
-                                    Toast.makeText(activity,getString(R.string.em_exist), Toast.LENGTH_SHORT).show();
+                                } else if (response.code() == 406) {
+                                    Toast.makeText(activity, getString(R.string.em_exist), Toast.LENGTH_SHORT).show();
 
-                                }else
-                                {
+                                } else {
                                     Toast.makeText(activity, getString(R.string.failed), Toast.LENGTH_SHORT).show();
 
                                     try {
 
-                                        Log.e("error",response.code()+"_"+response.errorBody().string());
+                                        Log.e("error", response.code() + "_" + response.errorBody().string());
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
@@ -341,7 +338,7 @@ if(body.getData()!=null){
 
 
     public void setlocation(SelectedLocation selectedLocation) {
-        this.selectedLocation=selectedLocation;
+        this.selectedLocation = selectedLocation;
         binding.setLocation(selectedLocation);
         signUpModel.setLatitude(String.valueOf(selectedLocation.getLat()));
         signUpModel.setLongitude(String.valueOf(selectedLocation.getLng()));

@@ -435,6 +435,22 @@
                     android:singleLine="true"
                     error="@{signUpModel.address_error}"
                     />
+
+                <CheckBox
+                    android:id="@+id/checkboxTerms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/rb_bg"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:text="@string/accept_terms_and_conditions"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginTop="20dp"
+                    />
+
             </LinearLayout>
 
 

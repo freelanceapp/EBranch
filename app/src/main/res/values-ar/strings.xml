@@ -98,12 +98,13 @@
     <string name="type_amessage">اكتب الرساله</string>
     <string name="confirmation_password">تاكيد الرقم السرى </string>
     <string name="order_accepted">تم قبول طلبك رقم</string>
-    <string name="order_finsihed">تم انهاء الطلب رقم</string>
-    <string name="market_accept_order">المتجر قبل طلبك رقم </string>
-    <string name="market_refues_order">المتجر رفض طلبك رقم </string>
-    <string name="driver_accept_order">السواق قبل طلبك رقم</string>
+    <string name="order_finsihed">تم الطلب بنجاح وسيتم اشعاركم خلال يومين عن طلب رقم</string>
+    <string name="market_accept_order">عميلنا العزيز تم تجهيز طلبك وجاري الشحن رقم </string>
+    <string name="market_refues_order">عميلنا العزيز نعتذر لعدم تنفيذ طلبك للمزيد من المعلومات الرجاء التواصل مع المتجر على طلب رقم </string>
+    <string name="driver_accept_order">السائق قبل طلبكم , سيتم التوصيل خلال 3 ايام طلبك رقم</string>
     <string name="driver_recevie_order">  السواق استلم طلبك رقم</string>
     <string name="driver_cancel_order">السواق رفض طلبك رقم </string>
     <string name="order_num">Order Num</string>
+    <string name="accept_terms_and_conditions">الموافقة على الشروط والاحكام</string>
 
 </resources>

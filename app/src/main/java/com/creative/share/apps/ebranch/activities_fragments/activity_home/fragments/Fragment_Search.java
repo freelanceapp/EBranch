@@ -51,8 +51,9 @@ public class Fragment_Search extends Fragment {
     private String current_lang;
     private String query;
     private GridLayoutManager manager;
-private List<Single_Market_Model> dataList;
-private Search_Markets_Adapter search_markets_adapter;
+    private List<Single_Market_Model> dataList;
+    private Search_Markets_Adapter search_markets_adapter;
+
     public static Fragment_Search newInstance() {
         return new Fragment_Search();
     }
@@ -74,33 +75,34 @@ private Search_Markets_Adapter search_markets_adapter;
         userModel = preferences.getUserData(activity);
         Paper.init(activity);
         current_lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
-        dataList=new ArrayList<>();
-search_markets_adapter=new Search_Markets_Adapter(dataList,activity,this);
+        dataList = new ArrayList<>();
+        search_markets_adapter = new Search_Markets_Adapter(dataList, activity, this);
         binding.progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(activity, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
         binding.progBar.setVisibility(View.GONE);
         binding.recView.setItemViewCacheSize(25);
         binding.recView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         binding.recView.setDrawingCacheEnabled(true);
-        manager=new GridLayoutManager(activity,2);
+        manager = new GridLayoutManager(activity, 2);
         binding.recView.setLayoutManager(manager);
         binding.recView.setAdapter(search_markets_adapter);
         binding.setLang(current_lang);
-binding.iconSearch.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        query = binding.edtSearch.getText().toString();
-        if (!TextUtils.isEmpty(query)) {
+        binding.iconSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                query = binding.edtSearch.getText().toString();
+                if (!TextUtils.isEmpty(query)) {
 
-            Common.CloseKeyBoard(activity,binding.edtSearch);
-            getmarkets(query);}
-    }
-});
+                    Common.CloseKeyBoard(activity, binding.edtSearch);
+                    getmarkets(query);
+                }
+            }
+        });
         binding.edtSearch.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 query = binding.edtSearch.getText().toString();
                 if (!TextUtils.isEmpty(query)) {
 
-                    Common.CloseKeyBoard(activity,binding.edtSearch);
+                    Common.CloseKeyBoard(activity, binding.edtSearch);
                     getmarkets(query);
                     return false;
                 }
@@ -120,7 +122,7 @@ binding.iconSearch.setOnClickListener(new View.OnClickListener() {
 
 
             Api.getService(Tags.base_url)
-                    .getmarketsbyname(query,1)
+                    .getmarketsbyname(query, 1)
                     .enqueue(new Callback<Markets_Model>() {
                         @Override
                         public void onResponse(Call<Markets_Model> call, Response<Markets_Model> response) {
@@ -175,8 +177,8 @@ binding.iconSearch.setOnClickListener(new View.OnClickListener() {
     }
 
     public void displaymarketprofile(Single_Market_Model users) {
-        Intent intent=new Intent(activity, MarketProfileActivity.class);
-        intent.putExtra("marketid",users.getId()+"");
+        Intent intent = new Intent(activity, MarketProfileActivity.class);
+        intent.putExtra("marketid", users.getId() + "");
         startActivity(intent);
     }
 }

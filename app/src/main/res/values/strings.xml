@@ -98,12 +98,13 @@
     <string name="type_amessage">Type Amessage</string>
     <string name="confirmation_password">Confirmation Password</string>
     <string name="order_accepted">Order Accepted Num</string>
-    <string name="order_finsihed">Order Finished Num</string>
-    <string name="market_accept_order">Market Accept Order Num </string>
-    <string name="market_refues_order">Market Refues Order Num</string>
-    <string name="driver_accept_order">Driver Accept Order Num</string>
+    <string name="order_finsihed">The request has been successfully completed and you will be notified within two days of the application number</string>
+    <string name="market_accept_order">Our dear customer, your order has been processed and shipping is being done number </string>
+    <string name="market_refues_order">Dear Customer, We apologize for not carrying out your order. For more information, please contact the store on request number</string>
+    <string name="driver_accept_order">Driver before your order, delivery will be made within 3 days of your order number</string>
     <string name="driver_recevie_order">Driver Reacive Order Num</string>
     <string name="driver_cancel_order">Driver Cancel Order Num</string>
     <string name="order_num">Order Num</string>
+    <string name="accept_terms_and_conditions">Accept terms and conditions</string>
 
 </resources>
