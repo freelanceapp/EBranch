@@ -104,7 +104,7 @@
     <string name="driver_accept_order">السائق قبل طلبكم , سيتم التوصيل خلال 3 ايام طلبك رقم</string>
     <string name="driver_recevie_order">  السواق استلم طلبك رقم</string>
     <string name="driver_cancel_order">السواق رفض طلبك رقم </string>
-    <string name="order_num">Order Num</string>
+    <string name="order_num">طلب رقم  </string>
     <string name="accept_terms_and_conditions">الموافقة على الشروط والاحكام</string>
     <string name="collecting_order">تجميع الطلب</string>
     <string name="driver_recevie_order_from_market">السائق استلم طلبك من المتجر</string>
@@ -114,7 +114,7 @@
     <string name="order_delivered_successfully">تم تسليم الطلب بنجاح</string>
     <string name="we_are_pleased_to_serve_you">نحن سعداء لخدمتك</string>
     <string name="driver_accept_order1">السائق قبل طلبك</string>
-    <string name="market_accept_order1">market_accept_order</string>
-    <string name="drive_proportion">drive proportion</string>
+    <string name="market_accept_order1">االمتجر قبل الطلب</string>
+    <string name="drive_proportion">سعر التوصس : ل</string>
 
 </resources>
