@@ -44,12 +44,12 @@ public class ProductDetialsActivity extends AppCompatActivity implements Listene
     private Preferences preferences;
     private UserModel userModel;
     private String lang;
-    private int NUM_PAGES,current_page=0;
-private SlidingImage_Adapter slidingImage__adapter;
-private String product_id;
-private int amount=1;
-private int totalamount;
-private Single_Product_Model single_product_model;
+    private int NUM_PAGES, current_page = 0;
+    private SlidingImage_Adapter slidingImage__adapter;
+    private String product_id;
+    private int amount = 1;
+    private int totalamount;
+    private Single_Product_Model single_product_model;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -72,11 +72,13 @@ private Single_Product_Model single_product_model;
 
 
     }
+
     private void getdatafromintent() {
         if (getIntent().getStringExtra("productid") != null) {
             product_id = getIntent().getStringExtra("productid");
         }
     }
+
     private void change_slide_image() {
         final Handler handler = new Handler();
         final Runnable Update = new Runnable() {
@@ -110,9 +112,9 @@ private Single_Product_Model single_product_model;
         binding.imageDecrease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(amount>1){
-                    binding.tvAmount.setText((amount-1)+"");
-                    amount-=1;
+                if (amount > 1) {
+                    binding.tvAmount.setText((amount - 1) + "");
+                    amount -= 1;
                 }
 
             }
@@ -120,66 +122,63 @@ private Single_Product_Model single_product_model;
         binding.imageIncrease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(amount<totalamount){
-                    binding.tvAmount.setText((amount+1)+"");
-                    amount+=1;
+                if (amount < totalamount) {
+                    binding.tvAmount.setText((amount + 1) + "");
+                    amount += 1;
                 }
             }
         });
         binding.btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Add_Order_Model add_order_model=preferences.getUserOrder(ProductDetialsActivity.this);
-                if(add_order_model!=null){
-                    Log.e("data",single_product_model.getMarket_id()+" "+add_order_model.getMarket_id());
-                    if((add_order_model.getMarket_id()+"").equals(single_product_model.getMarket_id())){
-                    List<Add_Order_Model.Products> order_details=add_order_model.getProducts();
-                    Add_Order_Model.Products products1 = null;
-                    int pos = 0;
-                  for(int i=0;i<order_details.size();i++){
-                      if(single_product_model.getId()==order_details.get(i).getProduct_id()){
-                          products1 =order_details.get(i);
-                          pos=i;
-                      }
-                  }
-                  if(products1 !=null){
-                      products1.setAmount(amount+order_details.get(pos).getAmount());
-                     // Log.e("to",add_order_model.getTotal_cost()+(Double.parseDouble(single_product_model.getPrice())*amount)+""+((amount+order_details.get(pos).getAmount())*Double.parseDouble(single_product_model.getPrice())));
-                      products1.setTotal_price(products1.getTotal_price()+(Double.parseDouble(single_product_model.getPrice())*amount));
-                      products1.setImage(single_product_model.getImage());
+                Add_Order_Model add_order_model = preferences.getUserOrder(ProductDetialsActivity.this);
+                if (add_order_model != null) {
+                    Log.e("data", single_product_model.getMarket_id() + " " + add_order_model.getMarket_id());
+                    if ((add_order_model.getMarket_id() + "").equals(single_product_model.getMarket_id())) {
+                        List<Add_Order_Model.Products> order_details = add_order_model.getProducts();
+                        Add_Order_Model.Products products1 = null;
+                        int pos = 0;
+                        for (int i = 0; i < order_details.size(); i++) {
+                            if (single_product_model.getId() == order_details.get(i).getProduct_id()) {
+                                products1 = order_details.get(i);
+                                pos = i;
+                            }
+                        }
+                        if (products1 != null) {
+                            products1.setAmount(amount + order_details.get(pos).getAmount());
+                            // Log.e("to",add_order_model.getTotal_cost()+(Double.parseDouble(single_product_model.getPrice())*amount)+""+((amount+order_details.get(pos).getAmount())*Double.parseDouble(single_product_model.getPrice())));
+                            products1.setTotal_price(products1.getTotal_price() + (Double.parseDouble(single_product_model.getPrice()) * amount));
+                            products1.setImage(single_product_model.getImage());
 
-                      order_details.remove(pos);
-                      order_details.add(pos, products1);
+                            order_details.remove(pos);
+                            order_details.add(pos, products1);
 
-                  }
-                  else {
-                      products1 =new Add_Order_Model.Products();
-                      products1.setAmount(amount);
-                      products1.setTotal_price(Double.parseDouble(single_product_model.getPrice())*amount);
-                      products1.setProduct_id(single_product_model.getId());
-                      products1.setAr_desc(single_product_model.getAr_des());
-                      products1.setEn_des(single_product_model.getEn_des());
-                      products1.setAr_title(single_product_model.getAr_title());
-                      products1.setEn_title(single_product_model.getEn_title());
-                      products1.setImage(single_product_model.getImage());
-                      order_details.add(products1);
+                        } else {
+                            products1 = new Add_Order_Model.Products();
+                            products1.setAmount(amount);
+                            products1.setTotal_price(Double.parseDouble(single_product_model.getPrice()) * amount);
+                            products1.setProduct_id(single_product_model.getId());
+                            products1.setAr_desc(single_product_model.getAr_des());
+                            products1.setEn_des(single_product_model.getEn_des());
+                            products1.setAr_title(single_product_model.getAr_title());
+                            products1.setEn_title(single_product_model.getEn_title());
+                            products1.setImage(single_product_model.getImage());
+                            order_details.add(products1);
 
-                  }
-                  add_order_model.setProducts(order_details);
-                        Common.CreateDialogAlert3(ProductDetialsActivity.this,getResources().getString(R.string.suc));
+                        }
+                        add_order_model.setProducts(order_details);
+                        Common.CreateDialogAlert3(ProductDetialsActivity.this, getResources().getString(R.string.suc));
 
+                    } else {
+                        Common.CreateDialogAlert(ProductDetialsActivity.this, getResources().getString(R.string.order_pref));
                     }
-                    else {
-                        Common.CreateDialogAlert(ProductDetialsActivity.this,getResources().getString(R.string.order_pref));
-                    }
-                }
-                else {
-                   add_order_model=new Add_Order_Model();
-                    List<Add_Order_Model.Products> order_details=new ArrayList<>();
+                } else {
+                    add_order_model = new Add_Order_Model();
+                    List<Add_Order_Model.Products> order_details = new ArrayList<>();
                     add_order_model.setMarket_id(Integer.parseInt(single_product_model.getMarket_id()));
-                    Add_Order_Model.Products products1 =new Add_Order_Model.Products();
+                    Add_Order_Model.Products products1 = new Add_Order_Model.Products();
                     products1.setProduct_id(single_product_model.getId());
-                    products1.setTotal_price(Double.parseDouble(single_product_model.getPrice())*amount);
+                    products1.setTotal_price(Double.parseDouble(single_product_model.getPrice()) * amount);
                     products1.setAmount(amount);
                     products1.setAr_desc(single_product_model.getAr_des());
                     products1.setEn_des(single_product_model.getEn_des());
@@ -189,11 +188,11 @@ private Single_Product_Model single_product_model;
                     order_details.add(products1);
                     add_order_model.setProducts(order_details);
 
-                    Common.CreateDialogAlert3(ProductDetialsActivity.this,getResources().getString(R.string.suc));
+                    Common.CreateDialogAlert3(ProductDetialsActivity.this, getResources().getString(R.string.suc));
 
 
                 }
-                preferences.create_update_order(ProductDetialsActivity.this,add_order_model);
+                preferences.create_update_order(ProductDetialsActivity.this, add_order_model);
 
 
             }
@@ -202,7 +201,7 @@ private Single_Product_Model single_product_model;
 
 
     private void setdata() {
-        List<Slider_Model.Data> dataArrayList=new ArrayList<>();
+        List<Slider_Model.Data> dataArrayList = new ArrayList<>();
 
         dataArrayList.add(new Slider_Model.Data());
         dataArrayList.add(new Slider_Model.Data());
@@ -222,10 +221,11 @@ private Single_Product_Model single_product_model;
     public void back() {
         finish();
     }
+
     public void getSingleproduct() {
         //  binding.progBar.setVisibility(View.VISIBLE);
-        Log.e("pr",product_id);
-        ProgressDialog dialog = Common.createProgressDialog(this,getString(R.string.wait));
+        Log.e("pr", product_id);
+        ProgressDialog dialog = Common.createProgressDialog(this, getString(R.string.wait));
         dialog.setCancelable(false);
         dialog.show();
         Api.getService(Tags.base_url)
@@ -252,7 +252,7 @@ private Single_Product_Model single_product_model;
                     @Override
                     public void onFailure(Call<Single_Product_Model> call, Throwable t) {
                         try {
-dialog.dismiss();
+                            dialog.dismiss();
 
                             //    Toast.makeText(activity, getString(R.string.something), Toast.LENGTH_SHORT).show();
                             Log.e("error", t.getMessage());
@@ -265,8 +265,8 @@ dialog.dismiss();
 
     private void updateddata(Single_Product_Model body) {
         binding.setProductmodel(body);
-        single_product_model=body;
-        totalamount=body.getAmount();
+        single_product_model = body;
+        totalamount = body.getAmount();
 
     }
 

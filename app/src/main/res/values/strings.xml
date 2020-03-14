@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">E Branch</string>
-    <string name="map_api_key">AIzaSyCbc2Y5AIwZ8uUeHRUXiozGN3CnpjKT0oI</string>
+    <string name="map_api_key">AIzaSyDahZQW7gLbt6P9g2zG6hHqaNnOjAUk48Y</string>
     <string name="code">code</string>
     <string name="sign_up2">Create Account</string>
     <string name="login">Login</string>
@@ -106,5 +106,13 @@
     <string name="driver_cancel_order">Driver Cancel Order Num</string>
     <string name="order_num">Order Num</string>
     <string name="accept_terms_and_conditions">Accept terms and conditions</string>
+    <string name="collecting_order">collecting  order</string>
+    <string name="driver_recevie_order_from_market">driver recevie order from market</string>
+    <string name="order_collected">order collected</string>
+    <string name="delivering_order">delivering order</string>
+    <string name="delivering_order_to_your_destination">delivering order to your destination</string>
+    <string name="order_delivered_successfully">order delivered successfully</string>
+    <string name="we_are_pleased_to_serve_you">we are pleased to serve you</string>
+    <string name="driver_accept_order1">driver accept your order</string>
 
 </resources>

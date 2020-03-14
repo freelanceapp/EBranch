@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -57,8 +59,10 @@ import com.creative.share.apps.ebranch.preferences.Preferences;
 import com.creative.share.apps.ebranch.remote.Api;
 import com.creative.share.apps.ebranch.share.Common;
 import com.creative.share.apps.ebranch.tags.Tags;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -103,10 +107,10 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private ImageView imagemenu, im_cart;
-    private LinearLayout ll_profile, ll_terms,ll_about, ll_orders, ll_lang,ll_notif,ll_chat, ll_logout;
+    private LinearLayout ll_profile, ll_terms, ll_about, ll_orders, ll_lang, ll_notif, ll_chat, ll_logout;
     private ConstraintLayout nestedScrollView;
     private String current_lang;
-    private float zoom = 15.6f;
+    private float zoom = 3.6f;
 
     private Marker marker;
     private GoogleMap mMap;
@@ -115,7 +119,8 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ActionBarDrawerToggle toggle;
     private Toolbar toolbar;
     private TextView textNotify;
-    private int amount=0;
+    private int amount = 0;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         Paper.init(newBase);
@@ -134,60 +139,66 @@ public class HomeActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (savedInstanceState == null) {
             displayFragmentDepartment();
         }
-if(userModel!=null){
-    updateToken();
+        if (userModel != null) {
+            updateToken();
 
-}
+        }
 
         gettotal();
         getdatafromintent();
 
     }
+
     private void getdatafromintent() {
-        if(getIntent().hasExtra("not")){
+        if (getIntent().hasExtra("not")) {
 
             new Handler()
                     .postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            if(userModel!=null){
-Intent intent=new Intent(HomeActivity.this,OrdersActivity.class);
-intent.putExtra("data",getIntent().getSerializableExtra("data"));
-startActivity(intent);}
+                            if (userModel != null) {
+                                Intent intent = new Intent(HomeActivity.this, OrdersActivity.class);
+                                intent.putExtra("data", getIntent().getSerializableExtra("data"));
+                                startActivity(intent);
+                            }
                         }
-                    },1000);        }
+                    }, 1000);
+        }
     }
+
     public void gettotal() {
-        amount=0;
-        if(preferences.getUserOrder(this)!=null){
+        amount = 0;
+        if (preferences.getUserOrder(this) != null) {
             for (int i = 0; i < preferences.getUserOrder(this).getProducts().size(); i++) {
                 Add_Order_Model.Products add_order_model = preferences.getUserOrder(this).getProducts().get(i);
-                    amount += add_order_model.getAmount();
+                amount += add_order_model.getAmount();
 
-            }}
+            }
+        }
         addItemToCart();
 
     }
 
     private void addItemToCart() {
-        if(amount>0){
+        if (amount > 0) {
 
             textNotify.setText(amount + "");
             textNotify.setVisibility(View.VISIBLE);
 
-        }
-        else {
+        } else {
             textNotify.setVisibility(View.GONE);
         }
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void listenToNewMessage(MessageModel messageModel) {
-        ChatUserModel chatUserModel = new ChatUserModel(messageModel.getFrom_user_name(),messageModel.getFrom_user_avatar(),messageModel.getFrom_user_id(),messageModel.getRoom_id(),messageModel.getFrom_user_phone_code(),messageModel.getFrom_user_phone());
+        ChatUserModel chatUserModel = new ChatUserModel(messageModel.getFrom_user_name(), messageModel.getFrom_user_avatar(), messageModel.getFrom_user_id(), messageModel.getRoom_id(), messageModel.getFrom_user_phone_code(), messageModel.getFrom_user_phone());
         Intent intent = new Intent(this, ChatActivity.class);
-        intent.putExtra("chat_user_data",chatUserModel);
-        startActivityForResult(intent,1000);
+        intent.putExtra("chat_user_data", chatUserModel);
+        startActivityForResult(intent, 1000);
 
     }
+
     private void initView() {
         EventBus.getDefault().register(this);
 
@@ -200,10 +211,10 @@ startActivity(intent);}
         ahBottomNav = findViewById(R.id.ah_bottom_nav);
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-        textNotify=findViewById(R.id.textNotify);
+        textNotify = findViewById(R.id.textNotify);
 
         toolbar = findViewById(R.id.toolbar);
-        toggle = new ActionBarDrawerToggle(this,drawer,toolbar,R.string.open,R.string.close);
+        toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.open, R.string.close);
         toggle.syncState();
 
         ll_profile = findViewById(R.id.ll_profile);
@@ -276,7 +287,7 @@ startActivity(intent);}
             public void onClick(View view) {
                 drawer.closeDrawer(GravityCompat.START);
                 Intent intent = new Intent(HomeActivity.this, NotificationsActivity.class);
-startActivity(intent);
+                startActivity(intent);
             }
         });
      /*   ll_home.setOnClickListener(new View.OnClickListener() {
@@ -346,8 +357,7 @@ startActivity(intent);
             return false;
         });
 
-        if (userModel!=null)
-        {
+        if (userModel != null) {
             updateImageUI();
         }
     }
@@ -514,12 +524,11 @@ startActivity(intent);
     }
 
     private void updateImageUI() {
-        Log.e("data",Tags.IMAGE_URL+userModel.getLogo()+"_");
-        if (userModel.getLogo()!=null&&!userModel.getLogo().isEmpty()&&!userModel.getLogo().equals("0"))
-        {
-           // Picasso.with(this).load(Uri.parse(Tags.IMAGE_URL)).fit().into(image);
+        Log.e("data", Tags.IMAGE_URL + userModel.getLogo() + "_");
+        if (userModel.getLogo() != null && !userModel.getLogo().isEmpty() && !userModel.getLogo().equals("0")) {
+            // Picasso.with(this).load(Uri.parse(Tags.IMAGE_URL)).fit().into(image);
 
-            Picasso.with(this).load(Uri.parse(Tags.IMAGE_URL+userModel.getLogo())).fit().into(image);
+            Picasso.with(this).load(Uri.parse(Tags.IMAGE_URL + userModel.getLogo())).fit().into(image);
 
         }
         tvName.setText(userModel.getFull_name());
@@ -574,16 +583,24 @@ startActivity(intent);
 
         //  LatLngBounds.Builder builder = new LatLngBounds.Builder();
         // Log.e("data",maDataList.size()+"");
+
+        int height = 100;
+        int width = 100;
+        BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.logo);
+        Bitmap b = bitmapdraw.getBitmap();
+        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
         for (int i = 0; i < maDataList.size(); i++) {
             //   LatLng ll = new LatLng(x[i], ys[i]);
 
             // bld.include(ll);
             //Log.e("dd", x[i] + "");
             MarkerOptions markerOptions = new MarkerOptions();
+         markerOptions.icon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+
             markerOptions.position(new LatLng(Double.parseDouble(maDataList.get(i).getLatitude()), Double.parseDouble(maDataList.get(i).getLongitude())));
             marker = mMap.addMarker(markerOptions);
             //  builder.include(marker[i].getPosition());
-            // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(maDataList.get(i).getLatitude()), Double.parseDouble(maDataList.get(i).getLongitude())), zoom));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(maDataList.get(i).getLatitude()), Double.parseDouble(maDataList.get(i).getLongitude())), zoom));
             marker.setTag(maDataList.get(i));
 
         }
@@ -792,7 +809,7 @@ startActivity(intent);
                 TextView tvAddress = view.findViewById(R.id.tvAddress);
                 ImageView image = view.findViewById(R.id.image);
 
-              //  ProgressBar progBar = view.findViewById(R.id.progBar);
+                //  ProgressBar progBar = view.findViewById(R.id.progBar);
 
                 try {
 
@@ -823,6 +840,7 @@ startActivity(intent);
 
 
     }
+
     private void updateToken() {
         FirebaseInstanceId.getInstance()
                 .getInstanceId()
@@ -834,7 +852,7 @@ startActivity(intent);
                             task.getResult().getId();
                             Log.e("sssssss", token);
                             Api.getService(Tags.base_url)
-                                    .updateToken(userModel.getId(), token,1)
+                                    .updateToken(userModel.getId(), token, 1)
                                     .enqueue(new Callback<ResponseBody>() {
                                         @Override
                                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -845,10 +863,9 @@ startActivity(intent);
                                                 } catch (Exception e) {
                                                     //  e.printStackTrace();
                                                 }
-                                            }
-                                            else {
+                                            } else {
                                                 try {
-                                                    Log.e("error",response.code()+"_"+response.errorBody().string());
+                                                    Log.e("error", response.code() + "_" + response.errorBody().string());
                                                 } catch (IOException e) {
                                                     e.printStackTrace();
                                                 }
@@ -873,8 +890,7 @@ startActivity(intent);
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (EventBus.getDefault().isRegistered(this))
-        {
+        if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
     }

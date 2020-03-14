@@ -16,7 +16,7 @@ public class OrderModel implements Serializable {
     private String address;
     private int status;
     private String cancel_reason;
-    private String  title;
+    private String title;
     private long order_date;
     private double total_cost;
     private double rating;
@@ -29,6 +29,7 @@ public class OrderModel implements Serializable {
     private List<OrderDetails> order_details;
     private User user;
     private Market market;
+    private Driver driver;
 
     public OrderModel(int status) {
         this.status = status;
@@ -130,8 +131,7 @@ public class OrderModel implements Serializable {
         return market;
     }
 
-    public class OrderDetails implements Serializable
-    {
+    public class OrderDetails implements Serializable {
         private Product product;
         private int id;
         private int order_id;
@@ -167,182 +167,102 @@ public class OrderModel implements Serializable {
         public int getOffer_id() {
             return offer_id;
         }
-         public class Product implements Serializable{
-        private int id;
-                private String slug;
-                private String ar_title;
-                private String en_title;
-                private String ar_des;
-             private String en_des;
-             private String price;
-             private String market_id;
-             private String cat_id;
-             private String sub_cat_id;
-             private String sales_counts;
-             private String rating;
-             private String image;
-             private String amount;
-             private String unit;
-             private String market_added;
-             private String views_count;
-             private String is_deleted;
 
-             public int getId() {
-                 return id;
-             }
+        public class Product implements Serializable {
+            private int id;
+            private String slug;
+            private String ar_title;
+            private String en_title;
+            private String ar_des;
+            private String en_des;
+            private String price;
+            private String market_id;
+            private String cat_id;
+            private String sub_cat_id;
+            private String sales_counts;
+            private String rating;
+            private String image;
+            private String amount;
+            private String unit;
+            private String market_added;
+            private String views_count;
+            private String is_deleted;
 
-             public String getSlug() {
-                 return slug;
-             }
+            public int getId() {
+                return id;
+            }
 
-             public String getAr_title() {
-                 return ar_title;
-             }
+            public String getSlug() {
+                return slug;
+            }
 
-             public String getEn_title() {
-                 return en_title;
-             }
+            public String getAr_title() {
+                return ar_title;
+            }
 
-             public String getAr_des() {
-                 return ar_des;
-             }
+            public String getEn_title() {
+                return en_title;
+            }
 
-             public String getEn_des() {
-                 return en_des;
-             }
+            public String getAr_des() {
+                return ar_des;
+            }
 
-             public String getPrice() {
-                 return price;
-             }
+            public String getEn_des() {
+                return en_des;
+            }
 
-             public String getMarket_id() {
-                 return market_id;
-             }
+            public String getPrice() {
+                return price;
+            }
 
-             public String getCat_id() {
-                 return cat_id;
-             }
+            public String getMarket_id() {
+                return market_id;
+            }
 
-             public String getSub_cat_id() {
-                 return sub_cat_id;
-             }
+            public String getCat_id() {
+                return cat_id;
+            }
 
-             public String getSales_counts() {
-                 return sales_counts;
-             }
+            public String getSub_cat_id() {
+                return sub_cat_id;
+            }
 
-             public String getRating() {
-                 return rating;
-             }
+            public String getSales_counts() {
+                return sales_counts;
+            }
 
-             public String getImage() {
-                 return image;
-             }
+            public String getRating() {
+                return rating;
+            }
 
-             public String getAmount() {
-                 return amount;
-             }
+            public String getImage() {
+                return image;
+            }
 
-             public String getUnit() {
-                 return unit;
-             }
+            public String getAmount() {
+                return amount;
+            }
 
-             public String getMarket_added() {
-                 return market_added;
-             }
+            public String getUnit() {
+                return unit;
+            }
 
-             public String getViews_count() {
-                 return views_count;
-             }
+            public String getMarket_added() {
+                return market_added;
+            }
 
-             public String getIs_deleted() {
-                 return is_deleted;
-             }
-         }
-    }
+            public String getViews_count() {
+                return views_count;
+            }
 
-    public class User implements Serializable
-    {
-        private int id;
-        private int user_type;
-        private int confirmation_code;
-        private String name;
-        private String phone_code;
-        private String phone;
-        private String email;
-        private String full_name;
-        private String membership_code;
-        private String logo;
-        private String address;
-        private double latitude;
-        private double longitude;
-        private int balance;
-        private double rate;
-
-
-        public int getId() {
-            return id;
-        }
-
-        public int getUser_type() {
-            return user_type;
-        }
-
-        public int getConfirmation_code() {
-            return confirmation_code;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getPhone_code() {
-            return phone_code;
-        }
-
-        public String getPhone() {
-            return phone;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public String getFull_name() {
-            return full_name;
-        }
-
-        public String getMembership_code() {
-            return membership_code;
-        }
-
-        public String getLogo() {
-            return logo;
-        }
-
-        public String getAddress() {
-            return address;
-        }
-
-        public double getLatitude() {
-            return latitude;
-        }
-
-        public double getLongitude() {
-            return longitude;
-        }
-
-        public int getBalance() {
-            return balance;
-        }
-
-        public double getRate() {
-            return rate;
+            public String getIs_deleted() {
+                return is_deleted;
+            }
         }
     }
 
-    public class Market implements Serializable
-    {
+    public class User implements Serializable {
         private int id;
         private int user_type;
         private int confirmation_code;
@@ -419,6 +339,166 @@ public class OrderModel implements Serializable {
         public double getRate() {
             return rate;
         }
+    }
+
+    public class Market implements Serializable {
+        private int id;
+        private int user_type;
+        private int confirmation_code;
+        private String name;
+        private String phone_code;
+        private String phone;
+        private String email;
+        private String full_name;
+        private String membership_code;
+        private String logo;
+        private String address;
+        private double latitude;
+        private double longitude;
+        private int balance;
+        private double rate;
+
+
+        public int getId() {
+            return id;
+        }
+
+        public int getUser_type() {
+            return user_type;
+        }
+
+        public int getConfirmation_code() {
+            return confirmation_code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getPhone_code() {
+            return phone_code;
+        }
+
+        public String getPhone() {
+            return phone;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public String getFull_name() {
+            return full_name;
+        }
+
+        public String getMembership_code() {
+            return membership_code;
+        }
+
+        public String getLogo() {
+            return logo;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public double getLatitude() {
+            return latitude;
+        }
+
+        public double getLongitude() {
+            return longitude;
+        }
+
+        public int getBalance() {
+            return balance;
+        }
+
+        public double getRate() {
+            return rate;
+        }
 
     }
+
+    public class Driver implements Serializable {
+        private int id;
+        private int user_type;
+        private int confirmation_code;
+        private String name;
+        private String phone_code;
+        private String phone;
+        private String email;
+        private String full_name;
+        private String membership_code;
+        private String logo;
+        private String address;
+        private double latitude;
+        private double longitude;
+        private int balance;
+        private double rate;
+
+
+        public int getId() {
+            return id;
+        }
+
+        public int getUser_type() {
+            return user_type;
+        }
+
+        public int getConfirmation_code() {
+            return confirmation_code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getPhone_code() {
+            return phone_code;
+        }
+
+        public String getPhone() {
+            return phone;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public String getFull_name() {
+            return full_name;
+        }
+
+        public String getMembership_code() {
+            return membership_code;
+        }
+
+        public String getLogo() {
+            return logo;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public double getLatitude() {
+            return latitude;
+        }
+
+        public double getLongitude() {
+            return longitude;
+        }
+
+        public int getBalance() {
+            return balance;
+        }
+
+        public double getRate() {
+            return rate;
+        }
+
+    }
+
 }

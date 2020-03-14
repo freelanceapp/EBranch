@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">E Branch</string>
-    <string name="map_api_key">AIzaSyCbc2Y5AIwZ8uUeHRUXiozGN3CnpjKT0oI</string>
+    <string name="map_api_key">AIzaSyDahZQW7gLbt6P9g2zG6hHqaNnOjAUk48Y</string>
     <string name="code"> كود الدوله</string>
     <string name="sign_up2">انشاء حساب</string>
     <string name="login">تسجيل الدخول</string>
@@ -106,5 +106,13 @@
     <string name="driver_cancel_order">السواق رفض طلبك رقم </string>
     <string name="order_num">Order Num</string>
     <string name="accept_terms_and_conditions">الموافقة على الشروط والاحكام</string>
+    <string name="collecting_order">تجميع الطلب</string>
+    <string name="driver_recevie_order_from_market">السائق استلم طلبك من المتجر</string>
+    <string name="order_collected">جارى تجميع الطلب</string>
+    <string name="delivering_order">جارى استلام الطلب</string>
+    <string name="delivering_order_to_your_destination">جارى تسليم طلبك</string>
+    <string name="order_delivered_successfully">تم تسليم الطلب بنجاح</string>
+    <string name="we_are_pleased_to_serve_you">نحن سعداء لخدمتك</string>
+    <string name="driver_accept_order1">السائق قبل طلبك</string>
 
 </resources>

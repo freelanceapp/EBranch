@@ -34,16 +34,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class OrderDetialsActivity extends AppCompatActivity  implements Listeners.BackListener {
+public class OrderDetialsActivity extends AppCompatActivity implements Listeners.BackListener {
     private ActivityOrderdetialsBinding binding;
 
     private Preferences preferences;
     private UserModel userModel;
 
     private Order_Detials_Adapter order_detials_adapter;
-private List<OrderModel.OrderDetails> orderDetails;
+    private List<OrderModel.OrderDetails> orderDetails;
     private String lang;
-private String order_id;
+    private String order_id;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         Paper.init(newBase);
@@ -59,12 +60,13 @@ private String order_id;
         getdatafromintent();
 
         initView();
-        if(order_id!=null){
-    getOrderDetials();}
+        if (order_id != null) {
+            getOrderDetials();
+        }
     }
 
     private void getdatafromintent() {
-        if( getIntent().getStringExtra("orderid") !=null){
+        if (getIntent().getStringExtra("orderid") != null) {
             order_id = getIntent().getStringExtra("orderid");
         }
     }
@@ -74,24 +76,23 @@ private String order_id;
     private void initView() {
         preferences = Preferences.newInstance();
         userModel = preferences.getUserData(this);
-        orderDetails=new ArrayList<>();
+        orderDetails = new ArrayList<>();
 
         Paper.init(this);
         lang = Paper.book().read("lang", Locale.getDefault().getLanguage());
-order_detials_adapter=new Order_Detials_Adapter(orderDetails,this);
+        order_detials_adapter = new Order_Detials_Adapter(orderDetails, this);
         binding.progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
 
-binding.recMarket.setItemViewCacheSize(25);
-binding.recMarket.setDrawingCacheEnabled(true);
-binding.recMarket.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        binding.recMarket.setItemViewCacheSize(25);
+        binding.recMarket.setDrawingCacheEnabled(true);
+        binding.recMarket.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
-        binding.recMarket.setLayoutManager(new GridLayoutManager(this,1));
+        binding.recMarket.setLayoutManager(new GridLayoutManager(this, 1));
         binding.recMarket.setAdapter(order_detials_adapter);
-binding.setLang(lang);
-binding.setBackListener(this);
+        binding.setLang(lang);
+        binding.setBackListener(this);
 
     }
-
 
 
     public void getOrderDetials() {
