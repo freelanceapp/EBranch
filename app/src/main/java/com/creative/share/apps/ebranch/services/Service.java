@@ -95,6 +95,10 @@ public interface Service {
     Call<App_Data_Model> getterms(@Field("type") int type
 
     );
+    @GET("api/setting")
+    Call<App_Data_Model> getderiv(
+
+    );
     @FormUrlEncoded
     @POST("api/about-us")
     Call<App_Data_Model> getabout(@Field("type") int type

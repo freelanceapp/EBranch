@@ -8,6 +8,9 @@
             name="backListener"
             type="com.creative.share.apps.ebranch.interfaces.Listeners.BackListener"
             />
+        <variable
+            name="appdatamodel"
+            type="com.creative.share.apps.ebranch.models.App_Data_Model" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -165,6 +168,34 @@ android:visibility="gone"
         android:textColor="@color/colorPrimary"
         android:text="@string/add_coupon"
         />
+        <LinearLayout
+            android:id="@+id/tv_derive"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/colorPrimary"
+            android:text='@{@string/drive_proportion(appdatamodel.drive_proportion)}'
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/colorPrimary"
+            android:text='@{appdatamodel.drive_proportion+""}'
+            />
+        </LinearLayout>
     <Button
         android:id="@+id/bt_com"
         android:layout_width="180dp"

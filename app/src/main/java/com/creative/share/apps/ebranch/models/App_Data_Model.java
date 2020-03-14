@@ -12,9 +12,13 @@ public class App_Data_Model implements Serializable {
     private String ar_content;
     private String en_content;
     private String image;
-
+    private double drive_proportion;
     public int getId() {
         return id;
+    }
+
+    public double getDrive_proportion() {
+        return drive_proportion;
     }
 
     public String getKey_word() {
