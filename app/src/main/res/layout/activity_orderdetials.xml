@@ -25,7 +25,7 @@
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+       >
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -68,6 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            app:layout_constraintVertical_bias="0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
@@ -165,7 +166,7 @@
                     android:id="@+id/tv1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/driver_accept_order1"
+                    android:text="@string/market_accept_order1"
                     android:textColor="@color/gray4"
                     android:textSize="17sp"
 
@@ -176,7 +177,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="@string/driver_accept_order"
+                    android:text="@string/market_accept_order"
                     android:textColor="@color/gray4"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -223,17 +224,18 @@
                     android:id="@+id/tv2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/collecting_order"
+                    android:text="@string/driver_accept_order1"
                     android:textColor="@color/gray4"
                     android:textSize="17sp"
 
                     />
 
                 <TextView
+                    android:id="@+id/tv_order_id1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="@string/driver_recevie_order_from_market"
+                    android:text="@string/driver_accept_order"
                     android:textColor="@color/gray4"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -287,6 +289,8 @@
                     />
 
                 <TextView
+                    android:id="@+id/tv_order_id2"
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -299,64 +303,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="90dp"
-            android:orientation="horizontal"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp">
-
-            <LinearLayout
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/image4"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/gray_circle"
-                    android:padding="13dp"
-                    android:src="@drawable/step_gray_truck" />
-
-                <View
-                    android:id="@+id/view4"
-                    android:layout_width="1px"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:background="@color/gray4" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp">
-
-                <TextView
-                    android:id="@+id/tv4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/delivering_order"
-                    android:textColor="@color/gray4"
-                    android:textSize="17sp"
-
-                    />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/delivering_order_to_your_destination"
-                    android:textColor="@color/gray4"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-
-                    />
-            </LinearLayout>
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -401,6 +347,8 @@
                     />
 
                 <TextView
+                    android:id="@+id/tv_order_id5"
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"

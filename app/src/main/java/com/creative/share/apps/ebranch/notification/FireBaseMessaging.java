@@ -201,7 +201,7 @@ else   if(not_type.equals("order"))
                 content=getResources().getString(R.string.order_finsihed)+ " "+order_id;
 
             }
-            if (current_class.equals("com.creative.share.apps.ebranch.activities_fragments.activity_orders.OrdersActivity")){
+            if (current_class.equals("com.creative.share.apps.ebranch.activities_fragments.activity_orders.OrdersActivity")||current_class.equals("com.creative.share.apps.ebranch.activities_fragments.activity_order_detials.OrderDetialsActivity")){
                 EventBus.getDefault().post(orderModel);
 
 

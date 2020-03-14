@@ -114,5 +114,6 @@
     <string name="order_delivered_successfully">تم تسليم الطلب بنجاح</string>
     <string name="we_are_pleased_to_serve_you">نحن سعداء لخدمتك</string>
     <string name="driver_accept_order1">السائق قبل طلبك</string>
+    <string name="market_accept_order1">market_accept_order</string>
 
 </resources>

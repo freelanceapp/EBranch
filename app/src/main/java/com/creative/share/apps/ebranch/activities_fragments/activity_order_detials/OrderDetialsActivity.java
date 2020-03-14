@@ -24,6 +24,10 @@ import com.creative.share.apps.ebranch.preferences.Preferences;
 import com.creative.share.apps.ebranch.remote.Api;
 import com.creative.share.apps.ebranch.tags.Tags;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +61,8 @@ public class OrderDetialsActivity extends AppCompatActivity implements Listeners
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_orderdetials);
+        EventBus.getDefault().register(this);
+
         getdatafromintent();
 
         initView();
@@ -71,7 +77,13 @@ public class OrderDetialsActivity extends AppCompatActivity implements Listeners
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void ListenNotificationChange(OrderModel order_model)
+    {
+        order_id=order_model.getId()+"";
+        getOrderDetials();
 
+    }
     @SuppressLint("RestrictedApi")
     private void initView() {
         preferences = Preferences.newInstance();
@@ -112,6 +124,7 @@ public class OrderDetialsActivity extends AppCompatActivity implements Listeners
 
                                 binding.llNoStore.setVisibility(View.GONE);
                                 order_detials_adapter.notifyDataSetChanged();
+                                updatestatus(response.body());
                                 //   total_page = response.body().getMeta().getLast_page();
 
                             } else {
@@ -144,6 +157,71 @@ public class OrderDetialsActivity extends AppCompatActivity implements Listeners
 
     }
 
+    private void updatestatus(OrderModel body) {
+
+        if(body.getStatus()==9){
+            binding.image1.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+            binding.image2.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+            binding.image3.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+            binding.image5.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+            binding.image1.setBackgroundResource(R.drawable.greem_circle);
+            binding.image2.setBackgroundResource(R.drawable.greem_circle);
+            binding.image3.setBackgroundResource(R.drawable.greem_circle);
+            binding.image5.setBackgroundResource(R.drawable.greem_circle);
+binding.tv1.setTextColor(getResources().getColor(R.color.colorAccent));
+            binding.tv2.setTextColor(getResources().getColor(R.color.colorAccent));
+            binding.tv3.setTextColor(getResources().getColor(R.color.colorAccent));
+            binding.tv5.setTextColor(getResources().getColor(R.color.colorAccent));
+            binding.tvOrderId.setTextColor(getResources().getColor(R.color.colorAccent));
+            binding.tvOrderId1.setTextColor(getResources().getColor(R.color.colorAccent));
+            binding.tvOrderId2.setTextColor(getResources().getColor(R.color.colorAccent));
+            binding.tvOrderId5.setTextColor(getResources().getColor(R.color.colorAccent));
+
+        }else
+        if(body.getStatus()==1){
+            binding.image1.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+            binding.image1.setBackgroundResource(R.drawable.greem_circle);
+            binding.tv1.setTextColor(getResources().getColor(R.color.colorAccent));
+            binding.tvOrderId.setTextColor(getResources().getColor(R.color.colorAccent));
+
+        }
+        else
+        if(body.getStatus()==14){
+            binding.image1.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+            binding.image2.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+            binding.image3.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+            binding.image1.setBackgroundResource(R.drawable.greem_circle);
+            binding.image2.setBackgroundResource(R.drawable.greem_circle);
+            binding.image3.setBackgroundResource(R.drawable.greem_circle);
+            binding.tv1.setTextColor(getResources().getColor(R.color.colorAccent));
+            binding.tv2.setTextColor(getResources().getColor(R.color.colorAccent));
+            binding.tv3.setTextColor(getResources().getColor(R.color.colorAccent));
+            binding.tvOrderId.setTextColor(getResources().getColor(R.color.colorAccent));
+            binding.tvOrderId1.setTextColor(getResources().getColor(R.color.colorAccent));
+            binding.tvOrderId2.setTextColor(getResources().getColor(R.color.colorAccent));
+        }
+        else
+        if(body.getStatus()==5){
+            binding.image1.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+            binding.image2.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+            binding.image1.setBackgroundResource(R.drawable.greem_circle);
+            binding.image2.setBackgroundResource(R.drawable.greem_circle);
+            binding.tv1.setTextColor(getResources().getColor(R.color.colorAccent));
+            binding.tv2.setTextColor(getResources().getColor(R.color.colorAccent));
+            binding.tvOrderId.setTextColor(getResources().getColor(R.color.colorAccent));
+            binding.tvOrderId1.setTextColor(getResources().getColor(R.color.colorAccent));
+        }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this))
+        {
+            EventBus.getDefault().unregister(this);
+        }
+    }
     @Override
     public void back() {
         finish();
