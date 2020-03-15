@@ -13,7 +13,7 @@
 
         <variable
             name="marketmodel"
-            type="com.creative.share.apps.ebranch.models.Catogries_Model.Data" />
+            type="com.creative.share.apps.ebranch.models.OrderModel" />
 
         <variable
             name="lang"
@@ -125,6 +125,14 @@
 
 
             </FrameLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{marketmodel.driver.phone}"
+                android:textColor="@color/colorPrimary"
+                android:textSize="17sp"
+
+                />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="90dp"

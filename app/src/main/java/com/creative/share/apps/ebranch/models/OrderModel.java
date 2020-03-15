@@ -131,6 +131,10 @@ public class OrderModel implements Serializable {
         return market;
     }
 
+    public Driver getDriver() {
+        return driver;
+    }
+
     public class OrderDetails implements Serializable {
         private Product product;
         private int id;
